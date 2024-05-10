@@ -1,12 +1,18 @@
 import Image from "next/image";
+import {Profile} from "./../../API/Profile/Profile";
+import {Tutee} from "./../../API/Profile/Tutee";
+
 //As a client, I need to create a profile, so that I can 
 //provide information about myself and my requirements 
 //to potential tutors or service providers.
 export default function Home() {
+ 
+  const p1 = new Profile("Yong Zhe", "loyongzhe@gmail.com", 1, 123, 123);
+  const t1 = new Tutee(p1, "male", "Yong Yang", "P5", "Math", 1, 1.5, 30);
 
   return (
     
-    <div> Welcome to TutorConnect!</div>
+    <div>{p1.getName()}</div>
     
     // <main className="flex min-h-screen flex-col items-center justify-between p-24">
     //   <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
