@@ -50,7 +50,7 @@ model Tutor {
   location String
 
   // Academic Qualifications and Preferences
-  type String
+  typeOfTutor String
   yearsOfExperience Int
   highestEducationLevel String
 }
