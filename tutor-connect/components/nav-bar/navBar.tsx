@@ -8,7 +8,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-// For future reference, to update the list of pages to traverse to
+// TODO: For future reference, to update the list of pages to traverse to
+// TODO: Highlight current page
+
 const items = [
   {
     key: "new",
