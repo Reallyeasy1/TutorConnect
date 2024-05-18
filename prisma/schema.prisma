@@ -43,11 +43,11 @@ model Tutor {
   age Int
   nationality String
   race String
-
+  
   // Tutoring Preferences
-  level String
-  subject String
-  location String
+  // level String
+  // subject String
+  // location String
 
   // Academic Qualifications and Preferences
   typeOfTutor String

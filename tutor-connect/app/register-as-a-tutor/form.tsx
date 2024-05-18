@@ -23,6 +23,11 @@ import {
 import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdownmenu"
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { CalendarIcon } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { format } from "date-fns"
+import { Calendar } from "@/components/ui/calendar"
 
 type Checked = DropdownMenuCheckboxItemProps["checked"]
 
@@ -40,11 +45,14 @@ export const RegisterForm = () => {
     const [typeOfTutor, setTypeofTutor] = useState('')
     const [highestEducationLevel, setHighestEducationLevel] = useState('')
     const [error, setError] = useState<string | null>(null)
+    const [date, setDate] = React.useState<Date>()
 
 
     const [showStatusBar, setShowStatusBar] = React.useState<Checked>(true)
     const [showActivityBar, setShowActivityBar] = React.useState<Checked>(false)
     const [showPanel, setShowPanel] = React.useState<Checked>(false)
+
+    const handleGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => setGender(e.target.value)
 
 
     const onSubmit = async (e: React.FormEvent) => {
@@ -136,13 +144,29 @@ export const RegisterForm = () => {
                 </div>
                 <div className="col-span-1 space-y-1">
                 <Label htmlFor="dateOfBirth">Date Of Birth</Label>
-                <Input 
-                  required
-                  value={dateOfBirth}
-                  onChange={(e) => setDateOfBirth(e.target.value)}
-                  id="dateOfBirth" 
-                  type="dateOfBirth" 
-                />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <div>
+                        <Button
+                          variant={"outline"}
+                          className={cn("w-[240px] justify-start text-left font-normal", !date && "text-muted-foreground")}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {date ? format(date, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                      </div>
+                    </PopoverTrigger>
+                    <PopoverContent align="start" className=" w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        captionLayout="dropdown-buttons"
+                        selected={date}
+                        onSelect={setDate}
+                        fromYear={1960}
+                        toYear={2030}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
