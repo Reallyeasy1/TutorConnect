@@ -4,7 +4,7 @@ import { Alert } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { signIn } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import { useState } from 'react'
 
 export const RegisterForm = () => {
@@ -15,6 +15,7 @@ export const RegisterForm = () => {
     const [address, setAddress] = useState('')
     const [postalCode, setPostalCode] = useState('')
     const [error, setError] = useState<string | null>(null)
+    const router = useRouter()
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -31,7 +32,7 @@ export const RegisterForm = () => {
             })
             
             if (res.ok) {
-                signIn()
+                router.push('http://localhost:3000/client-log-in')
             } else {
                 setError((await res.json()).error)
             }

@@ -13,7 +13,7 @@ export default function RegisterPage() {
                 <RegisterForm />
                 <p className="text-center">
                     Have an account?{' '}
-                    <Link className="text-indigo-500 hover:underline" href="/login">
+                    <Link className="text-indigo-500 hover:underline" href="/tutor-log-in">
                         Sign in
                     </Link>{' '}
                 </p>
