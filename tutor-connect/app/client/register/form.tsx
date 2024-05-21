@@ -32,7 +32,7 @@ export const RegisterForm = () => {
             })
             
             if (res.ok) {
-                router.push('http://localhost:3000/client-log-in')
+                router.push('http://localhost:3000/client/login')
             } else {
                 setError((await res.json()).error)
             }

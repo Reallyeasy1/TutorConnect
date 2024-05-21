@@ -11,7 +11,7 @@ import { useState } from "react"
 export const Form = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
-    const callbackUrl = searchParams.get('callbackUrl') || '/register-as-a-client' // change
+    const callbackUrl = searchParams.get('callbackUrl') || '/tutor/register' //change
     //const error = searchParams.get('error') ? 'Invalid credentials' : ''
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -24,6 +24,7 @@ export const Form = () => {
                 redirect: false,
                 email, 
                 password,
+                typeOfTutor: "tutor",
                 callbackUrl
             })
             if (!res?.error) {

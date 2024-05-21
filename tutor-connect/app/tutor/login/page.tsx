@@ -9,7 +9,7 @@ export default function LoginPage() {
                 <LoginForm />
                 <p className="text-center">
                     Need to create an account?{' '}
-                    <Link className="text-indigo-500 hover:underline" href="/register-as-a-tutor">
+                    <Link className="text-indigo-500 hover:underline" href="/tutor/register">
                         Create Account
                     </Link>{' '}
                 </p>

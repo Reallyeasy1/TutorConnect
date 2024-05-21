@@ -63,7 +63,7 @@ export const RegisterForm = () => {
             })
             
             if (res.ok) {
-                router.push("http://localhost:3000/tutor-log-in")
+                router.push("http://localhost:3000/tutor/login")
             } else {
                 setError((await res.json()).error)
             }
