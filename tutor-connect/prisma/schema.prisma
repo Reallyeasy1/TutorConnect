@@ -54,7 +54,6 @@ model Tutor {
   typeOfTutor String
   yearsOfExperience Int
   highestEducationLevel String
-
   assigments Assignment[]
 }
 
@@ -62,13 +61,13 @@ model Assignment {
   id Int @id @default(autoincrement())
   Subject String
   Level String
-  client Client @relation(fields: [clientId], references: [id])
   clientId Int
-  tutor Tutor? @relation(fields: [tutorId], references: [id]) 
+  client Client @relation(fields: [clientId], references: [id])
   tutorId Int?
+  tutor Tutor? @relation(fields: [tutorId], references: [id]) 
   description String?
   postDate DateTime
-  taken boolean
+  taken Boolean
   Location String
   minRate Int
   maxRate Int
