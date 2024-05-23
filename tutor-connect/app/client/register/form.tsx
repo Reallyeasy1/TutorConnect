@@ -21,7 +21,7 @@ export const RegisterForm = () => {
         e.preventDefault()
         
         try {
-            const res = await fetch('/api/register-as-a-client', {
+            const res = await fetch('/api/client/register', {
                 method: 'POST',
                 body: JSON.stringify({
                     email, password, name, contactNumber, address, postalCode

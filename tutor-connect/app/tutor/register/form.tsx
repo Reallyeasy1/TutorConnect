@@ -52,7 +52,7 @@ export const RegisterForm = () => {
         e.preventDefault()
         
         try {
-            const res = await fetch('/api/register-as-a-tutor', {
+            const res = await fetch('/api/tutor/register', {
                 method: 'POST',
                 body: JSON.stringify({
                     email, password, name, contactNumber, dateOfBirth, gender, age, nationality, race, yearsOfExperience, typeOfTutor, highestEducationLevel
