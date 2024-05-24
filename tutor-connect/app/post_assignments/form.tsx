@@ -1,6 +1,3 @@
-
-
-
 'use client'
 
 import * as React from "react";
@@ -28,7 +25,7 @@ export const RegisterForm = () => {
     const [MinRate, setMinRate] = useState<number>(-1);
     const [MaxRate, setMaxRate] = useState<number>(-1);
     const [error, setError] = useState<string | null>(null);
-
+//TODO Redirect to main page/assignments
 //TODO: Create inputs, change onSubmit
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -54,7 +51,7 @@ export const RegisterForm = () => {
 
             if (res.ok) {
    //TODO: Change to main page
-                router.push("/registerClient"); // Use relative path
+                router.push("/assignments"); // Use relative path
             } else {
                 setError((await res.json()).error);
             }
@@ -137,6 +134,7 @@ export const RegisterForm = () => {
                 {/* Error Message */}
                 {error && <div className="text-red-500">{error}</div>}
                 {/* Submit Button */}
+                
                 <Button type="submit" className="w-full mt-4">Post Assignment</Button>
             </div>
         </form>

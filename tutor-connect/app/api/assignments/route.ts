@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function GET(req: Request) {
     try {
         const assignments = await prisma.assignment.findMany({
-            where: { taken: false }, // Fetch only available assignments
+            // where: { taken: false }, // Fetch only available assignments
             include: {
                 client: true, // Include client details if needed
                 tutor: true  // Include tutor details if needed

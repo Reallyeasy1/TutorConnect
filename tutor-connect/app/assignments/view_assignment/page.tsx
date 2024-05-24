@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Alert } from "@/components/ui/alert"
 
 interface Assignment {
     id: number;
@@ -17,11 +18,70 @@ interface Assignment {
         id: number;
         name: string;
     };
+    tutor: {
+        id: number;
+        name: string;
+    }
 }
 
-export default function AllAssignments() {
+
+export default function ViewAssignment() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const assignmentId = searchParams.get('assignmentId');
+    const tutorId = searchParams.get('tutorId');
     const [assignments, setAssignments] = useState<Assignment[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [error2, setError2] = useState<string | null>(null);
+
+
+
+async function accept_assignment(assignment : Assignment) {
+    try {
+        console.log(tutorId);
+        if (tutorId == null) {
+            setError2('Tutor ID is required');
+        } else {
+
+            const res = await fetch('/api/acceptAssignment', {
+                method: 'PUT',
+                body: JSON.stringify({
+                    AssignmentId: assignment.id,
+                    Subject: assignment.Subject,
+                    Level: assignment.Level, 
+                    clientId: assignment.client.id,
+                    client: assignment.client,
+                    tuteeLocation: assignment.Location,
+                    minRate: assignment.minRate, 
+                    maxRate: assignment.maxRate, 
+                    description: assignment.description,
+                    postDate:assignment.postDate,
+                    tutorId: tutorId // Provide a value for the tutorId property
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+             if (res.ok) {
+   //TODO: Change to main page
+                // router.push("/assignments"); // Use relative path
+                  alert("Successfully sent offer to client!");
+        router.push("/assignments"); // Use relative path
+            } else {
+                setError((await res.json()).error);
+            }
+
+
+        }
+     } catch (error: any) {
+            setError(error?.message);
+        }
+
+      
+    }
+
+
 
     useEffect(() => {
         async function fetchAssignments() {
@@ -54,12 +114,13 @@ export default function AllAssignments() {
 
     return (
         <div className="container mx-auto p-6 flex flex-col items-center">
-            <h1 className="text-4xl font-bold mb-8 text-center">Available Assignments</h1>
+            <h1 className="text-4xl font-bold mb-8 text-center">Tutee Assignment</h1>
             {assignments.length === 0 ? (
                 <p className="text-gray-500 text-center">No assignments available.</p>
             ) : (
                 <div className="grid grid-cols-1 gap-8">
-                    {assignments.map((assignment) => (
+                    {assignments.filter((assignment) => assignment.id.toString() === assignmentId)
+                                .map((assignment) => (
                         <div key={assignment.id} className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl">
                             <h2 className="text-2xl font-semibold mb-2">{assignment.Subject} - {assignment.Level}</h2>
                             <p className="text-gray-700 mb-1"><strong>Location:</strong> {assignment.Location}</p>
@@ -72,14 +133,15 @@ export default function AllAssignments() {
                             </p>
                             <button
                                 className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors"
-                                onClick={() => window.location.href = `/assignments/view_assignment?assignmentId=${assignment.id}`}
+                                onClick={() => accept_assignment(assignment)}
                             >
-                                View Assignment
+                                Accept Assignment?
                             </button>
+            {error2 && <Alert>{error2}</Alert>}
                         </div>
                     ))}
                 </div>
             )}
         </div>
     );
-}
+} 
