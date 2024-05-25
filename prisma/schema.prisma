@@ -29,6 +29,29 @@ model Client {
   contactNumber Int
   address String
   postalCode Int
+  active Boolean @default(false)
+  activateClientToken ActivateClientToken[]
+  PasswordResetClientToken PasswordResetClientToken[]
+}
+
+model ActivateClientToken {
+  id          Int       @id @default(autoincrement())
+  token       String    @unique
+  createdAt   DateTime  @default(now())
+  activatedAt DateTime?
+
+  client Client @relation(fields: [clientId], references: [id])
+  clientId Int
+}
+
+model PasswordResetClientToken {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  createdAt DateTime  @default(now())
+  resetAt   DateTime?
+
+  client Client @relation(fields: [clientId], references: [id])
+  clientId Int
 }
 
 model Tutor {
@@ -43,14 +66,38 @@ model Tutor {
   age Int
   nationality String
   race String
-
+  
   // Tutoring Preferences
-  level String
-  subject String
-  location String
+  // level String
+  // subject String
+  // location String
 
   // Academic Qualifications and Preferences
-  type String
+  typeOfTutor String
   yearsOfExperience Int
   highestEducationLevel String
+
+  active Boolean @default(false)
+  activateTutorToken ActivateTutorToken[]
+  PasswordResetTutorToken PasswordResetTutorToken[]
+}
+
+model ActivateTutorToken {
+  id          Int       @id @default(autoincrement())
+  token       String    @unique
+  createdAt   DateTime  @default(now())
+  activatedAt DateTime?
+
+  tutor Tutor @relation(fields: [tutorId], references: [id])
+  tutorId Int
+}
+
+model PasswordResetTutorToken {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  createdAt DateTime  @default(now())
+  resetAt   DateTime?
+
+  tutor Tutor @relation(fields: [tutorId], references: [id])
+  tutorId Int
 }

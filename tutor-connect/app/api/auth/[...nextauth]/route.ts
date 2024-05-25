@@ -20,20 +20,35 @@ export const authOptions: NextAuthOptions = {
           placeholder: 'hello@example.com'
         },
         password: { label: 'Password', type: 'password' },
+        typeOfTutor: { label: 'typeOfTutor', type: 'typeOfTutor'}
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {
           return null
         }
 
-        const user = await prisma.client.findUnique({
-          where: {
-            email: credentials.email
-          }
-        })
+        let user
+
+        if (credentials?.typeOfTutor) {
+          user = await prisma.tutor.findUnique({
+            where: {
+              email: credentials.email
+            }
+          })
+        } else {
+          user = await prisma.client.findUnique({
+            where: {
+              email: credentials.email
+            }
+          })
+        }
 
         if (!user) {
           return null
+        }
+
+        if (!user.active) {
+          throw new Error("User is not active")
         }
 
         const isPasswordValid = await compare(
