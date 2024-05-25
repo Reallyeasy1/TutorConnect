@@ -18,6 +18,7 @@ export async function PUT(req: Request) {
                 status: 400
             });
         }
+
         
         // Validate tutorId is a number
         const tutorIdNumber = parseInt(tutorId);

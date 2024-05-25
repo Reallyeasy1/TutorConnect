@@ -18,6 +18,16 @@ export async function POST(req: Request) {
             });
         }
 
+
+        if (MinRate > MaxRate || MinRate < 0 || MaxRate < 0) {
+
+            return new NextResponse(JSON.stringify({
+                error: 'Invalid minRate or maxRate'
+            }), {
+                status: 400
+            });
+        }
+
         // Validate clientId is a number
         const clientIdNumber = parseInt(clientId);
         if (isNaN(clientIdNumber)) {

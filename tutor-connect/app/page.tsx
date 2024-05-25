@@ -1,3 +1,13 @@
+/**
+ * The Home function in this TypeScript React code fetches the server session using next-auth and
+ * displays login/logout buttons along with user information.
+ * @returns The `Home` component is returning a main section with the following elements:
+ * 1. A `LoginButton` component.
+ * 2. A `LogoutButton` component.
+ * 3. A heading `<h2>` with the text "Server Session".
+ * 4. A `<pre>` element displaying the JSON stringified `session` object.
+ * 5. Another heading `<h2>` with the text "Client Call".
+ */
 import { getServerSession } from 'next-auth'
 import { authOptions } from './api/auth/[...nextauth]/route'
 import { LoginButton, LogoutButton } from './auth'
