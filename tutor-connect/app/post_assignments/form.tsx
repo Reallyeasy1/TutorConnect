@@ -1,3 +1,12 @@
+/**
+ * The RegisterForm component in TypeScript React handles form submission for posting assignments with
+ * input fields for subject, level, location, rates, and description.
+ * @returns The `RegisterForm` component is being returned. It is a form component that allows users to
+ * input information such as subject, level, location, rates, and description for posting an
+ * assignment. The form includes input fields for Subject, Level, Location, Min Rate, Max Rate, and
+ * Description. It also displays an error message if there is an error during form submission. Finally,
+ * there is a "
+ */
 'use client'
 
 import * as React from "react";
