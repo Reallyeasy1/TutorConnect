@@ -2,7 +2,6 @@ import { prisma } from '@/lib/prisma'
 import { compare } from 'bcrypt'
 import NextAuth, { type NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-
 export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/login'
@@ -20,31 +19,44 @@ export const authOptions: NextAuthOptions = {
           placeholder: 'hello@example.com'
         },
         password: { label: 'Password', type: 'password' },
+        typeOfTutor: { label: 'typeOfTutor', type: 'typeOfTutor'}
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {
           return null
         }
 
-        const user = await prisma.client.findUnique({
-          where: {
-            email: credentials.email
-          }
-        })
+        let user
+
+        if (credentials?.typeOfTutor) {
+          user = await prisma.tutor.findUnique({
+            where: {
+              email: credentials.email
+            }
+          })
+        } else {
+          user = await prisma.client.findUnique({
+            where: {
+              email: credentials.email
+            }
+          })
+        }
 
         if (!user) {
           return null
+        }
+
+        if (!user.active) {
+          throw new Error("User is not active")
         }
 
         const isPasswordValid = await compare(
           credentials.password,
           user.password
         )
-
         if (!isPasswordValid) {
           return null
         }
-
         return {
           id: user.id + '',
           email: user.email,
@@ -80,6 +92,5 @@ export const authOptions: NextAuthOptions = {
     }
   }
 }
-
 const handler = NextAuth(authOptions)
 export { handler as GET, handler as POST }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+// import NavBar from "./../../components/nav-bar/navBar";
 
 interface Assignment {
     id: number;
@@ -53,7 +54,10 @@ export default function AllAssignments() {
     }
 
     return (
+        <div>
+             {/* <NavBar /> */}
         <div className="container mx-auto p-6 flex flex-col items-center">
+           
             <h1 className="text-4xl font-bold mb-8 text-center">Available Assignments</h1>
             {assignments.length === 0 ? (
                 <p className="text-gray-500 text-center">No assignments available.</p>
@@ -70,16 +74,18 @@ export default function AllAssignments() {
                             <p className={`text-gray-700 mb-1 ${assignment.taken ? 'text-red-500' : 'text-green-500'}`}>
                                 <strong>Status:</strong> {assignment.taken ? 'Taken' : 'Available'}
                             </p>
-                            <button
+                            {/* TODO: Add a new page for this
+                             <button
                                 className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors"
                                 onClick={() => window.location.href = `/assignments/view_assignment?assignmentId=${assignment.id}`}
                             >
                                 View Assignment
-                            </button>
+                            </button> */}
                         </div>
                     ))}
                 </div>
             )}
+        </div>
         </div>
     );
 }

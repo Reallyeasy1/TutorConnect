@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Providers } from "./providers";
-import NavBar from "./../components/nav-bar/navBar";
+import { Providers } from "./providers"
 
 //TODO: Insert Navbar but not in layouts here
 export const metadata: Metadata = {

@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,64 +7,94 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id Int @id @default(autoincrement())
-  email String @unique
-  password String
-  name String
-}
-
 model Client {
-  // Personal Information
-  id Int @id @default(autoincrement())
-  email String @unique
-  password String
-  name String
-  contactNumber Int
-  address String
-  postalCode Int
-  assignments Assignment[]
+  id                      Int                      @id @default(autoincrement())
+  email                   String                   @unique
+  password                String
+  name                    String
+  contactNumber           Int
+  address                 String
+  postalCode              Int
+  assignments             Assignment[]
+  active                  Boolean                  @default(false)
+  activateClientToken     ActivateClientToken[]
+  passwordResetClientToken PasswordResetClientToken[]
 }
 
 model Tutor {
-  // Personal Information
-  id Int @id @default(autoincrement())
-  email String @unique
-  password String
-  name String
-  contactNumber Int
-  dateOfBirth DateTime
-  gender String
-  age Int
-  nationality String
-  race String
-
-  // Tutoring Preferences
-  level String
-  subject String
-  location String
-
-  // Academic Qualifications and Preferences
-  typeOfTutor String
-  yearsOfExperience Int
-  highestEducationLevel String
-  assigments Assignment[]
+  id                      Int                      @id @default(autoincrement())
+  email                   String                   @unique
+  password                String
+  name                    String
+  contactNumber           Int
+  dateOfBirth             DateTime
+  gender                  String
+  age                     Int
+  nationality             String
+  race                    String
+  //level                   String
+  //subject                 String
+  //location                String
+  //type                    String
+  typeOfTutor             String
+  yearsOfExperience       Int
+  highestEducationLevel   String
+  assignments             Assignment[]
+  active                  Boolean                  @default(false)
+  activateTutorToken      ActivateTutorToken[]
+  passwordResetTutorToken PasswordResetTutorToken[]
 }
 
 model Assignment {
-  id Int @id @default(autoincrement())
-  Subject String
-  Level String
+  id       Int      @id @default(autoincrement())
+  subject  String
+  level    String
+  client   Client   @relation(fields: [clientId], references: [id])
   clientId Int
-  client Client @relation(fields: [clientId], references: [id])
-  tutorId Int?
-  tutor Tutor? @relation(fields: [tutorId], references: [id]) 
+  tutor    Tutor?   @relation(fields: [tutorId], references: [id])
+  tutorId  Int?
   description String?
   postDate DateTime
-  taken Boolean
-  Location String
-  minRate Int
-  maxRate Int
+  taken    Boolean
+  location String
+  minRate  Int
+  maxRate  Int
+}
+
+model ActivateTutorToken {
+  id          Int       @id @default(autoincrement())
+  token       String    @unique
+  createdAt   DateTime  @default(now())
+  activatedAt DateTime?
+  tutor       Tutor     @relation(fields: [tutorId], references: [id])
+  tutorId     Int
+}
+
+model PasswordResetTutorToken {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  createdAt DateTime  @default(now())
+  resetAt   DateTime?
+  tutor     Tutor     @relation(fields: [tutorId], references: [id])
+  tutorId   Int
+}
+
+model ActivateClientToken {
+  id          Int       @id @default(autoincrement())
+  token       String    @unique
+  createdAt   DateTime  @default(now())
+  activatedAt DateTime?
+  client      Client    @relation(fields: [clientId], references: [id])
+  clientId    Int
+}
+
+model PasswordResetClientToken {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  createdAt DateTime  @default(now())
+  resetAt   DateTime?
+  client    Client    @relation(fields: [clientId], references: [id])
+  clientId  Int
 }
 
 generator erd {
