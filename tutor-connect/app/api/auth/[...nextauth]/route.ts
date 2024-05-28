@@ -2,7 +2,6 @@ import { prisma } from '@/lib/prisma'
 import { compare } from 'bcrypt'
 import NextAuth, { type NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-
 export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/login'
@@ -55,11 +54,9 @@ export const authOptions: NextAuthOptions = {
           credentials.password,
           user.password
         )
-
         if (!isPasswordValid) {
           return null
         }
-
         return {
           id: user.id + '',
           email: user.email,
@@ -95,6 +92,5 @@ export const authOptions: NextAuthOptions = {
     }
   }
 }
-
 const handler = NextAuth(authOptions)
 export { handler as GET, handler as POST }

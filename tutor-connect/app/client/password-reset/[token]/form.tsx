@@ -15,7 +15,7 @@ export const ResetPasswordForm = () => {
     const [error, setError] = useState('')
     const router = useRouter()
     const { token } = useParams()
-    
+
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
@@ -23,7 +23,7 @@ export const ResetPasswordForm = () => {
             setError("Passwords do not match");
             return;
         }
-        
+
         try {
             const res = await fetch('/api/client/reset-password', {
                 method: 'POST',
@@ -35,7 +35,7 @@ export const ResetPasswordForm = () => {
                     'Content-Type': 'application/json'
                 }
             })
-            
+
             if (res.ok) {
                 router.push('http://localhost:3000/client/login')
             } else {

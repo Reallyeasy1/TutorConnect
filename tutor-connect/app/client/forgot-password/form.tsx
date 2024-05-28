@@ -15,7 +15,7 @@ export const ForgotPasswordForm = () => {
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        
+
         try {
             const res = await fetch('/api/client/forgot-password', {
                 method: 'POST',
@@ -26,7 +26,7 @@ export const ForgotPasswordForm = () => {
                     'Content-Type': 'application/json'
                 }
             })
-            
+
             if (res.ok) {
                 router.push('http://localhost:3000/client/forgot-password/success')
             } else {
