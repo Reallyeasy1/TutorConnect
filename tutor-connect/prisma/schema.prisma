@@ -2,10 +2,20 @@ generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
+// To deploy locally
+ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
+ }
+
+
+//To deploy on vercel
+//datasource db {
+//  provider = "postgresql"
+//  url = env("postgres_PRISMA_URL") // uses connection pooling
+//  directUrl = env("postgres_URL_NON_POOLING") // uses a direct connection
+//}
+
 
 model Client {
   id                      Int                      @id @default(autoincrement())
@@ -59,6 +69,7 @@ model Assignment {
   location String
   minRate  Int
   maxRate  Int
+  avail_tutors Int[]
 }
 
 model ActivateTutorToken {

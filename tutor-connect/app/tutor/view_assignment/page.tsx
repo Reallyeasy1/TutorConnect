@@ -21,7 +21,8 @@ interface Assignment {
     tutor: {
         id: number;
         name: string;
-    }
+    }, 
+    avail_tutors: number[]
 }
 
 
