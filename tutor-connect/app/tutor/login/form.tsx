@@ -8,6 +8,11 @@ import { signIn } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 
+/**
+ * The Form component renders a login form with email and password fields, and a submit button.
+ * It handles form submission using the signIn function from next-auth/react.
+ * @return {JSX.Element} The login form component.
+ */
 export const Form = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
@@ -19,8 +24,11 @@ export const Form = () => {
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+
+        // Attempt to sign in using the signIn function from next-auth/react
         try {
             const res = await signIn('credentials', {
+                // Set redirect to false so that we can handle the response ourselves
                 redirect: false,
                 email, 
                 password,
@@ -28,8 +36,10 @@ export const Form = () => {
                 callbackUrl
             })
             if (!res?.error) {
+                // If there is no error, redirect the user to the callback URL
                 router.push(callbackUrl)
             } else {
+                // If there is an error, set the error state to the error message
                 setError('Invalid email or password')
             }
         } catch (err: any) {

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
+import NavBar from "@/components/nav-bar/navBar";
 
 interface Assignment {
     id: number;
@@ -55,7 +56,8 @@ export default function AllAssignments() {
         return <div className="text-red-500">Error: {error}</div>;
     }
 const assignment_filtered = assignments.filter((assignment) => !assignment.taken)
-    return (
+    return (<div>
+<NavBar/>
         <div className="container mx-auto p-6 flex flex-col items-center">
             <h1 className="text-4xl font-bold mb-8 text-center">Available Assignments</h1>
             {assignment_filtered.length === 0 ? (
@@ -83,6 +85,7 @@ const assignment_filtered = assignments.filter((assignment) => !assignment.taken
                     ))}
                 </div>
             )}
+        </div>
         </div>
     );
 }
