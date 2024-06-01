@@ -6,8 +6,8 @@ import { Alert } from "@/components/ui/alert"
 
 interface Assignment {
     id: number;
-    Subject: string;
-    Level: string;
+    subject: string;
+    level: string;
     Location: string;
     minRate: number;
     maxRate: number;
@@ -37,22 +37,22 @@ export default function ViewAssignment() {
 
 
 
-async function accept_assignment(assignment : Assignment) {
+async function apply_assignment(assignment : Assignment) {
     try {
         console.log(tutorId);
         if (tutorId == null) {
             setError2('Tutor ID is required');
         } else {
-
-            const res = await fetch('/api/acceptAssignment', {
+//TODO: Change to tutor/applyAssignment
+            const res = await fetch('/api/tutor/applyAssignment', {
                 method: 'PUT',
                 body: JSON.stringify({
                     AssignmentId: assignment.id,
-                    Subject: assignment.Subject,
-                    Level: assignment.Level, 
+                    Subject: assignment.subject,
+                    Level: assignment.level, 
                     clientId: assignment.client.id,
                     client: assignment.client,
-                    tuteeLocation: assignment.Location,
+                    // tuteeLocation: assignment.Location,
                     minRate: assignment.minRate, 
                     maxRate: assignment.maxRate, 
                     description: assignment.description,
@@ -78,7 +78,6 @@ async function accept_assignment(assignment : Assignment) {
      } catch (error: any) {
             setError(error?.message);
         }
-
       
     }
 
@@ -123,7 +122,7 @@ async function accept_assignment(assignment : Assignment) {
                     {assignments.filter((assignment) => assignment.id.toString() === assignmentId)
                                 .map((assignment) => (
                         <div key={assignment.id} className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl">
-                            <h2 className="text-2xl font-semibold mb-2">{assignment.Subject} - {assignment.Level}</h2>
+                            <h2 className="text-2xl font-semibold mb-2">{assignment.subject} - {assignment.level}</h2>
                             <p className="text-gray-700 mb-1"><strong>Location:</strong> {assignment.Location}</p>
                             <p className="text-gray-700 mb-1"><strong>Rate:</strong> ${assignment.minRate} - ${assignment.maxRate}</p>
                             <p className="text-gray-700 mb-1"><strong>Description:</strong> {assignment.description}</p>
@@ -134,9 +133,9 @@ async function accept_assignment(assignment : Assignment) {
                             </p>
                             <button
                                 className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors"
-                                onClick={() => accept_assignment(assignment)}
+                                onClick={() => apply_assignment(assignment)}
                             >
-                                Accept Assignment?
+                                Apply Assignment?
                             </button>
             {error2 && <Alert>{error2}</Alert>}
                         </div>

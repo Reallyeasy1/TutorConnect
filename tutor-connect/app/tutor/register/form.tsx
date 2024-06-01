@@ -87,7 +87,7 @@ export const RegisterForm = () => {
             <CardHeader>
               <CardTitle>Personal Information</CardTitle>
               <CardDescription>
-                Fill up your personal information. Click next when you're done.
+                Fill up your personal information. Click next when you&apos;re done.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">

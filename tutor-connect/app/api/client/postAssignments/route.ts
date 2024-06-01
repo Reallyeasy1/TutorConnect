@@ -62,7 +62,10 @@ export async function POST(req: Request) {
                 maxRate: MaxRate,
                 description: description,
                 postDate: new Date(postDate), // Ensure postDate is a valid Date
-                taken: false
+                taken: false,
+                avail_tutors: {
+                    create: []
+                }
             }
         });
 

@@ -6,8 +6,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 interface Assignment {
     id: number;
-    Subject: string;
-    Level: string;
+    subject: string;
+    level: string;
     Location: string;
     minRate: number;
     maxRate: number;
@@ -64,7 +64,8 @@ const assignment_filtered = assignments.filter((assignment) => assignment.client
                 <div className="grid grid-cols-1 gap-8">
                     {assignment_filtered.map((assignment) => (
                         <div key={assignment.id} className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl">
-                            <h2 className="text-2xl font-semibold mb-2">{assignment.Subject} - {assignment.Level}</h2>
+                           
+                            <h2 className="text-2xl font-semibold mb-2">{assignment.subject} - {assignment.level}</h2>
                             <p className="text-gray-700 mb-1"><strong>Location:</strong> {assignment.Location}</p>
                             <p className="text-gray-700 mb-1"><strong>Rate:</strong> ${assignment.minRate} - ${assignment.maxRate}</p>
                             <p className="text-gray-700 mb-1"><strong>Description:</strong> {assignment.description}</p>
@@ -75,7 +76,7 @@ const assignment_filtered = assignments.filter((assignment) => assignment.client
                             </p>
                             <button
                                 className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors"
-                                onClick={() => window.location.href = `/client/view_assignment?clientId=${clientId}assignmentId=${assignment.id}`}
+                                onClick={() => window.location.href = `/client/view_assignment?clientId=${clientId}&assignmentId=${assignment.id}`}
                             >
                                 View Assignment
                             </button>

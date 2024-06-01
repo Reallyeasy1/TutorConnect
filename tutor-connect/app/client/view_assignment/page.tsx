@@ -6,8 +6,8 @@ import { Alert } from "@/components/ui/alert"
 
 interface Assignment {
     id: number;
-    Subject: string;
-    Level: string;
+    subject: string;
+    level: string;
     Location: string;
     minRate: number;
     maxRate: number;
@@ -48,8 +48,8 @@ async function accept_assignment(assignment : Assignment) {
                 method: 'PUT',
                 body: JSON.stringify({
                     AssignmentId: assignment.id,
-                    Subject: assignment.Subject,
-                    Level: assignment.Level, 
+                    Subject: assignment.subject,
+                    Level: assignment.level, 
                     clientId: assignment.client.id,
                     client: assignment.client,
                     tuteeLocation: assignment.Location,
@@ -123,7 +123,7 @@ async function accept_assignment(assignment : Assignment) {
                     {assignments.filter((assignment) => assignment.id.toString() === assignmentId)
                                 .map((assignment) => (
                         <div key={assignment.id} className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl">
-                            <h2 className="text-2xl font-semibold mb-2">{assignment.Subject} - {assignment.Level}</h2>
+                            <h2 className="text-2xl font-semibold mb-2">{assignment.subject} - {assignment.level}</h2>
                             <p className="text-gray-700 mb-1"><strong>Location:</strong> {assignment.Location}</p>
                             <p className="text-gray-700 mb-1"><strong>Rate:</strong> ${assignment.minRate} - ${assignment.maxRate}</p>
                             <p className="text-gray-700 mb-1"><strong>Description:</strong> {assignment.description}</p>
