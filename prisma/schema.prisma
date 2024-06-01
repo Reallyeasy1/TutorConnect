@@ -13,25 +13,58 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id Int @id @default(autoincrement())
-  email String @unique
-  password String
-  name String
+model Client {
+  id                      Int                      @id @default(autoincrement())
+  email                   String                   @unique
+  password                String
+  name                    String
+  contactNumber           Int
+  address                 String
+  postalCode              Int
+  assignments             Assignment[]
+  active                  Boolean                  @default(false)
+  activateClientToken     ActivateClientToken[]
+  passwordResetClientToken PasswordResetClientToken[]
 }
 
-model Client {
-  // Personal Information
-  id Int @id @default(autoincrement())
-  email String @unique
-  password String
-  name String
-  contactNumber Int
-  address String
-  postalCode Int
-  active Boolean @default(false)
-  activateClientToken ActivateClientToken[]
-  PasswordResetClientToken PasswordResetClientToken[]
+model Tutor {
+  id                      Int                      @id @default(autoincrement())
+  email                   String                   @unique
+  password                String
+  name                    String
+  contactNumber           Int
+  dateOfBirth             DateTime
+  gender                  String
+  age                     Int
+  nationality             String
+  race                    String
+  //level                   String
+  //subject                 String
+  //location                String
+  //type                    String
+  typeOfTutor             String
+  yearsOfExperience       Int
+  highestEducationLevel   String
+  assignments             Assignment[]
+  active                  Boolean                  @default(false)
+  activateTutorToken      ActivateTutorToken[]
+  passwordResetTutorToken PasswordResetTutorToken[]
+}
+
+model Assignment {
+  id       Int      @id @default(autoincrement())
+  subject  String
+  level    String
+  client   Client   @relation(fields: [clientId], references: [id])
+  clientId Int
+  tutor    Tutor?   @relation(fields: [tutorId], references: [id])
+  tutorId  Int?
+  description String?
+  postDate DateTime
+  taken    Boolean
+  location String
+  minRate  Int
+  maxRate  Int
 }
 
 model ActivateClientToken {
@@ -52,34 +85,6 @@ model PasswordResetClientToken {
 
   client Client @relation(fields: [clientId], references: [id])
   clientId Int
-}
-
-model Tutor {
-  // Personal Information
-  id Int @id @default(autoincrement())
-  email String @unique
-  password String
-  name String
-  contactNumber Int
-  dateOfBirth DateTime
-  gender String
-  age Int
-  nationality String
-  race String
-  
-  // Tutoring Preferences
-  // level String
-  // subject String
-  // location String
-
-  // Academic Qualifications and Preferences
-  typeOfTutor String
-  yearsOfExperience Int
-  highestEducationLevel String
-
-  active Boolean @default(false)
-  activateTutorToken ActivateTutorToken[]
-  PasswordResetTutorToken PasswordResetTutorToken[]
 }
 
 model ActivateTutorToken {

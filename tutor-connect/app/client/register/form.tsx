@@ -19,7 +19,26 @@ export const RegisterForm = () => {
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+
+        if (password.length < 8 || 
+            !/[a-z]/.test(password) || 
+            !/[A-Z]/.test(password) || 
+            !/[0-9]/.test(password) || 
+            !/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+                setError("Your password must be at least 8 characters long, contain at least one number and one special character, and have a mixture of uppercase and lowercase letters.")
+                return
+        }
+
+        if (contactNumber.length !== 8) {
+            setError('Contact number must be 8 digits')
+            return
+        }
         
+        if (postalCode.length !== 6) {
+            setError('Postal code must be 6 digits')
+            return
+        }
+       
         try {
             const res = await fetch('/api/client/register', {
                 method: 'POST',
@@ -44,7 +63,7 @@ export const RegisterForm = () => {
     }
 
     return (
-        <form onSubmit={onSubmit} className="space-y-12 w-full sm:w-[400px]">
+        <form onSubmit={onSubmit} className="space-y-6 w-full sm:w-[400px]">
             <div className="grid w-full items-center gap-1.5">
                 <Label htmlFor="name">Name</Label>
                 <Input 

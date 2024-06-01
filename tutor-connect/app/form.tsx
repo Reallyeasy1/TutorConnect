@@ -11,7 +11,7 @@ import { useState } from "react"
 export const Form = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
-    const callbackUrl = searchParams.get('callbackUrl') || '/client/register' // change
+    const callbackUrl = searchParams.get('callbackUrl') || '/tutor/register' //change
     //const error = searchParams.get('error') ? 'Invalid credentials' : ''
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -24,6 +24,7 @@ export const Form = () => {
                 redirect: false,
                 email, 
                 password,
+                typeOfTutor: "tutor",
                 callbackUrl
             })
             if (!res?.error) {
@@ -34,10 +35,10 @@ export const Form = () => {
         } catch (err: any) {
 
         }
-        
+
     }
     return (
-        <form onSubmit={onSubmit} className="space-y-4 w-full sm:w-[400px]">
+        <form onSubmit={onSubmit} className="space-y-12 w-full sm:w-[400px]">
             <div className="grid w-full items-center gap-1.5">
                 <Label htmlFor="email">Email</Label>
                 <Input

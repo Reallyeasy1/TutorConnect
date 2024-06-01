@@ -19,6 +19,13 @@ export async function POST(req: Request) {
             )
         }
 
+        if (new Date() > new Date(passwordResetToken.createdAt.getTime() + 24 * 60 * 60 * 1000)) {
+            return NextResponse.json(
+                { error: 'This reset link has expired. Please request a new reset link if needed.' },
+                { status: 400 }
+            )
+        }
+
         if (passwordResetToken.resetAt !== null) {
             return NextResponse.json(
                 { error: 'This reset link has already been used. Please request a new reset link if needed.' },

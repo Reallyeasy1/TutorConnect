@@ -50,28 +50,42 @@ export const RegisterForm = () => {
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        
-        try {
-            const res = await fetch('/api/tutor/register', {
-                method: 'POST',
-                body: JSON.stringify({
-                    email, password, name, contactNumber, dateOfBirth, gender, age, nationality, race, yearsOfExperience, typeOfTutor, highestEducationLevel
-                }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            
-            if (res.ok) {
-                router.push("http://localhost:3000/tutor/login")
-            } else {
-                setError((await res.json()).error)
-            }
-        } catch (error: any) {
-            setError(error?.message)
+
+        if (password.length < 8 || 
+          !/[a-z]/.test(password) || 
+          !/[A-Z]/.test(password) || 
+          !/[0-9]/.test(password) || 
+          !/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+              setError("Your password must be at least 8 characters long, contain at least one number and one special character, and have a mixture of uppercase and lowercase letters.")
+              return
         }
 
-        console.log("Register!")
+        if (contactNumber.length !== 8) {
+          setError('Contact number must be 8 digits')
+          return
+      }
+      
+       try {
+          const res = await fetch('/api/tutor/register', {
+              method: 'POST',
+              body: JSON.stringify({
+                  email, password, name, contactNumber, dateOfBirth, gender, age, nationality, race, yearsOfExperience, typeOfTutor, highestEducationLevel
+              }),
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          })
+          
+          if (res.ok) {
+              router.push("/tutor/login")
+          } else {
+              setError((await res.json()).error)
+          }
+      } catch (error: any) {
+          setError(error?.message)
+      }
+
+      console.log("Register!")
     }
 
     return (
