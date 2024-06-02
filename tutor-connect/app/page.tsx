@@ -1,10 +1,7 @@
 "use client"
 import NavBar from '@/components/nav-bar/navBar';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Image from "next/image";
-import Logo from '@/components/nav-bar/logo';
-import { text } from 'stream/consumers';
 import Footer from '@/components/footer/footer';
 
 export default function AllAssignments() {

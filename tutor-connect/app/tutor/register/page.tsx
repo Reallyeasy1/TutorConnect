@@ -13,7 +13,7 @@ export default function RegisterPage() {
 		fontFamily: "Poppins",
 		fontSize: 28,
 		fontWeight: "bold",
-	}
+	};
 
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">

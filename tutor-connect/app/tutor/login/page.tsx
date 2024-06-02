@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 import { Form as LoginForm } from "./form";
@@ -7,12 +7,12 @@ import Logo from "@/components/nav-bar/logo";
 import Footer from "@/components/footer/footer";
 
 export default function LoginPage() {
-    const logoText = {
+	const logoText = {
 		color: "#5790AB",
 		fontFamily: "Poppins",
 		fontSize: 28,
 		fontWeight: "bold",
-	}
+	};
 
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
