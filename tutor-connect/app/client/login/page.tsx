@@ -27,13 +27,21 @@ export default function LoginPage() {
 							</div>
 						</div>
 						<LoginForm />
-						<p className="text-center">
+						<p className="text-center py-1">
 							Need to create an account?{" "}
 							<Link
 								className="text-indigo-500 hover:underline"
 								href="/client/register"
 							>
 								Create Account
+							</Link>{" "}
+						</p>
+						<p className="text-center">
+							<Link
+								className="text-indigo-500 hover:underline"
+								href="/client/forgot_password"
+							>
+								Forgot your password?
 							</Link>{" "}
 						</p>
 					</div>

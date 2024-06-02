@@ -66,7 +66,8 @@ export default function AvailTutors() {
 	useEffect(() => {
 		async function getTutors() {
 			try {
-				const res = await fetch("/api/client/avail_tutors"); // Ensure this matches your route
+				
+				const res = await fetch(`/api/client/avail_tutors?assignmentId=${assignmentId}`);  // Ensure this matches your route
 				const contentType = res.headers.get("content-type");
 
 				if (!res.ok) {
@@ -94,9 +95,9 @@ export default function AvailTutors() {
 	}
 
 	return (
-		<div>
+		<div className="flex flex-col min-h-screen">
 			<NavBar />
-			<div className="container mx-auto p-6 flex flex-col items-center">
+			<div className="container mx-auto p-6 flex flex-col items-center flex-grow">
 				<h1 className="text-4xl font-bold mb-8 text-center">
 					Available Tutors
 				</h1>

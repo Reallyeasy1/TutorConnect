@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
@@ -60,9 +59,9 @@ export default function AllAssignments() {
 		(assignment) => assignment.client.id.toString() == clientId
 	);
 	return (
-		<div>
+		<div className="flex flex-col min-h-screen">
 			<NavBar />
-			<div className="container mx-auto p-6 flex flex-col items-center">
+			<div className="container mx-auto p-6 flex flex-col items-center flex-grow">
 				<h1 className="text-4xl font-bold mb-8 text-center">
 					Available Assignments
 				</h1>
@@ -113,7 +112,7 @@ export default function AllAssignments() {
 									{assignment.taken ? "Taken" : "Available"}
 								</p>
 								<button
-									className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors"
+									className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors w-full"
 									onClick={() =>
 										(window.location.href = `/client/view_assignment?clientId=${clientId}&assignmentId=${assignment.id}`)
 									}

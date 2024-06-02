@@ -41,7 +41,11 @@ export default function ViewAssignment() {
 		try {
 			console.log(tutorId);
 			if (tutorId == null) {
-				setError2("Tutor ID is required");
+				if (clientId != null) {
+                        router.push(`/client/avail_tutors?clientId=${clientId}&assignmentId=${assignmentId}`);
+                } else {
+                    setError2("Tutor ID is required");
+                }
 			} else {
 				const res = await fetch("/api/acceptAssignment", {
 					method: "PUT",
@@ -109,9 +113,9 @@ export default function ViewAssignment() {
 	}
 
 	return (
-		<div>
+		<div className="flex flex-col min-h-screen">
 			<NavBar />
-			<div className="container mx-auto p-6 flex flex-col items-center">
+			<div className="container mx-auto p-6 flex flex-col items-center flex-grow">
 				<h1 className="text-4xl font-bold mb-8 text-center">
 					Tutee Assignment
 				</h1>
@@ -171,12 +175,12 @@ export default function ViewAssignment() {
 											: "Available"}
 									</p>
 									<button
-										className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors"
+										className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors w-full"
 										onClick={() =>
 											accept_assignment(assignment)
 										}
 									>
-										Accept Assignment?
+										View Details
 									</button>
 									{error2 && <Alert>{error2}</Alert>}
 								</div>

@@ -117,7 +117,23 @@ export const RegisterForm = () => {
 			});
 
 			if (res.ok) {
-				router.push("/tutor/login");
+				const response = await fetch("/api/tutor/getTutorDetails", {
+					method: "POST",
+					body: JSON.stringify({
+						email,
+					}),
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+				const data = await response.json();
+				if (data?.id) {
+					router.push(
+						"/tutor/verify_email?tutortId=" + data.id
+					);
+				} else {
+					setError("Failed to retrieve user information");
+				}
 			} else {
 				setError((await res.json()).error);
 			}

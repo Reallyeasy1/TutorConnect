@@ -37,15 +37,18 @@ const Footer = () => {
   const logoText = { 
     color: "#ffffff", 
     fontFamily: "Poppins", 
-    fontSize: 28 
+    fontSize: 28,
+    fontWeight: "bold",
 }
 
   return (
     <footer style={footerStyle}>
-      <div className='flex items-center'>
-        <Logo/>
-        <div className="font-semibold" style={logoText}>TutorConnect</div>
-      </div>
+      <div className="flex items-center">
+				<Logo />
+				<div style={logoText} className="ml-2">
+					TutorConnect
+				</div>
+			</div>
       <div style={sectionStyle} >
         <h3 style={titleStyle}>Quick Links</h3>
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>

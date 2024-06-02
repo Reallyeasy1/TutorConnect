@@ -17,7 +17,8 @@ import { useState } from "react";
 export const Form = () => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const callbackUrl = searchParams.get("callbackUrl") || "/tutor/register"; //change
+    //TODO: Add clientId to the query string
+	const callbackUrl = searchParams.get("callbackUrl") || "/tutor/view_assignments"; //change
 	//const error = searchParams.get('error') ? 'Invalid credentials' : ''
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -37,8 +38,23 @@ export const Form = () => {
 				callbackUrl,
 			});
 			if (!res?.error) {
-				// If there is no error, redirect the user to the callback URL
-				router.push(callbackUrl);
+				const response = await fetch("/api/tutor/getTutorDetails", {
+					method: "POST",
+					body: JSON.stringify({
+						email,
+					}),
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+				const data = await response.json();
+				if (data?.id) {
+					router.push(
+						"/tutor/view_assignments?tutorId=" + data.id
+					);
+				} else {
+					setError("Failed to retrieve user information");
+				}
 			} else {
 				// If there is an error, set the error state to the error message
 				setError("Invalid email or password");

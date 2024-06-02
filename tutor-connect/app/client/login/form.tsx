@@ -3,6 +3,7 @@
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { prisma } from "@/lib/prisma";
 import { Label } from "@radix-ui/react-label";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -11,7 +12,7 @@ import { useState } from "react";
 export const Form = () => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const callbackUrl = searchParams.get("callbackUrl") || "/client/register"; // change
+	const callbackUrl = searchParams.get("callbackUrl") || "/client/post_assignments"; // change
 	//const error = searchParams.get('error') ? 'Invalid credentials' : ''
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -27,7 +28,23 @@ export const Form = () => {
 				callbackUrl,
 			});
 			if (!res?.error) {
-				router.push(callbackUrl);
+				const response = await fetch("/api/client/getClientDetails", {
+					method: "POST",
+					body: JSON.stringify({
+						email,
+					}),
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+				const data = await response.json();
+				if (data?.id) {
+					router.push(
+						"/client/client_assignment?clientId=" + data.id
+					);
+				} else {
+					setError("Failed to retrieve user information");
+				}
 			} else {
 				setError("Invalid email or password");
 			}

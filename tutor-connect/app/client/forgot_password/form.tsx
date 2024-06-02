@@ -36,7 +36,7 @@ export const ForgotPasswordForm = () => {
 
 			if (res.ok) {
 				router.push(
-					"http://localhost:3000/client/forgot-password/success"
+					"http://localhost:3000/client/forgot_password/success"
 				);
 			} else {
 				setError((await res.json()).error);

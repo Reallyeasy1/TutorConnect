@@ -79,14 +79,6 @@ export default function AllAssignments() {
         },
     };
 
-    const handleRegisterRequestClick = () => {
-        alert('Register and Request feature is coming soon!');
-    };
-
-    const handleRegisterTutorClick = () => {
-        alert('Register as a Tutor feature is coming soon!');
-    };
-
     return (
         <div style={styles.body}>
             <NavBar />
@@ -94,7 +86,7 @@ export default function AllAssignments() {
                 <div style={styles.heroText}>
                     <h1 style={styles.heroTitle}>Find the right tutor<br />with TutorConnect</h1>
                     <p style={styles.heroDescription}>Find the perfect tutor for your needs instantly with TutorConnect's personalized matchmaking algorithm</p>
-                    <a href="#" style={styles.heroButton} onClick={handleRegisterRequestClick}>Register & Request Now</a>
+                    <a href="/client/register" style={styles.heroButton}>Register & Request Now</a>
                 </div>
             </div>
             <div style={styles.features}>
@@ -117,7 +109,7 @@ export default function AllAssignments() {
             <div style={styles.ctaSection}>
                 <h2>Looking for clients? Join TutorConnect today!</h2>
                 <p>Are you a passionate tutor looking for more students? Sign up now to find clients who need your expertise today!</p>
-                <a href="#" style={styles.heroButton} onClick={handleRegisterTutorClick}>Register as a Tutor</a>
+                <a href="/tutor/register" style={styles.heroButton}>Register as a Tutor</a>
             </div>
             <div style = {styles.featuresContainer}>
                 <h2 style = {styles.featureTitle}>Matchmaking Made Easy!</h2>

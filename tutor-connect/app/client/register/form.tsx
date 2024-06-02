@@ -60,7 +60,23 @@ export const RegisterForm = () => {
 			});
 
 			if (res.ok) {
-				router.push("http://localhost:3000/client/login");
+				const response = await fetch("/api/client/getClientDetails", {
+					method: "POST",
+					body: JSON.stringify({
+						email,
+					}),
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+				const data = await response.json();
+				if (data?.id) {
+					router.push(
+						"/client/verify_email?clientId=" + data.id
+					);
+				} else {
+					setError("Failed to retrieve user information");
+				}
 			} else {
 				setError((await res.json()).error);
 			}
