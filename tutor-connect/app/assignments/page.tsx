@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import NavBar from "@/components/nav-bar/navBar";
+import Footer from "@/components/footer/footer";
 // import NavBar from "./../../components/nav-bar/navBar";
 
 interface Assignment {
@@ -55,7 +57,7 @@ export default function AllAssignments() {
 
 	return (
 		<div>
-			{/* <NavBar /> */}
+			<NavBar />
 			<div className="container mx-auto p-6 flex flex-col items-center">
 				<h1 className="text-4xl font-bold mb-8 text-center">
 					Available Assignments
@@ -118,6 +120,7 @@ export default function AllAssignments() {
 					</div>
 				)}
 			</div>
+            <Footer />
 		</div>
 	);
 }

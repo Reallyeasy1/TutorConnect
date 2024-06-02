@@ -1,25 +1,23 @@
-import Link from "next/link";
-import { RegisterForm } from "./form";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+"use client";
 
-export default function RegisterPage() {
+import Link from "next/link";
+import { PostAssignmentForm } from "./form";
+import Footer from "@/components/footer/footer";
+import NavBar from "@/components/nav-bar/navBar";
+
+export default function PostAssignmentPage() {
 	return (
-		<div className="h-full w-screen flex justify-center items-center bg-navy-100">
-			<div className="sm:shadow-xl px-8 pb-8 pt-12 sm:bg-white rounded-xl space-y-12">
-				<h1 className="font-semibold text-2xl">
-					Post Assignment here!
-				</h1>
-				<RegisterForm />
-				<p className="text-center">
-					Have an account?{" "}
-					<Link
-						className="text-indigo-500 hover:underline"
-						href="/login"
-					>
-						Sign in
-					</Link>{" "}
-				</p>
+		<div>
+			<NavBar />
+			<div className="h-full w-screen flex justify-center items-center bg-navy-100 py-6">
+				<div className="sm:shadow-xl px-8 pb-8 pt-12 sm:bg-white rounded-xl space-y-12">
+					<h1 className="font-semibold text-2xl">
+						Post Assignment here!
+					</h1>
+					<PostAssignmentForm />
+				</div>
 			</div>
+			<Footer />
 		</div>
 	);
 }

@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export const RegisterForm = () => {
+export const PostAssignmentForm = () => {
 	//TODO: Get a proper router and switch to [clientId]/postAssignments as the query string
 	const router = useRouter();
 	const searchParams = useSearchParams();
