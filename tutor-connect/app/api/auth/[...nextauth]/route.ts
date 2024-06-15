@@ -64,7 +64,7 @@ export const authOptions: NextAuthOptions = {
 					id: user.id + "",
 					email: user.email,
 					name: user.name,
-					randomKey: "Hey cool",
+					randomKey: credentials?.typeOfTutor ? "tutor" : "client",
 				};
 			},
 		}),
@@ -85,11 +85,10 @@ export const authOptions: NextAuthOptions = {
 			console.log("JWT Callback", { token, user });
 			if (user) {
 				const u = user as unknown as any;
-				return {
-					...token,
-					id: u.id,
-					randomKey: u.randomKey,
-				};
+				token.id = u.id;
+				token.name = u.name;
+				token.email = u.email;
+				token.randomKey = u.randomKey as string;
 			}
 			return token;
 		},

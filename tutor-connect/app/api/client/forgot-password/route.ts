@@ -28,7 +28,8 @@ export async function POST(req: Request) {
 		const from: string = "<lowethan11@gmail.com>";
 		const to: string = user.email;
 		const subject: string = "Reset Password";
-		const mailTemplate: string = `Hello ${user.name}, <br> Please click on the link to reset your password: http://localhost:3000/client/password_reset/${token.token}`;
+		const baseUrl: string = process.env.NEXTAUTH_URL || "http://localhost:3000";
+		const mailTemplate: string = `Hello ${user.name}, <br> Please click on the link to reset your password: ${baseUrl}/client/password_reset/${token.token}`;
 
 		sendMail(from, to, subject, mailTemplate);
 

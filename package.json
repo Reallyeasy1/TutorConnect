@@ -3,6 +3,7 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.0.18",
     "@fontsource/playfair-display": "^5.0.24",
     "@fontsource/poppins": "^5.0.14",
     "@googlemaps/js-api-loader": "^1.16.6",
