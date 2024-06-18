@@ -12,7 +12,7 @@ export default function ProfilePage() {
 	const { data: session, status } = useSession();
 	const router = useRouter();
 	const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-	const [file, setFile] = useState<string | null>(null);
+	const [file, setFile] = useState<File | null>(null); // Changed to File type for handling file uploads
 	const [error, setError] = useState<string | null>(null);
 	const [profile, setProfile] = useState({
 		email: "",
@@ -20,8 +20,11 @@ export default function ProfilePage() {
 		address: "",
 		postalCode: "",
 		name: "",
+		image: "",
 	});
-	const [modifiedFields, setModifiedFields] = useState<Set<string>>(new Set());
+	const [modifiedFields, setModifiedFields] = useState<Set<string>>(
+		new Set()
+	);
 
 	useEffect(() => {
 		const fetchClientDetails = async () => {
@@ -68,10 +71,20 @@ export default function ProfilePage() {
 	};
 
 	const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files && e.target.files[0]) {
-			const fileURL = URL.createObjectURL(e.target.files[0]);
-			console.log(fileURL);
-			setFile(fileURL);
+		const file = e.target.files && e.target.files[0];
+		if (file) {
+			const maxSize = 2 * 1024 * 1024;
+
+			if (file.size > maxSize) {
+				alert("File size exceeds 2MB");
+				return;
+			}
+
+			const blobUrl = URL.createObjectURL(file);
+			setProfile({
+				...profile,
+				image: blobUrl,
+			});
 		}
 	};
 
@@ -91,29 +104,35 @@ export default function ProfilePage() {
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		if (modifiedFields.has("contactNumber") && profile.contactNumber.length !== 8) {
+		if (
+			modifiedFields.has("contactNumber") &&
+			profile.contactNumber.length !== 8
+		) {
 			setError("Contact number must be 8 digits");
 			return;
 		}
 
-		if (modifiedFields.has("postalCode") && profile.postalCode.length !== 6) {
+		if (
+			modifiedFields.has("postalCode") &&
+			profile.postalCode.length !== 6
+		) {
 			setError("Postal code must be 6 digits");
 			return;
 		}
-		console.log("Submitting profile changes", profile);
 
 		try {
+			const formData = new FormData();
+			formData.append("email", profile.email);
+			formData.append("contactNumber", profile.contactNumber);
+			formData.append("address", profile.address);
+			formData.append("postalCode", profile.postalCode);
+			if (profile.image) {
+				formData.append("image", profile.image);
+			}
+
 			const res = await fetch("/api/client/edit_profile", {
 				method: "POST",
-				body: JSON.stringify({
-					email: profile.email,
-					contactNumber: profile.contactNumber,
-					address: profile.address,
-					postalCode: profile.postalCode,
-				}),
-				headers: {
-					"Content-Type": "application/json",
-				},
+				body: formData,
 			});
 			if (res.ok) {
 				alert("Changes saved successfully");
@@ -297,16 +316,17 @@ export default function ProfilePage() {
 								<div style={profileCard.profileImage}>
 									<Image
 										src={
-											file ||
-											"/images/Blank Profile Photo.jpg"
+											profile.image
+												? profile.image
+												: "/images/Blank Profile Photo.jpg"
 										}
 										alt="Profile Picture"
 										width={100}
 										height={100}
 										className="rounded-full mr-2"
 										style={{
-											maxWidth: "100px",
-											maxHeight: "100px",
+											width: "100px",
+											height: "100px",
 										}}
 									/>
 									<input
@@ -314,6 +334,7 @@ export default function ProfilePage() {
 										id="fileInput"
 										style={{ display: "none" }}
 										onChange={handlePhotoChange}
+										accept=".png, .jpg, .jpeg, .gif"
 									/>
 									<button
 										type="button"
@@ -328,7 +349,7 @@ export default function ProfilePage() {
 									</button>
 								</div>
 								<h2 style={profileCard.clientName}>
-									{ profile.name }
+									{profile.name}
 								</h2>
 								<Label htmlFor="email">
 									Email (Cannot be changed)
@@ -388,7 +409,9 @@ export default function ProfilePage() {
 										Save Changes
 									</button>
 								</div>
-								{error && <p style={{ color: "red" }}>{error}</p>}
+								{error && (
+									<p style={{ color: "red" }}>{error}</p>
+								)}
 							</form>
 						</div>
 					</div>

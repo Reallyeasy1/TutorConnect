@@ -27,6 +27,7 @@ model Client {
   active                   Boolean                    @default(false)
   activateClientToken      ActivateClientToken[]
   passwordResetClientToken PasswordResetClientToken[]
+  image                    String?
 }
 
 model Assignment {
@@ -57,10 +58,8 @@ model Tutor {
   age                     Int
   nationality             String
   race                    String
-  // level                String
-  // subject              String
-  // location             String
-  // type                 String
+  levelAndSubjects        Json
+  location                String[]
   typeOfTutor             String
   yearsOfExperience       Int
   highestEducationLevel   String
@@ -69,10 +68,11 @@ model Tutor {
   active                  Boolean                   @default(false)
   activateTutorToken      ActivateTutorToken[]
   passwordResetTutorToken PasswordResetTutorToken[]
+  image                   String?
 }
 
 model ActivateTutorToken {
-  id          Int       @id @default(autoincrement())
+  id          Int       @id @default(autoincrement()) 
   token       String    @unique
   createdAt   DateTime  @default(now())
   activatedAt DateTime?

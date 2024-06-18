@@ -22,7 +22,7 @@ export async function POST(req: Request) {
 				{ status: 404 }
 			);
 		} else {
-			return NextResponse.json({ id: user.id, email: user.email, name: user.name, contactNumber: user.contactNumber, address: user.address, postalCode: user.postalCode});
+			return NextResponse.json({ id: user.id, email: user.email, name: user.name, contactNumber: user.contactNumber, address: user.address, postalCode: user.postalCode, image: user.image});
 		}
 	} catch (err: any) {
 		return NextResponse.json({ error: err.message }, { status: 500 });

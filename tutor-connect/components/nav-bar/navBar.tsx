@@ -43,22 +43,40 @@ const NavBar = () => {
 
 	useEffect(() => {
 		let handler = (e: MouseEvent) => {
-			if (clientDropdownRef.current && !clientDropdownRef.current.contains(e.target as Node)) {
+			if (
+				clientDropdownRef.current &&
+				!clientDropdownRef.current.contains(e.target as Node)
+			) {
 				setClientsDropdown(false);
 			}
-			if (tutorDropdownRef.current && !tutorDropdownRef.current.contains(e.target as Node)) {
+			if (
+				tutorDropdownRef.current &&
+				!tutorDropdownRef.current.contains(e.target as Node)
+			) {
 				setTutorsDropdown(false);
 			}
-			if (registerRef.current && !registerRef.current.contains(e.target as Node)) {
+			if (
+				registerRef.current &&
+				!registerRef.current.contains(e.target as Node)
+			) {
 				setRegisterDropdown(false);
 			}
-			if (loginRef.current && !loginRef.current.contains(e.target as Node)) {
+			if (
+				loginRef.current &&
+				!loginRef.current.contains(e.target as Node)
+			) {
 				setLoginDropdown(false);
 			}
-			if (clientProfileRef.current && !clientProfileRef.current.contains(e.target as Node)) {
+			if (
+				clientProfileRef.current &&
+				!clientProfileRef.current.contains(e.target as Node)
+			) {
 				setClientProfile(false);
 			}
-			if (tutorProfileRef.current && !tutorProfileRef.current.contains(e.target as Node)) {
+			if (
+				tutorProfileRef.current &&
+				!tutorProfileRef.current.contains(e.target as Node)
+			) {
 				setTutorProfile(false);
 			}
 		};
@@ -221,7 +239,10 @@ const NavBar = () => {
 			<div className="flex items-center space-x-4">
 				{session ? (
 					session.user?.randomKey == "client" ? (
-						<div className="flex items-center space-x-2" ref={clientProfileRef}>
+						<div
+							className="flex items-center space-x-2"
+							ref={clientProfileRef}
+						>
 							<button
 								style={hoverText(6)}
 								onMouseEnter={() => handleMouseEnter(6)}
@@ -232,7 +253,11 @@ const NavBar = () => {
 								className="flex items-center"
 							>
 								<Image
-									src="/images/Blank Profile Photo.jpg"
+									src={
+										session.user.image
+											? session.user.image
+											: "/images/Blank Profile Photo.jpg"
+									}
 									alt="Profile Picture"
 									width={40}
 									height={40}
@@ -248,7 +273,10 @@ const NavBar = () => {
 							{clientProfile && <ClientProfile />}
 						</div>
 					) : (
-						<div className="flex items-center space-x-2" ref={tutorProfileRef}>
+						<div
+							className="flex items-center space-x-2"
+							ref={tutorProfileRef}
+						>
 							<button
 								style={hoverText(7)}
 								onMouseEnter={() => handleMouseEnter(7)}

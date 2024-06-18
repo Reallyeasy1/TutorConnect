@@ -65,6 +65,7 @@ export const authOptions: NextAuthOptions = {
 					email: user.email,
 					name: user.name,
 					randomKey: credentials?.typeOfTutor ? "tutor" : "client",
+					image: user.image,
 				};
 			},
 		}),

@@ -3,7 +3,13 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
 	try {
-		const { email, contactNumber, address, postalCode } = await req.json();
+		const formData = await req.formData();
+
+		const email = formData.get("email");
+		const contactNumber = formData.get("contactNumber");
+		const address = formData.get("address");
+		const postalCode = formData.get("postalCode");
+		const image = formData.get("image");
 
 		if (!email || !contactNumber || !address || !postalCode) {
 			return NextResponse.json(
@@ -12,13 +18,19 @@ export async function POST(req: Request) {
 			);
 		}
 
+		let updateData: any = {
+			contactNumber: parseInt(contactNumber as string),
+			address: address as string,
+			postalCode: parseInt(postalCode as string),
+		};
+
+		if (image) {
+			updateData.image = image;
+		}
+
 		const updatedClient = await prisma.client.update({
-			where: { email: email },
-			data: {
-				contactNumber: parseInt(contactNumber),
-				address,
-				postalCode: parseInt(postalCode),
-			},
+			where: { email: email as string },
+			data: updateData,
 		});
 
 		return NextResponse.json({ success: "Changes made successfully" });
