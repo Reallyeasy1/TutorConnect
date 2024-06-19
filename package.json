@@ -3,10 +3,19 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
+  "antd": "^4.20.5",
+    "font-awesome.min.css": "^3.2.1",
+    "jsonwebtoken": "^8.5.1",
+    "next": "12.1.6",
+    "nodemailer": "^6.9.13",
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
+    "react-scroll-to-bottom": "^4.2.0",
+    "styled-components": "5.3.5",
     "@fontsource/playfair-display": "^5.0.24",
     "@fontsource/poppins": "^5.0.14",
     "@googlemaps/js-api-loader": "^1.16.6",
-    "@prisma/client": "^5.13.0",
+    "@prisma/client": "^5.15.0",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
@@ -26,12 +35,11 @@
     "lucide-react": "^0.378.0",
     "moment": "^2.30.1",
     "next-auth": "^4.24.7",
-    "nodemailer": "^6.9.13",
     "pg": "^8.11.5",
     "react-day-picker": "^8.10.1",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "winston": "^3.13.0"
+    "winston": "^3.13.0" 
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

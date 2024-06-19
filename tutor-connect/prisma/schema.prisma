@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+// To deploy locally
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//To deploy on vercel
+//datasource db {
+//  provider = "postgresql"
+//  url = env("postgres_PRISMA_URL") // uses connection pooling
+//  directUrl = env("postgres_URL_NON_POOLING") // uses a direct connection
+//}
+
+model Client {
+  id                       Int                        @id @default(autoincrement())
+  email                    String                     @unique
+  password                 String
+  name                     String
+  contactNumber            Int
+  address                  String
+  postalCode               Int
+  assignments              Assignment[]
+  active                   Boolean                    @default(false)
+  activateClientToken      ActivateClientToken[]
+  passwordResetClientToken PasswordResetClientToken[]
+}
+
+model Assignment {
+  id           Int      @id @default(autoincrement())
+  subject      String
+  level        String
+  client       Client   @relation(fields: [clientId], references: [id])
+  clientId     Int
+  tutor        Tutor?   @relation(name: "PrimaryTutor", fields: [tutorId], references: [id])
+  tutorId      Int?
+  description  String?
+  postDate     DateTime
+  taken        Boolean
+  location     String
+  minRate      Int
+  maxRate      Int
+  avail_tutors Tutor[]  @relation(name: "AvailableTutors")
+}
+
+model Tutor {
+  id                      Int                       @id @default(autoincrement())
+  email                   String                    @unique
+  password                String
+  name                    String
+  contactNumber           Int
+  dateOfBirth             DateTime
+  gender                  String
+  age                     Int
+  nationality             String
+  race                    String
+  // level                String
+  // subject              String
+  // location             String
+  // type                 String
+  typeOfTutor             String
+  yearsOfExperience       Int
+  highestEducationLevel   String
+  assignmentsPrimary      Assignment[]              @relation(name: "PrimaryTutor")
+  assignmentsAvailable    Assignment[]              @relation(name: "AvailableTutors")
+  active                  Boolean                   @default(false)
+  activateTutorToken      ActivateTutorToken[]
+  passwordResetTutorToken PasswordResetTutorToken[]
+}
+
+model ActivateTutorToken {
+  id          Int       @id @default(autoincrement())
+  token       String    @unique
+  createdAt   DateTime  @default(now())
+  activatedAt DateTime?
+  tutor       Tutor     @relation(fields: [tutorId], references: [id])
+  tutorId     Int
+}
+
+model PasswordResetTutorToken {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  createdAt DateTime  @default(now())
+  resetAt   DateTime?
+  tutor     Tutor     @relation(fields: [tutorId], references: [id])
+  tutorId   Int
+}
+
+model ActivateClientToken {
+  id          Int       @id @default(autoincrement())
+  token       String    @unique
+  createdAt   DateTime  @default(now())
+  activatedAt DateTime?
+  client      Client    @relation(fields: [clientId], references: [id])
+  clientId    Int
+}
+
+model PasswordResetClientToken {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  createdAt DateTime  @default(now())
+  resetAt   DateTime?
+  client    Client    @relation(fields: [clientId], references: [id])
+  clientId  Int
+}

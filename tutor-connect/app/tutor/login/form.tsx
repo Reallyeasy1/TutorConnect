@@ -50,7 +50,7 @@ export const Form = () => {
 				const data = await response.json();
 				if (data?.id) {
 					router.push(
-						"/tutor/view_assignments?tutorId=" + data.id
+						`/tutor/${data.id}/view_assignments`
 					);
 				} else {
 					setError("Failed to retrieve user information");
