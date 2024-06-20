@@ -30,11 +30,14 @@ interface User {
   attributes: UserAttributes;
 }
 
+// Now make it such that the List component, when clicked on, sets the recipient as that current recipient
+// It then filters the list of messages to only show messages between the current user and that recipient
 const ChatRoom: React.FC<ChatRoomProps> = ({ username, id }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<string>("");
   const [users, setUsers] = useState<User[]>([]);
   const socket = useRef(io("http://localhost:1337")).current;
+  // Create setRecipient here
 
   useEffect(() => {
     socket.emit("join", { username, id }, (error: string) => {
@@ -48,12 +51,14 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id }) => {
         message: data.text,
         createdAt: new Date().toISOString(),
       };
-      setMessages([welcomeMessage]);
+      // setMessages([welcomeMessage]);
 
+      setMessages([]);
       try {
         const res = await fetch("http://localhost:1337/api/messages");
         const response = await res.json();
-        let arr: Message[] = [welcomeMessage];
+        // let arr: Message[] = [welcomeMessage];
+         let arr: Message[] = [];
         response.data.forEach((one: { attributes: Message }) => {
           arr = [...arr, one.attributes];
         });
@@ -63,6 +68,19 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id }) => {
       }
     });
 
+async function loadUsers(){
+     try {
+        const res = await fetch("http://localhost:1337/api/accounts");
+        const usersData = await res.json();
+        console.log("Users response: ", usersData);
+        setUsers(usersData.data); // Ensure setting the correct part of the response
+      } catch (e) {
+        console.log(e.message);
+      }
+
+}
+
+loadUsers()
     socket.on("roomData", async (data) => {
       try {
         const res = await fetch("http://localhost:1337/api/accounts");
@@ -122,10 +140,13 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id }) => {
   const handleClick = () => {
     sendMessage(message);
   };
-console.log(users)
-  return (
+
+
+// console.log(users)
+// console.log("hello")  
+return (
     <ChatContainer>
-      <Header room="Group Chat" />
+      <Header room="Chat" />
       <StyledContainer>
         <List users={users} username={username} />
         <ChatBox>
@@ -157,4 +178,6 @@ export default ChatRoom;
       //TODO: Also fix active users as well/ classify them into rooms
       //TODO: Add polling so the name gets generated, etc.
       //TODO: Add timestamp as well
+      //TODO: Refresh the page after 30s
+      //TODO: Add scroll down bar if reach maximum height of room/ number of messages
    
