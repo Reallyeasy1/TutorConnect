@@ -66,6 +66,7 @@ io.on("connection", (socket) => {
       data: {
         user: data.user,
         message: data.message,
+        recipient: data.recipient
       },
     };
 
@@ -77,6 +78,7 @@ io.on("connection", (socket) => {
         user: data.user,
         text: data.message,
         timestamp: new Date().toISOString(),
+        recipient: data.recipient
       });
     } catch (e) {
       console.error("Error storing message:", e.message);

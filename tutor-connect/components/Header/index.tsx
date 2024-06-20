@@ -3,9 +3,11 @@ import styled from "styled-components";
 
 interface HeaderProps {
   room: string;
+  id: string;
+  tutor: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ room }) => {
+const Header: React.FC<HeaderProps> = ({ room, id, tutor}) => {
   return (
     <HeaderContainer>
       <RoomInfo>
@@ -14,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({ room }) => {
         </StatusIcon>
         <RoomName>{room}</RoomName>
       </RoomInfo>
-      <CloseButton href="/">
+      <CloseButton href= {!tutor ? `/client/${id}/assignment/client_assignment` : `/tutor/${id}/view_assignments`}>
         <i className="fa fa-times-circle" aria-hidden="true"></i>
       </CloseButton>
     </HeaderContainer>

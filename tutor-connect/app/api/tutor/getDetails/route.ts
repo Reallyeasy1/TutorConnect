@@ -5,18 +5,18 @@ import { NextResponse } from "next/server";
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
-    const clientId = url.searchParams.get("clientId");
+    const tutorId = url.searchParams.get("tutorId");
 
     let user;
-    if (clientId) {
-      user = await prisma.client.findUnique({
-        where: { id: parseInt(clientId, 10) }, // Ensure the clientId is parsed as an integer
+    if (tutorId) {
+      user = await prisma.tutor.findUnique({
+        where: { id: parseInt(tutorId, 10) }, // Ensure the clientId is parsed as an integer
       });
     }
 
     if (!user) {
       return NextResponse.json(
-        { error: "This client ID is not registered" },
+        { error: "This tutor ID is not registered" },
         { status: 404 }
       );
     } else {

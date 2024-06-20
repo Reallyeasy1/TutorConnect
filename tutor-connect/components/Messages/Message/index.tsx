@@ -12,6 +12,7 @@ interface MessageProps {
 
 const Message: React.FC<MessageProps> = ({ username, message }) => {
   const sentByCurrentUser = message.user === username;
+  const formattedDate = new Date(message.createdAt).toLocaleString(); // Format the date and time
 
   return (
     <MessagesContainer textPosition={sentByCurrentUser ? "end" : "start"}>
@@ -20,7 +21,7 @@ const Message: React.FC<MessageProps> = ({ username, message }) => {
           {message.message}
         </MessageText>
         <SentBy right={sentByCurrentUser ? 1 : 0}>
-          {message.user} - {new Date(message.createdAt).toLocaleTimeString()}
+          {message.user} - {formattedDate} {/* Display the formatted date and time */}
         </SentBy>
       </MessageBox>
     </MessagesContainer>

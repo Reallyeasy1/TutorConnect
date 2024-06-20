@@ -7,11 +7,13 @@ export const ChatContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     background: #f2f2f2;
-    padding: 40px;
-    margin: 100px auto;
-    max-width: 60vw;
+    padding: 20px;
+    margin: 20px auto;
+    width: 80%; // Adjusted width to fit design
+    max-width: 1200px; // Max width to control the container size
     box-shadow: 5px 10px 18px #888888;
-    height: 80vh;
+    height: 80vh; // Adjusted height to fit design
+    border-radius: 10px; // Added border radius for better aesthetics
 `;
 
 // Container for the chat messages and input
@@ -20,18 +22,19 @@ export const StyledContainer = styled.div`
     width: 100%;
     flex: 1;
     border-radius: 8px;
-    height: 60%;
+    height: 100%; // Adjusted height
     justify-content: space-between;
 `;
 
 // Chat box with messages and input
 export const ChatBox = styled.div`
-    width: 60%;
+    flex: 1;
     display: flex;
     flex-direction: column;
     background: linear-gradient(to bottom, #d4fc79, #96e6a1);  // Gradient background similar to Telegram
     border-radius: 8px;
     padding: 10px;
+    overflow-y: auto; // Ensure messages can be scrolled
 `;
 
 // Container for the input and send button
@@ -40,6 +43,7 @@ export const InputContainer = styled.div`
     align-items: center;
     width: 100%;
     margin-top: auto;
+    padding-top: 10px; // Added padding to separate from messages
 `;
 
 // Styled input field

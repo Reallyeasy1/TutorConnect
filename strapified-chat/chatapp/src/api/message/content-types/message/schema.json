@@ -20,6 +20,9 @@
     },
     "timestamp": {
       "type": "datetime"
+    },
+    "recipient": {
+      "type": "string"
     }
   }
 }
