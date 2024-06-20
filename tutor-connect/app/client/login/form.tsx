@@ -45,7 +45,8 @@ export const Form = () => {
         const token = jwt.sign(account, SECRET);
 
         if (data?.id) {
-          // Parameters for Strapi
+          // Strapi portion (migrated to register)
+         /* // Parameters for Strapi
           const strapiData = {
             data: {
               id: data.id,
@@ -76,6 +77,7 @@ export const Form = () => {
           const strapiResponseData = await strapiResponse.json();
           console.log(strapiResponseData); // Outputs the result
           console.log("Upload to Strapi success");
+          */
 
           router.push(`/client/${data.id}/assignment/client_assignment`);
         } else {

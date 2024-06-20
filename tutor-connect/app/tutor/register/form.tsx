@@ -13,6 +13,14 @@ import { CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
 import { useRouter } from "next/navigation"
+import jwt from "jsonwebtoken";
+
+interface StrapiResponseData {
+  id: number;
+  name: string;
+  email: string;
+}
+
 
 export const RegisterForm = () => {
     const [name, setName] = useState('')
@@ -63,10 +71,52 @@ export const RegisterForm = () => {
             })
             
             if (res.ok) {
+               const response = await fetch("/api/client/getClientDetails", {
+          method: "POST",
+          body: JSON.stringify({
+            email,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data: StrapiResponseData = await response.json();
+        if (data?.id) {
+          const account = { token: data.id };
+          const SECRET = "this is a secret";
+          const token = jwt.sign(account, SECRET);
+
+          const strapiData = {
+            data: {
+              id: data.id,
+              username: data.name,
+              email: data.email,
+              token: token,
+            },
+          };
+
+          const strapiResponse = await fetch("http://localhost:1337/api/accounts", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(strapiData),
+          });
+
+          if (!strapiResponse.ok) {
+            throw new Error("Failed to upload to Strapi");
+          }
+
+          const strapiResponseData = await strapiResponse.json();
+          console.log(strapiResponseData); // Outputs the result
+          console.log("Upload to Strapi success");
+              
                 router.push("/tutor/login")
+        }
             } else {
                 setError((await res.json()).error)
             }
+
         } catch (error: any) {
             setError(error?.message)
         }

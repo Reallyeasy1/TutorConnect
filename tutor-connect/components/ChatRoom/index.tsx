@@ -160,9 +160,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, tutor }) => {
         }
       });
       setMessage("");
-    } else {
-      alert("Message can't be empty");
-    }
+    } 
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
