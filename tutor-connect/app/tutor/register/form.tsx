@@ -64,15 +64,6 @@ export const RegisterForm = () => {
 		ib: false,
 		diplomaOrDegree: false,
 	});
-	const [showLocation, setShowLocation] = useState({
-		North: false,
-		South: false,
-		East: false,
-		West: false,
-		Central: false,
-		NorthWest: false,
-		NorthEast: false,
-	});
 	const [location, setLocation] = useState<string[]>([]);
 	const [checkedSubjects, setCheckedSubjects] = useState<CheckedSubjects>({
 		preschool: [],
@@ -94,14 +85,13 @@ export const RegisterForm = () => {
 	) => {
 		const { id, value, checked } = event.target;
 		const level = id as keyof typeof checkedSubjects;
-		
+
 		if (checked) {
-			// Check if the value is already in the array
 			if (!checkedSubjects[level].includes(value)) {
-			  setCheckedSubjects({
-				...checkedSubjects,
-				[id]: [...checkedSubjects[level], value], // Add value to the array for the selected level
-			  });
+				setCheckedSubjects({
+					...checkedSubjects,
+					[id]: [...checkedSubjects[level], value],
+				});
 			}
 		} else {
 			setCheckedSubjects({
@@ -116,7 +106,6 @@ export const RegisterForm = () => {
 
 	const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { value, checked } = e.target;
-		setShowLocation({ ...showLocation, [value]: checked });
 
 		if (checked) {
 			setLocation([...location, value]);
@@ -314,6 +303,7 @@ export const RegisterForm = () => {
 			fontSize: "14px",
 			color: "#909090",
 			textAlign: "justify" as "justify",
+			display: "block",
 		},
 	};
 
@@ -358,8 +348,6 @@ export const RegisterForm = () => {
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		const levelAndSubjects = checkedSubjects;
-		console.log(location);
-		console.log(checkedSubjects);
 
 		if (
 			password.length < 8 ||
@@ -561,12 +549,7 @@ export const RegisterForm = () => {
 									<Select
 										required
 										value={gender}
-										onChange={(
-											e: React.ChangeEvent<HTMLSelectElement>
-										) => setGender(e.target.value)}
-										onValueChange={setGender}
-										id="gender"
-										type="gender"
+										onValueChange={(value: string) => setGender(value)}
 									>
 										<div>
 											<SelectTrigger className="w-full">
@@ -592,12 +575,7 @@ export const RegisterForm = () => {
 									<Select
 										required
 										value={nationality}
-										onChange={(
-											e: React.ChangeEvent<HTMLSelectElement>
-										) => setNationality(e.target.value)}
-										onValueChange={setNationality}
-										id="nationality"
-										type="nationality"
+										onValueChange={(value: string) => setNationality(value)}
 									>
 										<div>
 											<SelectTrigger className="w-full">
@@ -622,12 +600,7 @@ export const RegisterForm = () => {
 									<Select
 										required
 										value={race}
-										onChange={(
-											e: React.ChangeEvent<HTMLSelectElement>
-										) => setRace(e.target.value)}
-										onValueChange={setRace}
-										id="race"
-										type="race"
+										onValueChange={(value: string) => setRace(value)}
 									>
 										<div>
 											<SelectTrigger className="w-full">
@@ -918,11 +891,11 @@ export const RegisterForm = () => {
 													)}
 												/>
 												{loc[0]}
-												<div
+												<span
 													style={locationStyle.places}
 												>
-													<label>{loc[1]}</label>
-												</div>
+													{loc[1]}
+												</span>
 											</label>
 										</div>
 									))}
@@ -967,12 +940,7 @@ export const RegisterForm = () => {
 								<Select
 									required
 									value={typeOfTutor}
-									onChange={(
-										e: React.ChangeEvent<HTMLSelectElement>
-									) => setTypeofTutor(e.target.value)}
-									onValueChange={setTypeofTutor}
-									id="typeOfTutor"
-									type="typeOfTutor"
+									onValueChange={(value: string) => setTypeofTutor(value)}
 								>
 									<div>
 										<SelectTrigger className="w-full">
@@ -1011,14 +979,7 @@ export const RegisterForm = () => {
 								<Select
 									required
 									value={highestEducationLevel}
-									onChange={(
-										e: React.ChangeEvent<HTMLSelectElement>
-									) =>
-										setHighestEducationLevel(e.target.value)
-									}
-									onValueChange={setHighestEducationLevel}
-									id="highestEducationLevel"
-									type="highestEducationLevel"
+									onValueChange={(value: string) => setHighestEducationLevel(value)}
 								>
 									<div>
 										<SelectTrigger className="w-full">

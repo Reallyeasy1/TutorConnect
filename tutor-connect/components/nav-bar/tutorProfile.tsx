@@ -7,7 +7,7 @@ export default function TutorProfile() {
 	const tutorItems = [
 		{
 			title: "Settings",
-			path: "/tutor/settings",
+			path: "/tutor/settings/profile",
 			cName: "dropdown-link",
 		},
 		{
@@ -19,7 +19,7 @@ export default function TutorProfile() {
 			title: "Sign Out",
 			path: "#",
 			cName: "dropdown-link",
-      action: () => signOut(),
+			action: () => signOut(),
 		},
 	];
 
@@ -34,7 +34,7 @@ export default function TutorProfile() {
 						}`}
 						onMouseEnter={() => setHoveredIndex(index)}
 						onMouseLeave={() => setHoveredIndex(-1)}
-            onClick={item.action ? item.action : undefined}
+						onClick={item.action ? item.action : undefined}
 					>
 						<a
 							className={`${item.cName} block w-full h-full`}

@@ -14,7 +14,7 @@ import LoginDropdown from "./loginDropdown";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 import ClientProfile from "./clientProfile";
-import TutorProfile from "./tutorDropdown";
+import TutorProfile from "./tutorProfile";
 
 const NavBar = () => {
 	const [clientsDropdown, setClientsDropdown] = useState(false);

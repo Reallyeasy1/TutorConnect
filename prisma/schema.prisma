@@ -69,10 +69,13 @@ model Tutor {
   activateTutorToken      ActivateTutorToken[]
   passwordResetTutorToken PasswordResetTutorToken[]
   image                   String?
+  introduction            String?
+  summary                 String?
+  studentsResults          String?
 }
 
 model ActivateTutorToken {
-  id          Int       @id @default(autoincrement()) 
+  id          Int       @id @default(autoincrement())
   token       String    @unique
   createdAt   DateTime  @default(now())
   activatedAt DateTime?

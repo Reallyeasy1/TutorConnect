@@ -310,7 +310,7 @@ export default function ProfilePage() {
 				</div>
 				<div style={profileCard.container}>
 					<div style={sidebar.container}>
-						<h2 style={sidebar.title}>Edit Profile</h2>
+						<h2 style={sidebar.title}>Personal Information</h2>
 						<div style={profileCard.card}>
 							<form onSubmit={onSubmit}>
 								<div style={profileCard.profileImage}>
