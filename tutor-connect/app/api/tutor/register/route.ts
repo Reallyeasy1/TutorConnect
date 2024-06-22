@@ -6,7 +6,6 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
 	try {
-		
 		const {
 			email,
 			password,
@@ -17,12 +16,14 @@ export async function POST(req: Request) {
 			age,
 			nationality,
 			race,
+			levelAndSubjects,
+			location,
 			typeOfTutor,
 			yearsOfExperience,
 			highestEducationLevel,
 		} = await req.json();
 		const hashed = await hash(password, 12);
-		
+
 		const user = await prisma.tutor.create({
 			data: {
 				email,
@@ -34,6 +35,8 @@ export async function POST(req: Request) {
 				age: parseInt(age),
 				nationality,
 				race,
+				levelAndSubjects,
+				location,
 				typeOfTutor,
 				yearsOfExperience: parseInt(yearsOfExperience),
 				highestEducationLevel,

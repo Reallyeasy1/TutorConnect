@@ -130,7 +130,7 @@ export const RegisterForm = () => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           id="name"
-          type="text"
+          type="name"
         />
       </div>
       <div className="grid w-full items-center gap-1.5">
@@ -160,7 +160,7 @@ export const RegisterForm = () => {
           value={contactNumber}
           onChange={(e) => setContactNumber(e.target.value)}
           id="contactNumber"
-          type="text"
+          type="contactNumber"
         />
       </div>
       <div className="grid w-full items-center gap-1.5">
@@ -170,7 +170,7 @@ export const RegisterForm = () => {
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           id="address"
-          type="text"
+          type="address"
         />
       </div>
       <div className="grid w-full items-center gap-1.5">
@@ -180,7 +180,7 @@ export const RegisterForm = () => {
           value={postalCode}
           onChange={(e) => setPostalCode(e.target.value)}
           id="postalCode"
-          type="text"
+          type="postalCode"
         />
       </div>
       {error && <Alert>{error}</Alert>}

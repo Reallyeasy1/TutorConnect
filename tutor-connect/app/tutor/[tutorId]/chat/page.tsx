@@ -17,7 +17,7 @@ export default function Chat() {
     async function getDetails() {
       try {
         //Change this URL to /api/tutor/getDetails?tutorId=${tutorId}
-        const response = await fetch(`/api/client/getDetails?tutorId=${tutorId}`);
+        const response = await fetch(`/api/tutor/getDetails?tutorId=${tutorId}`);
         const data = await response.json();
         console.log(data); // Logging out the Payload.
         setUsername(data.name); // Setting the username
@@ -36,7 +36,7 @@ export default function Chat() {
         <h1>Verifying token..... Please wait</h1>
       ) : (<div>
       <NavBar />
-        <ChatRoom username={username} id = {tutorId} tutor = {true}/>
+        <ChatRoom username={username} id = {tutorId}/>
         {/* <Footer /> */}
         </div>
         

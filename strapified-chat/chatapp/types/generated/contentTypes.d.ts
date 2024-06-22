@@ -794,6 +794,7 @@ export interface ApiAccountAccount extends Schema.CollectionType {
     singularName: 'account';
     pluralName: 'accounts';
     displayName: 'Account';
+    description: '';
   };
   options: {
     draftAndPublish: true;

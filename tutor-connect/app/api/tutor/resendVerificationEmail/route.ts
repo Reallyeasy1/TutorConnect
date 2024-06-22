@@ -29,7 +29,8 @@ export async function POST(req: Request) {
 		const from: string = "<lowethan11@gmail.com>";
 		const to: string = user.email;
 		const subject: string = "Please Activate Your Account";
-		const mailTemplate: string = `Hello ${user.name}, <br> Please click on the link to activate your account: http://localhost:3000/api/tutor/activate/${token.token}`;
+		const baseUrl: string = process.env.NEXTAUTH_URL || "http://localhost:3000";
+		const mailTemplate: string = `Hello ${user.name}, <br> Please click on the link to activate your account: ${baseUrl}/api/tutor/activate/${token.token}`;
 
 		sendMail(from, to, subject, mailTemplate);
 
