@@ -17,8 +17,9 @@ import { useState } from "react";
 export const Form = () => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-    //TODO: Add clientId to the query string
-	const callbackUrl = searchParams.get("callbackUrl") || "/tutor/view_assignments"; //change
+	//TODO: Add clientId to the query string
+	const callbackUrl =
+		searchParams.get("callbackUrl") || "/tutor/view_assignments"; //change
 	//const error = searchParams.get('error') ? 'Invalid credentials' : ''
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -49,9 +50,7 @@ export const Form = () => {
 				});
 				const data = await response.json();
 				if (data?.id) {
-					router.push(
-						"/tutor/view_assignments?tutorId=" + data.id
-					);
+					router.push(`/tutor/${data.id}/view_assignments`);
 				} else {
 					setError("Failed to retrieve user information");
 				}

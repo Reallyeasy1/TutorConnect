@@ -20,7 +20,7 @@ export default function LoginDropdown() {
 
     return (
       <>
-        <ul className="absolute mt-2 bg-white border rounded shadow-xl">
+        <ul className="absolute mt-2 bg-white border rounded shadow-xl" style={{zIndex:50}}>
             {register.map((item, index) => (
               <li
                 key={index}

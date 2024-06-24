@@ -6,6 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import jwt from "jsonwebtoken";
+
+interface StrapiResponseData {
+	id: number;
+	name: string;
+	email: string;
+}
 
 export const RegisterForm = () => {
 	const [name, setName] = useState("");
@@ -69,19 +76,49 @@ export const RegisterForm = () => {
 						"Content-Type": "application/json",
 					},
 				});
-				const data = await response.json();
+				const data: StrapiResponseData = await response.json();
 				if (data?.id) {
-					router.push(
-						"/client/verify_email?clientId=" + data.id
+					const account = { token: data.id };
+					const SECRET = "this is a secret";
+					const token = jwt.sign(account, SECRET);
+
+					const strapiData = {
+						data: {
+							id: data.id,
+							username: data.name,
+							email: data.email,
+							token: token,
+						},
+					};
+
+					const strapiResponse = await fetch(
+						"http://localhost:1337/api/accounts",
+						{
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+							},
+							body: JSON.stringify(strapiData),
+						}
 					);
+
+					if (!strapiResponse.ok) {
+						throw new Error("Failed to upload to Strapi");
+					}
+
+					const strapiResponseData = await strapiResponse.json();
+					console.log(strapiResponseData); // Outputs the result
+					console.log("Upload to Strapi success");
+					router.push("/client/verify_email?clientId=" + data.id);
 				} else {
 					setError("Failed to retrieve user information");
 				}
 			} else {
-				setError((await res.json()).error);
+				const errorResponse = await res.json();
+				setError(errorResponse.error);
 			}
 		} catch (error: any) {
-			setError(error?.message);
+			setError(error.message);
 		}
 
 		console.log("Register!");

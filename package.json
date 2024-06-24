@@ -17,13 +17,17 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tabs": "^1.0.4",
+    "@react-google-maps/api": "^2.19.3",
+    "@types/antd": "^1.0.0",
     "@types/nodemailer": "^6.4.15",
     "@vis.gl/react-google-maps": "^1.0.2",
+    "antd": "^5.18.3",
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.378.0",
     "moment": "^2.30.1",
     "next-auth": "^4.24.7",
@@ -31,6 +35,7 @@
     "pg": "^8.11.5",
     "react-day-picker": "^8.10.1",
     "react-images-uploading": "^3.1.7",
+    "socket.io-client": "^4.7.5",
     "styled-components": "^6.1.11",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
@@ -43,5 +48,15 @@
     "prisma-erd-generator": "^1.11.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
-  }
+  },
+  "name": "tutorconnect",
+  "version": "1.0.0",
+  "description": "Please don't flame my Orbital",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

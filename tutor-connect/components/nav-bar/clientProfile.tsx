@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { signOut } from "next-auth/react";
+import { useParams } from "next/navigation";
 
 export default function ClientProfile() {
 	const [hoveredIndex, setHoveredIndex] = useState(-1);
+	const params = useParams();
+    const clientId = params.clientId;
 
 	const clientItems = [
 		{
 			title: "Settings",
-			path: "/client/settings/profile",
+			path: `/client/${clientId}/settings/profile`,
 			cName: "dropdown-link",
 		},
 		{
@@ -24,7 +27,7 @@ export default function ClientProfile() {
 	];
 
 	return (
-		<div className="relative inline-block">
+		<div className="relative inline-block" style={{zIndex:50}}>
 			<ul className="absolute right-2 top-8 w-fit bg-white border border-gray-300 rounded shadow-lg">
 				{clientItems.map((item, index) => (
 					<li

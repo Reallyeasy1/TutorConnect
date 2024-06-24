@@ -1,16 +1,15 @@
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 
 export default function TutorDropdown() {
-    const [click, setClick] = useState(false)
     const [hoveredIndex, setHoveredIndex] = useState(-1);
-    const searchParams = useSearchParams();
-    const tutorId = searchParams.get("tutorId");
+    const params = useParams();
+    const tutorId = params.tutorId;
     
     const tutorItems = [
         {
             title: "View Assignments",
-            path: "/tutor/view_assignments?tutorId=" + tutorId,
+            path: `/tutor/${tutorId}/view_assignments`,
             cName: "dropdown-link"
         },
         {
@@ -27,7 +26,7 @@ export default function TutorDropdown() {
 
     return (
       <>
-        <ul className="absolute -translate-x-5 mt-2 w-52 bg-white border rounded shadow-xl">
+        <ul className="absolute -translate-x-5 mt-2 w-52 bg-white border rounded shadow-xl" style={{zIndex:50}}>
             {tutorItems.map((item, index) => (
               <li
                 key={index}

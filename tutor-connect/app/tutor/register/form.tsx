@@ -30,6 +30,7 @@ import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { useRouter } from "next/navigation";
+import jwt from "jsonwebtoken";
 
 type CheckedSubjects = {
 	preschool: string[];
@@ -403,6 +404,37 @@ export const RegisterForm = () => {
 				});
 				const data = await response.json();
 				if (data?.id) {
+					const account = { token: data.id };
+					const SECRET = "this is a secret";
+					const token = jwt.sign(account, SECRET);
+
+					const strapiData = {
+						data: {
+							id: data.id,
+							username: data.name,
+							email: data.email,
+							token: token,
+						},
+					};
+
+					const strapiResponse = await fetch(
+						"http://localhost:1337/api/accounts",
+						{
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+							},
+							body: JSON.stringify(strapiData),
+						}
+					);
+
+					if (!strapiResponse.ok) {
+						throw new Error("Failed to upload to Strapi");
+					}
+
+					const strapiResponseData = await strapiResponse.json();
+					console.log(strapiResponseData); // Outputs the result
+					console.log("Upload to Strapi success");
 					router.push("/tutor/verify_email?tutortId=" + data.id);
 				} else {
 					setError("Failed to retrieve user information");
@@ -549,7 +581,9 @@ export const RegisterForm = () => {
 									<Select
 										required
 										value={gender}
-										onValueChange={(value: string) => setGender(value)}
+										onValueChange={(value: string) =>
+											setGender(value)
+										}
 									>
 										<div>
 											<SelectTrigger className="w-full">
@@ -575,7 +609,9 @@ export const RegisterForm = () => {
 									<Select
 										required
 										value={nationality}
-										onValueChange={(value: string) => setNationality(value)}
+										onValueChange={(value: string) =>
+											setNationality(value)
+										}
 									>
 										<div>
 											<SelectTrigger className="w-full">
@@ -600,7 +636,9 @@ export const RegisterForm = () => {
 									<Select
 										required
 										value={race}
-										onValueChange={(value: string) => setRace(value)}
+										onValueChange={(value: string) =>
+											setRace(value)
+										}
 									>
 										<div>
 											<SelectTrigger className="w-full">
@@ -874,7 +912,7 @@ export const RegisterForm = () => {
 								</Label>
 								<div style={locationStyle.container}>
 									{locations.map((loc) => (
-										<div>
+										<div key={loc[0]}>
 											<label key={loc[0]}>
 												<input
 													type="checkbox"
@@ -940,7 +978,9 @@ export const RegisterForm = () => {
 								<Select
 									required
 									value={typeOfTutor}
-									onValueChange={(value: string) => setTypeofTutor(value)}
+									onValueChange={(value: string) =>
+										setTypeofTutor(value)
+									}
 								>
 									<div>
 										<SelectTrigger className="w-full">
@@ -979,7 +1019,9 @@ export const RegisterForm = () => {
 								<Select
 									required
 									value={highestEducationLevel}
-									onValueChange={(value: string) => setHighestEducationLevel(value)}
+									onValueChange={(value: string) =>
+										setHighestEducationLevel(value)
+									}
 								>
 									<div>
 										<SelectTrigger className="w-full">
