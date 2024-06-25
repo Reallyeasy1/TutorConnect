@@ -10,21 +10,23 @@ interface Assignment {
 	id: number;
 	subject: string;
 	level: string;
-	location: string;
+	address: string;
+	postalCode: number;
 	minRate: number;
 	maxRate: number;
-	description: string;
+	duration: string;
+	frequency: string;
+	additionalDetails: string;
+	typeOfTutor: string[];
+	gender: string;
+	race: string[];
+	availability: string;
 	postDate: string;
 	taken: boolean;
 	client: {
 		id: number;
 		name: string;
 	};
-	tutor: {
-		id: number;
-		name: string;
-	};
-	avail_tutors: number[];
 }
 
 export default function ViewAssignment() {
@@ -46,15 +48,22 @@ export default function ViewAssignment() {
 				const res = await fetch("/api/tutor/applyAssignment", {
 					method: "PUT",
 					body: JSON.stringify({
-						AssignmentId: assignment.id,
-						Subject: assignment.subject,
-						Level: assignment.level,
+						assignmentId: assignment.id,
+						subject: assignment.subject,
+						level: assignment.level,
 						clientId: assignment.client.id,
 						client: assignment.client,
-						// tuteeLocation: assignment.Location,
+						address: assignment.address,
+						postalCode: assignment.postalCode,
 						minRate: assignment.minRate,
 						maxRate: assignment.maxRate,
-						description: assignment.description,
+						duration: assignment.duration,
+						frequency: assignment.frequency,
+						additionalDetails: assignment.additionalDetails,
+						typeOfTutor: assignment.typeOfTutor,
+						gender: assignment.gender,
+						race: assignment.race,
+						availability: assignment.availability,
 						postDate: assignment.postDate,
 						tutorId: tutorId, // Provide a value for the tutorId property
 					}),
@@ -126,26 +135,36 @@ export default function ViewAssignment() {
 							)
 							.map((assignment) => (
 								<div
-									key={assignment.id}
-									className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl"
-								>
-									<h2 className="text-2xl font-semibold mb-2">
-										{assignment.subject} -{" "}
-										{assignment.level}
-									</h2>
+								key={assignment.id}
+								className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl"
+							>
+								<h2 className="text-2xl font-semibold mb-2">
+									{assignment.level} {assignment.subject}
+								</h2>
+								<p className="text-gray-700 mb-1">
+									<strong>Address:</strong>{" "}
+									{assignment.address} Singapore{" "}
+									{assignment.postalCode}
+								</p>
+								<p className="text-gray-700 mb-1">
+									<strong>Frequency:</strong>{" "}
+									{assignment.duration},{" "}
+									{assignment.frequency}
+								</p>
+								<p className="text-gray-700 mb-1">
+									<strong>Rate:</strong> ${assignment.minRate}{" "}
+									- ${assignment.maxRate}
+								</p>
+								{assignment.additionalDetails && (
 									<p className="text-gray-700 mb-1">
-										<strong>Location:</strong>{" "}
-										{assignment.location}
+										<strong>Additional Details:</strong>{" "}
+										{assignment.additionalDetails}
 									</p>
-									<p className="text-gray-700 mb-1">
-										<strong>Rate:</strong> $
-										{assignment.minRate} - $
-										{assignment.maxRate}
-									</p>
-									<p className="text-gray-700 mb-1">
-										<strong>Description:</strong>{" "}
-										{assignment.description}
-									</p>
+								)}
+								<p className="text-gray-700 mb-1">
+									<strong>Available on:</strong>{" "}
+									{assignment.availability}
+								</p>
 									<p className="text-gray-700 mb-1">
 										<strong>Post Date:</strong>{" "}
 										{new Date(

@@ -7,14 +7,21 @@ export async function PUT(req: Request) {
 		console.log(body);
 
 		const {
-			AssignmentId,
-			Subject,
-			Level,
+			assignmentId,
+			subject,
+			level,
 			clientId,
-			tuteeLocation,
+			address,
+			postalCode,
 			minRate,
 			maxRate,
-			description,
+			duration,
+			frequency,
+			additionalDetails,
+			typeOfTutor,
+			gender,
+			race,
+			availability,
 			postDate,
 			tutorId,
 		} = body;
@@ -23,9 +30,9 @@ export async function PUT(req: Request) {
 		//|| !tuteeLocation
 		if (
 			!tutorId ||
-			!AssignmentId ||
-			!Subject ||
-			!Level ||
+			!assignmentId ||
+			!subject ||
+			!level ||
 			!clientId ||
 			!minRate ||
 			!maxRate ||
@@ -72,7 +79,7 @@ export async function PUT(req: Request) {
 
 		// Find the assignment with available tutors included
 		const assignment_found = await prisma.assignment.findUnique({
-			where: { id: AssignmentId },
+			where: { id: assignmentId },
 			include: { avail_tutors: true },
 		});
 
@@ -92,18 +99,25 @@ export async function PUT(req: Request) {
 
 		// Update the assignment with the new available tutor
 		await prisma.assignment.update({
-			where: { id: AssignmentId },
+			where: { id: assignmentId },
 			data: {
-				subject: Subject,
-				level: Level,
-				location: tuteeLocation,
+				level,
+				subject,
+				address,
+				postalCode,
 				minRate,
 				maxRate,
-				description,
+				duration,
+				frequency,
+				additionalDetails,
+				typeOfTutor,
+				gender,
+				race,
+				availability,
 				postDate: new Date(postDate),
 				taken: false,
 				avail_tutors: {
-					set: updatedAvailTutors,
+					set: updatedAvailTutors.map((t) => ({ id: t.id })),
 				},
 				client: { connect: { id: parseInt(clientId) } },
 			},
@@ -114,7 +128,7 @@ export async function PUT(req: Request) {
 			where: { id: tutor.id },
 			data: {
 				assignmentsAvailable: {
-					connect: { id: AssignmentId },
+					connect: { id: assignmentId },
 				},
 			},
 		});

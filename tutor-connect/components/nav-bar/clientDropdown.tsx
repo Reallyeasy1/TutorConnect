@@ -14,7 +14,7 @@ export default function ClientDropdown() {
         },
         {
             title: "View Assignments",
-            path: "#",
+            path: `/client/${clientId}/assignment/client_assignment`,
             cName: "dropdown-link"
         },
         {

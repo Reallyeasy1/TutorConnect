@@ -10,10 +10,17 @@ interface Assignment {
 	id: number;
 	subject: string;
 	level: string;
-	location: string;
+	address: string;
+	postalCode: number;
 	minRate: number;
 	maxRate: number;
-	description: string;
+	duration: string;
+	frequency: string;
+	additionalDetails: string;
+	typeOfTutor: string[];
+	gender: string;
+	race: string[];
+	availability: string;
 	postDate: string;
 	taken: boolean;
 	client: {
@@ -31,22 +38,33 @@ const AssignmentRow = ({ assignments }: { assignments: Assignment[] }) => {
 			{assignments.map((assignment) => (
 				<div
 					key={assignment.id}
-					className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow flex flex-col justify-between relative"
+					className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl flex flex-col justify-between"
 				>
 					<div>
 						<h2 className="text-2xl font-semibold mb-2">
-							{assignment.subject} - {assignment.level}
+							{assignment.level} {assignment.subject}
 						</h2>
 						<p className="text-gray-700 mb-1">
-							<strong>Location:</strong> {assignment.location}
+							<strong>Address:</strong> {assignment.address}{" "}
+							Singapore {assignment.postalCode}
+						</p>
+						<p className="text-gray-700 mb-1">
+							<strong>Frequency:</strong> {assignment.duration},{" "}
+							{assignment.frequency}
 						</p>
 						<p className="text-gray-700 mb-1">
 							<strong>Rate:</strong> ${assignment.minRate} - $
 							{assignment.maxRate}
 						</p>
+						{assignment.additionalDetails && (
+							<p className="text-gray-700 mb-1">
+								<strong>Additional Details:</strong>{" "}
+								{assignment.additionalDetails}
+							</p>
+						)}
 						<p className="text-gray-700 mb-1">
-							<strong>Description:</strong>{" "}
-							{assignment.description}
+							<strong>Available on:</strong>{" "}
+							{assignment.availability}
 						</p>
 						<p className="text-gray-700 mb-1">
 							<strong>Post Date:</strong>{" "}
@@ -116,22 +134,22 @@ export default function AllAssignments() {
 	};
 
 	const createMarkerIcon = (price: string): google.maps.Symbol => ({
-        path: "M 0,0 h 25 a 5,5 0 0 1 5,5 v 18 a 5,5 0 0 1 -5,5 h -25 a 5,5 0 0 1 -5,-5 v -18 a 5,5 0 0 1 5,-5 z",
-        fillColor: "white",
-        fillOpacity: 1,
-        strokeColor: "grey",
-        strokeWeight: 2,
-        scale: 1,
-        labelOrigin: new google.maps.Point(12.5, 14),
-    });
+		path: "M 0,0 h 25 a 5,5 0 0 1 5,5 v 18 a 5,5 0 0 1 -5,5 h -25 a 5,5 0 0 1 -5,-5 v -18 a 5,5 0 0 1 5,-5 z",
+		fillColor: "white",
+		fillOpacity: 1,
+		strokeColor: "grey",
+		strokeWeight: 2,
+		scale: 1,
+		labelOrigin: new google.maps.Point(12.5, 14),
+	});
 
-    const createMarkerLabel = (price: string): google.maps.MarkerLabel => ({
-        text: price,
-        color: "black",
-        fontSize: "12px",
-        fontWeight: "bold",
-        fontFamily: "Poppins",
-    });
+	const createMarkerLabel = (price: string): google.maps.MarkerLabel => ({
+		text: price,
+		color: "black",
+		fontSize: "12px",
+		fontWeight: "bold",
+		fontFamily: "Poppins",
+	});
 
 	useEffect(() => {
 		async function fetchAssignments() {
@@ -150,7 +168,7 @@ export default function AllAssignments() {
 
 					const markerPromises = data.map((assignment: Assignment) =>
 						geocodeAddress(
-							assignment.location,
+							assignment.address,
 							"YOUR_GOOGLE_MAPS_API_KEY"
 						).then((coords) => ({
 							...coords,
