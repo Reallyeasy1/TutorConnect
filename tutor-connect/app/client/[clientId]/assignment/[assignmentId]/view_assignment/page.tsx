@@ -1,31 +1,33 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams,useParams } from "next/navigation";
+import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { Alert } from "@/components/ui/alert";
 import Footer from "@/components/footer/footer";
 import NavBar from "@/components/nav-bar/navBar";
 
 interface Assignment {
-	id: number;
-	subject: string;
-	level: string;
-	location: string;
-	minRate: number;
-	maxRate: number;
-	description: string;
-	postDate: string;
-	taken: boolean;
-	client: {
-		id: number;
-		name: string;
-	};
-	tutor: {
-		id: number;
-		name: string;
-	};
+    id: number;
+    subject: string;
+    level: string;
+    address: string;
+    postalCode: number;
+    minRate: number;
+    maxRate: number;
+    duration: string;
+    frequency: string;
+    additionalDetails: string;
+    typeOfTutor: string[];
+    gender: string;
+    race: string[];
+    availability: string;
+    postDate: string;
+    taken: boolean;
+    client: {
+        id: number;
+        name: string;
+    };
 }
-
 
 //TODO: Change to update assignment details only and only accept possible clientId
 export default function ViewAssignment() {
@@ -39,12 +41,13 @@ export default function ViewAssignment() {
 
 	async function accept_assignment(assignment: Assignment) {
 		try {
-				if (clientId != null) {
-                        router.push(`/client/${clientId}/assignment/${assignmentId}/view_assignment/avail_tutors`);
-                } else {
-                    setError2("Client ID is required");
-                }
-			
+			if (clientId != null) {
+				router.push(
+					`/client/${clientId}/assignment/${assignmentId}/view_assignment/avail_tutors`
+				);
+			} else {
+				setError2("Client ID is required");
+			}
 		} catch (error: any) {
 			setError(error?.message);
 		}
@@ -103,21 +106,32 @@ export default function ViewAssignment() {
 									className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl"
 								>
 									<h2 className="text-2xl font-semibold mb-2">
-										{assignment.subject} -{" "}
-										{assignment.level}
+										{assignment.level} {assignment.subject}
 									</h2>
 									<p className="text-gray-700 mb-1">
-										<strong>Location:</strong>{" "}
-										{assignment.location}
+										<strong>Address:</strong>{" "}
+										{assignment.address} Singapore{" "}
+										{assignment.postalCode}
+									</p>
+									<p className="text-gray-700 mb-1">
+										<strong>Frequency:</strong>{" "}
+										{assignment.duration},{" "}
+										{assignment.frequency}
 									</p>
 									<p className="text-gray-700 mb-1">
 										<strong>Rate:</strong> $
 										{assignment.minRate} - $
 										{assignment.maxRate}
 									</p>
+									{assignment.additionalDetails && (
+										<p className="text-gray-700 mb-1">
+											<strong>Additional Details:</strong>{" "}
+											{assignment.additionalDetails}
+										</p>
+									)}
 									<p className="text-gray-700 mb-1">
-										<strong>Description:</strong>{" "}
-										{assignment.description}
+										<strong>Available on:</strong>{" "}
+										{assignment.availability}
 									</p>
 									<p className="text-gray-700 mb-1">
 										<strong>Post Date:</strong>{" "}

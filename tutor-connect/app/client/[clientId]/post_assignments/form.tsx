@@ -36,11 +36,10 @@ import {
 } from "@/components/ui/card";
 
 export const PostAssignmentForm = () => {
-	//TODO: Get a proper router and switch to [clientId]/postAssignments as the query string
 	const router = useRouter();
 	const params = useParams();
 	const clientId = params.clientId;
-	const [description, setDescription] = useState("");
+	const [additionalDetails, setAdditionalDetails] = useState("");
 	const [address, setAddress] = useState("");
 	const [postalCode, setPostalCode] = useState("");
 	const [minRate, setMinRate] = useState<number>(0);
@@ -113,6 +112,7 @@ export const PostAssignmentForm = () => {
 	const [level, setLevel] = useState<Level | "">("");
 	const [otherLevel, setOtherLevel] = useState("");
 	const [subject, setSubject] = useState("");
+	const [otherSubject, setOtherSubject] = useState("");
 
 	const subjectsByLevel: Record<Level, string[]> = {
 		"Primary 1": [
@@ -874,19 +874,31 @@ export const PostAssignmentForm = () => {
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		const postDate = Date.now();
+		let newLevel;
+		if (level === "Others") {
+			newLevel = otherLevel;
+		} else {
+			newLevel = level;
+		}
 
 		try {
 			const res = await fetch("/api/client/postAssignments", {
 				method: "POST",
 				body: JSON.stringify({
-					subject,
-					level,
 					clientId,
+					level: newLevel,
+					subject,
 					address,
 					postalCode,
 					minRate,
 					maxRate,
-					description,
+					duration,
+					frequency,
+					additionalDetails,
+					typeOfTutor,
+					gender,
+					race,
+					availability,
 					postDate,
 				}),
 				headers: {
@@ -969,7 +981,19 @@ export const PostAssignmentForm = () => {
 								{level === "Others" && (
 									<Input
 										required
-										placeholder="Enter Level"
+										placeholder="Enter Level (Example: Grade 5)"
+										onChange={(e) =>
+											setOtherLevel(e.target.value)
+										}
+										id="otherLevel"
+										type="text"
+									/>
+								)}
+								{(level === "Poly" ||
+									level === "University") && (
+									<Input
+										required
+										placeholder="Enter Level (Example: Y2 NUS/Y1 SP)"
 										onChange={(e) =>
 											setOtherLevel(e.target.value)
 										}
@@ -978,34 +1002,68 @@ export const PostAssignmentForm = () => {
 									/>
 								)}
 							</div>
-							{level && (
+							{level !== "Poly" &&
+								level !== "University" &&
+								level !== "Others" &&
+								level && (
+									<div className="space-y-2">
+										<Label htmlFor="Subject">Subject</Label>
+										<Select
+											required
+											value={subject}
+											onValueChange={(value) =>
+												setSubject(value)
+											}
+										>
+											<div>
+												<SelectTrigger className="w-full">
+													<SelectValue placeholder="Select a Subject" />
+												</SelectTrigger>
+											</div>
+											<SelectContent>
+												{subjectsByLevel[level].map(
+													(subject: string) => (
+														<SelectItem
+															key={subject}
+															value={subject}
+														>
+															{subject}
+														</SelectItem>
+													)
+												)}
+											</SelectContent>
+										</Select>
+									</div>
+								)}
+							{(level === "Poly" ||
+								level === "University" && level) && (
 								<div className="space-y-2">
 									<Label htmlFor="Subject">Subject</Label>
-									<Select
+									<Input
 										required
 										value={subject}
-										onValueChange={(value) =>
-											setSubject(value)
+										onChange={(e) =>
+											setSubject(e.target.value)
 										}
-									>
-										<div>
-											<SelectTrigger className="w-full">
-												<SelectValue placeholder="Select a Subject" />
-											</SelectTrigger>
-										</div>
-										<SelectContent>
-											{subjectsByLevel[level].map(
-												(subject: string) => (
-													<SelectItem
-														key={subject}
-														value={subject}
-													>
-														{subject}
-													</SelectItem>
-												)
-											)}
-										</SelectContent>
-									</Select>
+										id="subject"
+										type="text"
+										placeholder="Please specify Module Name and Module Code (if any)"
+									/>
+								</div>
+							)}
+							{(level === "Others" && level) && (
+								<div className="space-y-2">
+									<Label htmlFor="Subject">Subject</Label>
+									<Input
+										required
+										value={subject}
+										onChange={(e) =>
+											setSubject(e.target.value)
+										}
+										id="subject"
+										type="text"
+										placeholder="Enter Subject (Example: Piano)"
+									/>
 								</div>
 							)}
 							{/* Tutee Location */}
@@ -1127,6 +1185,20 @@ export const PostAssignmentForm = () => {
 										</SelectContent>
 									</Select>
 								</div>
+							</div>
+							<div className="space-y-2">
+								<Label htmlFor="additionalDetails">
+									Additional Details
+								</Label>
+								<Input
+									value={additionalDetails}
+									onChange={(e) =>
+										setAdditionalDetails(e.target.value)
+									}
+									id="additionalDetails"
+									type="additionalDetails"
+									placeholder="Example: Tutor to be bilingual, patient"
+								/>
 							</div>
 							{/* Error Message */}
 							{error && (
@@ -1293,7 +1365,9 @@ export const PostAssignmentForm = () => {
 									type="checkbox"
 									id="No Preference"
 									checked={race.includes("No Preference")}
-									onChange={() => handleRaceChange("No Preference")}
+									onChange={() =>
+										handleRaceChange("No Preference")
+									}
 									className="form-checkbox h-3 w-3 text-indigo-600"
 								/>
 								<label
@@ -1307,7 +1381,16 @@ export const PostAssignmentForm = () => {
 								<Label htmlFor="availability">
 									Availability
 								</Label>
-								<Input id="availability" type="text" placeholder="Example: Mon - Wed: 3pm - 5pm"/>
+								<Input
+									required
+									value={availability}
+									onChange={(e) =>
+										setAvailability(e.target.value)
+									}
+									id="availability"
+									type="text"
+									placeholder="Example: Mon - Wed: 3pm - 5pm"
+								/>
 							</div>
 						</CardContent>
 						<CardFooter className="flex justify-between space-x-2">
