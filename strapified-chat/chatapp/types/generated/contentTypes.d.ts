@@ -803,6 +803,7 @@ export interface ApiAccountAccount extends Schema.CollectionType {
     username: Attribute.String;
     email: Attribute.Email;
     token: Attribute.String;
+    isTutor: Attribute.Boolean;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

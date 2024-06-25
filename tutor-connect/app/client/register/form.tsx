@@ -88,6 +88,7 @@ export const RegisterForm = () => {
               username: data.name,
               email: data.email,
               token: token,
+              isTutor: false
             },
           };
 

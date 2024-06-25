@@ -22,6 +22,9 @@
     },
     "token": {
       "type": "string"
+    },
+    "isTutor": {
+      "type": "boolean"
     }
   }
 }

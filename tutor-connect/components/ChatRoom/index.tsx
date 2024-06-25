@@ -11,6 +11,11 @@ import { io } from "socket.io-client";
 interface ChatRoomProps {
   username: string;
   id: string;
+  tutor: boolean;
+  curr_recipient: {
+    username: string | null;
+    id: number | null;
+  } | null;
 }
 
 interface Message {
@@ -27,9 +32,10 @@ interface UserAttributes {
 interface User {
   id: number;
   attributes: UserAttributes;
+  isTutor: boolean;
 }
 
-const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, tutor }) => {
+const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipient }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<string>("");
   const [users, setUsers] = useState<User[]>([]);
@@ -90,10 +96,13 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, tutor }) => {
       try {
         const res = await fetch("http://localhost:1337/api/accounts");
         const usersData = await res.json();
+        console.log(usersData);
         const transformedUsers: User[] = usersData.data.map((user: any) => ({
           id: user.id,
-          attributes: user.attributes
-        }));
+          attributes: user.attributes,
+          isTutor: user.attributes.isTutor
+        })).filter((user: User) => user.isTutor == !isTutor);
+
         setUsers(transformedUsers);
       } catch (e) {
         console.log(e.message);
@@ -129,6 +138,11 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, tutor }) => {
   }, [username, id]);
 
   useEffect(() => {
+    if (curr_recipient) {
+      setRecipient(curr_recipient.username);
+      //TODO: Need to change the list section to be highlighted
+    }
+ 
     const filtered = recipient
       ? messages.filter(
           (msg) =>
@@ -173,9 +187,9 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, tutor }) => {
 
   return (
     <ChatContainer>
-      <Header room="Chat" id={id} tutor = {tutor}/>
+      <Header room="Chat" id={id} tutor = {isTutor}/>
       <StyledContainer>
-        <List users={users} username={username} onUserClick={setRecipient} />
+        <List users={users} username={username} onUserClick={setRecipient} curr_recipient = {curr_recipient} />
         <ChatBox>
           {recipient ? (
             <>

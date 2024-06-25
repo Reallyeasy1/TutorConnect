@@ -20,7 +20,6 @@ export async function PUT(req: Request) {
 		} = body;
 
 		// Validate required fields
-		//|| !tuteeLocation
 		if (
 			!tutorId ||
 			!AssignmentId ||
@@ -47,6 +46,19 @@ export async function PUT(req: Request) {
 			return new NextResponse(
 				JSON.stringify({
 					error: "Invalid tutor ID",
+				}),
+				{
+					status: 400,
+				}
+			);
+		}
+
+		// Validate clientId is a number
+		const clientIdNumber = parseInt(clientId);
+		if (isNaN(clientIdNumber)) {
+			return new NextResponse(
+				JSON.stringify({
+					error: "Invalid client ID",
 				}),
 				{
 					status: 400,
@@ -87,8 +99,18 @@ export async function PUT(req: Request) {
 			);
 		}
 
-		// Add tutor to available tutors for the assignment
-		const updatedAvailTutors = [...assignment_found.avail_tutors, tutor];
+		// Check if tutor is already in the available tutors
+		const tutorExists = assignment_found.avail_tutors.some(t => t.id === tutor.id);
+		if (tutorExists) {
+			return new NextResponse(
+				JSON.stringify({
+					error: "Tutor is already an available tutor for this assignment",
+				}),
+				{
+					status: 400,
+				}
+			);
+		}
 
 		// Update the assignment with the new available tutor
 		await prisma.assignment.update({
@@ -103,9 +125,9 @@ export async function PUT(req: Request) {
 				postDate: new Date(postDate),
 				taken: false,
 				avail_tutors: {
-					set: updatedAvailTutors,
+					connect: { id: tutor.id },
 				},
-				client: { connect: { id: parseInt(clientId) } },
+				client: { connect: { id: clientIdNumber } },
 			},
 		});
 
@@ -128,6 +150,7 @@ export async function PUT(req: Request) {
 			}
 		);
 	} catch (err: any) {
+		console.error(err);
 		return new NextResponse(
 			JSON.stringify({
 				error: err.message,

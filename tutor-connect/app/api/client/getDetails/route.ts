@@ -24,6 +24,8 @@ export async function GET(req: Request) {
         id: user.id,
         email: user.email,
         name: user.name,
+        address: user.address,
+        postalCode: user.postalCode,
       });
     }
   } catch (err: any) {

@@ -8,6 +8,7 @@ CREATE TABLE "Client" (
     "address" TEXT NOT NULL,
     "postalCode" INTEGER NOT NULL,
     "active" BOOLEAN NOT NULL DEFAULT false,
+    "image" TEXT,
 
     CONSTRAINT "Client_pkey" PRIMARY KEY ("id")
 );
@@ -41,10 +42,16 @@ CREATE TABLE "Tutor" (
     "age" INTEGER NOT NULL,
     "nationality" TEXT NOT NULL,
     "race" TEXT NOT NULL,
+    "levelAndSubjects" JSONB NOT NULL,
+    "location" TEXT[],
     "typeOfTutor" TEXT NOT NULL,
     "yearsOfExperience" INTEGER NOT NULL,
     "highestEducationLevel" TEXT NOT NULL,
     "active" BOOLEAN NOT NULL DEFAULT false,
+    "image" TEXT,
+    "introduction" TEXT,
+    "summary" TEXT,
+    "studentsResults" TEXT,
 
     CONSTRAINT "Tutor_pkey" PRIMARY KEY ("id")
 );

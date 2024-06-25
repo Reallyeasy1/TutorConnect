@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams,useParams } from "next/navigation";
+import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { Alert } from "@/components/ui/alert";
 import Footer from "@/components/footer/footer";
 import NavBar from "@/components/nav-bar/navBar";
@@ -24,53 +24,27 @@ interface Assignment {
 		id: number;
 		name: string;
 	};
+	avail_tutors: number[];
 }
 
-
-//TODO: Change to update assignment details only and only accept possible clientId
 export default function ViewAssignment() {
 	const router = useRouter();
 	const params = useParams();
 	const assignmentId = params.assignmentId;
-	const clientId = params.clientId;
+	const tutorId = params.tutorId;
 	const [assignments, setAssignments] = useState<Assignment[]>([]);
 	const [error, setError] = useState<string | null>(null);
 	const [error2, setError2] = useState<string | null>(null);
 
-	async function accept_assignment(assignment: Assignment) {
+	async function clientInfo(assignment: Assignment) {
 		try {
-				if (clientId != null) {
-                        router.push(`/client/${clientId}/assignment/${assignmentId}/view_assignment/avail_tutors`);
-                } else {
-                    setError2("Client ID is required");
-                }
-			
-		} catch (error: any) {
-			setError(error?.message);
-		}
-	}
-
-		async function tutorInfo(assignment: Assignment) {
-		try {
-				if (clientId != null) {
-                        router.push(`/client/${clientId}/assignment/${assignmentId}/view_assignment/tutorInfo`);
-                } else {
-                    setError2("Client ID is required");
-                }
-			
-		} catch (error: any) {
-			setError(error?.message);
-		}
-	}
-
-	async function edit_assignment(assignment: Assignment) {
-		try {
-				if (clientId != null) {
-                        router.push(`/client/${clientId}/assignment/${assignmentId}/edit_assignment`);
-                } else {
-                    setError2("Client ID is required");
-                }
-			
+			console.log(tutorId);
+			if (tutorId == null) {
+				setError2("Tutor ID is required");
+			} else {
+				//TODO: Change to tutor/applyAssignment
+                router.push(`/tutor/${tutorId}/chat?clientId=${assignment.client.id}&clientName=${assignment.client.name}`)
+			}
 		} catch (error: any) {
 			setError(error?.message);
 		}
@@ -110,7 +84,7 @@ export default function ViewAssignment() {
 			<NavBar />
 			<div className="container mx-auto p-6 flex flex-col items-center flex-grow">
 				<h1 className="text-4xl font-bold mb-8 text-center">
-					Tutee Assignment
+					Client Details
 				</h1>
 				{assignments.length === 0 ? (
 					<p className="text-gray-500 text-center">
@@ -168,33 +142,13 @@ export default function ViewAssignment() {
 											: "Available"}
 									</p>
 									<button
-										className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors w-full"
+										className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors"
 										onClick={() =>
-											edit_assignment(assignment)
+											clientInfo(assignment)
 										}
 									>
-										Edit 
+										Contact Client Here
 									</button>
-									
-									{ assignment.taken? 
-									<button
-										className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors w-full"
-										onClick={() =>
-									tutorInfo(assignment)
-										}
-									>
-										Tutor Info
-									</button>
-										:
-									<button
-										className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors w-full"
-										onClick={() =>
-											accept_assignment(assignment)
-										}
-									>
-										View Tutors 
-									</button>
-}
 									{error2 && <Alert>{error2}</Alert>}
 								</div>
 							))}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ChatRoom from "@/components/ChatRoom/index";
 import NavBar from "@/components/nav-bar/navBar";
@@ -9,9 +9,19 @@ import Footer from "@/components/footer/footer";
 export default function Chat() {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const tutorId = params.tutorId; // Getting the clientId from the URL
+  const clientName = searchParams.get("clientName")
+  const clientId = searchParams.get("clientId")
   const [done, setDone] = useState("");
   const [username, setUsername] = useState("");
+  let clientIdInt = null;
+  let curr_recipient_inp = null;
+
+  if (clientId != null) {
+    clientIdInt = parseInt(clientId, 10);
+    curr_recipient_inp = {username: clientName, id: clientIdInt};
+  }  
 
   useEffect(() => {
     async function getDetails() {
@@ -36,7 +46,7 @@ export default function Chat() {
         <h1>Verifying token..... Please wait</h1>
       ) : (<div>
       <NavBar />
-        <ChatRoom username={username} id = {tutorId}/>
+        <ChatRoom username={username} id = {tutorId} isTutor = {true} curr_recipient = {curr_recipient_inp}/>
         {/* <Footer /> */}
         </div>
         

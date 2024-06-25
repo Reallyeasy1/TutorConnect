@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { List as AntdList, Avatar } from "antd";
 
@@ -15,15 +15,27 @@ interface ListProps {
   users: User[];
   username: string;
   onUserClick: (username: string) => void;
+  curr_recipient: {
+    username: string | null;
+    id: number | null;
+  }
 }
 
-const List: React.FC<ListProps> = ({ users, username, onUserClick }) => {
+const List: React.FC<ListProps> = ({ users, username, onUserClick, curr_recipient }) => {
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
   const handleClick = (userId: number, username: string) => {
     setSelectedUserId(userId);
     onUserClick(username);
   };
+
+  //TODO: Fix the highlighting of the selected user in the params
+  useEffect(() => {
+    if (curr_recipient != null) {
+    setSelectedUserId(curr_recipient.id)
+    onUserClick(curr_recipient.username);
+    }
+  },[])
 
   return (
     <StyledContainer>
@@ -35,7 +47,7 @@ const List: React.FC<ListProps> = ({ users, username, onUserClick }) => {
           renderItem={(user) => (
             <CardWrapper
               onClick={() => handleClick(user.id, user.attributes.username)}
-              isSelected={user.id === selectedUserId}
+              isSelected={user.id === selectedUserId ||curr_recipient?.id === user.id}
             >
               <AntdList.Item>
                 <AntdList.Item.Meta
