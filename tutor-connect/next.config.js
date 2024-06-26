@@ -6,10 +6,7 @@ module.exports = {
       domains: ['mdbootstrap.com'],
     }, env: {
     MAPS_API_KEY: process.env.MAPS_API_KEY,
-  },  webpack: (config, { isServer }) => {
-    config.resolve.alias['@'] = path.resolve(__dirname);
-    return config;
-  }
+  }, 
   //    async rewrites() {
   //   return [
   //     {

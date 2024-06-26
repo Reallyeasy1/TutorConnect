@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { signOut } from "next-auth/react";
+import { useParams } from "next/navigation";
 
 export default function TutorProfile() {
 	const [hoveredIndex, setHoveredIndex] = useState(-1);
+	const params = useParams();
+    const tutorId = params.tutorId;
 
 	const tutorItems = [
 		{
 			title: "Settings",
-			path: "/tutor/settings/profile",
+			path: `/tutor/${tutorId}/settings/profile`,
 			cName: "dropdown-link",
 		},
 		{
@@ -24,7 +27,7 @@ export default function TutorProfile() {
 	];
 
 	return (
-		<div className="relative inline-block">
+		<div className="relative inline-block" style={{zIndex:50}}>
 			<ul className="absolute right-2 top-8 w-fit bg-white border border-gray-300 rounded shadow-lg">
 				{tutorItems.map((item, index) => (
 					<li

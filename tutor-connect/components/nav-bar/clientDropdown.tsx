@@ -1,20 +1,20 @@
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 
 export default function ClientDropdown() {
     const [hoveredIndex, setHoveredIndex] = useState(-1);
-    const searchParams = useSearchParams();
-	  const clientId = searchParams.get("clientId");
+    const params = useParams();
+    const clientId = params.clientId;
     
     const clientItems = [
         {
             title: "Post Assignment",
-            path: "/client/post_assignments?clientId=" + clientId,
+            path: `/client/${clientId}/post_assignments`,
             cName: "dropdown-link"
         },
         {
             title: "View Assignments",
-            path: "#",
+            path: `/client/${clientId}/assignment/client_assignment`,
             cName: "dropdown-link"
         },
         {
@@ -26,7 +26,7 @@ export default function ClientDropdown() {
 
     return (
       <>
-        <ul className="absolute -translate-x-5 mt-2 w-52 bg-white border rounded shadow-xl">
+        <ul className="absolute -translate-x-5 mt-2 w-52 bg-white border rounded shadow-xl" style={{zIndex:50}}>
             {clientItems.map((item, index) => (
               <li
                 key={index}
