@@ -2,18 +2,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// To deploy locally
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  //url      = env("DATABASE_URL")
+  // Uncomment the following lines if you need to specify different URLs for pooling and direct connections
+  url = env("postgres_PRISMA_URL") // uses connection pooling
+  directUrl = env("postgres_URL_NON_POOLING") // uses a direct connection
 }
-
-//To deploy on vercel
-//datasource db {
-//  provider = "postgresql"
-//  url = env("postgres_PRISMA_URL") // uses connection pooling
-//  directUrl = env("postgres_URL_NON_POOLING") // uses a direct connection
-//}
 
 model Client {
   id                       Int                        @id @default(autoincrement())

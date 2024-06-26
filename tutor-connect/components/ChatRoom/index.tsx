@@ -55,7 +55,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
     let pageSize = 100; // Adjust page size if necessary
 
     while (true) {
-      const res = await fetch(`http://localhost:1337/api/messages?pagination[page]=${page}&pagination[pageSize]=${pageSize}`);
+      const res = await fetch(`http://188.166.213.34/api/messages?pagination[page]=${page}&pagination[pageSize]=${pageSize}`);
       const response = await res.json();
       const newMessages = response.data.map((one: { attributes: Message }) => one.attributes);
       allMessages = [...allMessages, ...newMessages];
