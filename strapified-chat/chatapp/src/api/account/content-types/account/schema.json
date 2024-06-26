@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "accounts",
+  "info": {
+    "singularName": "account",
+    "pluralName": "accounts",
+    "displayName": "Account",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "username": {
+      "type": "string",
+      "unique": false
+    },
+    "email": {
+      "type": "email",
+      "unique": false
+    },
+    "token": {
+      "type": "string"
+    },
+    "isTutor": {
+      "type": "boolean"
+    }
+  }
+}

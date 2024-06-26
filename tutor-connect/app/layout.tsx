@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata } from "next"
 import "./globals.css";
 import { Providers } from "./providers"
+import { Suspense } from "react";
 
-//TODO: Insert Navbar but not in layouts here
 export const metadata: Metadata = {
   title: "TutorConnect",
   description: "TutorConnect is a platform that connects tutors and students.",
@@ -17,12 +17,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-
+    <html lang="en"> 
       <body>
-        <Providers>
-          {children}</Providers>
-      </body>
+        <Providers>{children}</Providers>
+      </body> 
     </html>
   )
 }

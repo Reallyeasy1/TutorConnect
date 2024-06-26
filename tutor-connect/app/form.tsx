@@ -35,7 +35,7 @@ export const Form = () => {
         } catch (err: any) {
 
         }
-        
+
     }
     return (
         <form onSubmit={onSubmit} className="space-y-12 w-full sm:w-[400px]">

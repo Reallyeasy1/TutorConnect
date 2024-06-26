@@ -1,46 +1,20 @@
 import { PrismaClient } from '@prisma/client'
+import { hash } from 'bcrypt'
 
-const prisma = new PrismaClient({
-  log: [
-    {
-      emit: 'stdout',
-      level: 'query',
-    },
-    {
-      emit: 'stdout',
-      level: 'error',
-    },
-    {
-      emit: 'stdout',
-      level: 'info',
-    },
-    {
-      emit: 'stdout',
-      level: 'warn',
-    },
-  ],
-})
-
+const prisma = new PrismaClient()
 
 async function main() {
-
-//   const user2 = await prisma.user.create({
-//     data: {
-//     email: 'elsa@prisma.io',
-//     name: 'Elsa Prisma',
-//     password: 'test',
-//   },
-// })
-  const user = await prisma.user.upsert({
+  const password = await hash('test', 12)
+  const user = await prisma.client.upsert({
     where: { email: 'test@test.com' },
     update: {},
     create: {
       email: 'test@test.com',
       name: 'Test User',
-      password: 'test',
-      // contactNumber: 123,
-      // address: 'Test',
-      // postalCode: 123
+      password,
+      contactNumber: 123,
+      address: 'Test',
+      postalCode: 123
     }
   })
   console.log({ user })
