@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import ChatRoom from "@/components/ChatRoom/index";
 import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
+import { cli } from "winston/lib/winston/config";
 
 export default function Chat() {
   const router = useRouter();
@@ -17,10 +18,11 @@ export default function Chat() {
   const [username, setUsername] = useState("");
   let clientIdInt = null;
   let curr_recipient_inp = null;
+  let clientNameInp = clientName? clientName: null;
 
   if (clientId != null) {
     clientIdInt = parseInt(clientId, 10);
-    curr_recipient_inp = {username: clientName, id: clientIdInt};
+    curr_recipient_inp = {username: clientNameInp, id: clientIdInt};
   }  
 
   useEffect(() => {

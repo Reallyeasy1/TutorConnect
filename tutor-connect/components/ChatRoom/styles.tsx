@@ -90,7 +90,7 @@ export const SendIcon = styled.div`
 `;
 
 // Container for individual messages
-export const MessagesContainer = styled.div`
+export const MessagesContainer = styled.div<{ textPosition: string }>`
     display: flex;
     padding: 0 5%;
     margin-top: 3px;
@@ -98,7 +98,7 @@ export const MessagesContainer = styled.div`
 `;
 
 // Box containing the message text
-export const MessageBox = styled.div`
+export const MessageBox = styled.div<{ background: string }>`
     background: #F3F3F3;
     border-radius: 10px 10px 10px 0;
     padding: 15px 20px;
@@ -128,5 +128,5 @@ export const SentBy = styled.p`
     color: #828282;
     letter-spacing: 0.3px;
     margin: 5px 0 0 0;
-    justify-content: ${(props) => (props.right ? 'flex-end' : 'flex-start')};
+    justify-content: flex-start;
 `;

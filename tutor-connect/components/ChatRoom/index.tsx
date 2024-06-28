@@ -14,7 +14,7 @@ interface ChatRoomProps {
   id: number;
   isTutor: boolean;
   curr_recipient: {
-    username: string | null | undefined;
+    username: string | null;
     id: number | null;
   } | null;
 }
@@ -188,7 +188,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
 
   return (
     <ChatContainer>
-      <Header room="Chat" id={id} tutor = {isTutor}/>
+      <Header room="Chat" id={id.toString()} tutor = {isTutor}/>
       <StyledContainer>
         <List users={users} username={username} onUserClick={setRecipient} curr_recipient = {curr_recipient} />
         <ChatBox>

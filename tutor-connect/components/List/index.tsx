@@ -18,7 +18,7 @@ interface ListProps {
   curr_recipient: {
     username: string | null;
     id: number | null;
-  }
+  } | null;
 }
 
 const List: React.FC<ListProps> = ({ users, username, onUserClick, curr_recipient }) => {
@@ -30,12 +30,12 @@ const List: React.FC<ListProps> = ({ users, username, onUserClick, curr_recipien
   };
 
   //TODO: Fix the highlighting of the selected user in the params
-  useEffect(() => {
-    if (curr_recipient != null) {
-    setSelectedUserId(curr_recipient.id)
-    onUserClick(curr_recipient.username);
-    }
-  },[])
+  // useEffect(() => {
+  //   if (curr_recipient != null) {
+  //   setSelectedUserId(curr_recipient.id)
+  //   onUserClick(curr_recipient.username);
+  //   }
+  // },[])
 
   return (
     <StyledContainer>
