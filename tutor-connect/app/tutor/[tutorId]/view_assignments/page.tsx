@@ -273,7 +273,9 @@ export default function AllAssignments() {
                 ))}
               </GoogleMap>
             )}
+            
           </div>
+          
         </div>
       </div>
       <Footer />
