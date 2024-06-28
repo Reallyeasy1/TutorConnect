@@ -18,8 +18,9 @@
       }
     ],
     "paths": {
-       "@/components/*": ["./components/*"],
+      
   "@/components/ui/*": ["./components/ui/*"],
+      "@/components/*": ["./components/*"],
       "@/*": ["./*"]
     }
   },
