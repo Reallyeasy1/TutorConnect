@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { hash } from 'bcrypt'
-//hello
+
 const prisma = new PrismaClient()
 
 async function main() {
