@@ -928,7 +928,7 @@ export const PostAssignmentForm = () => {
 							<CardTitle>Lesson Details</CardTitle>
 							<CardDescription>
 								Fill up your lesson details. Click next when
-								you're done.
+								you&apos;re done.
 							</CardDescription>
 						</CardHeader>
 						<CardContent className="space-y-2">
@@ -949,7 +949,7 @@ export const PostAssignmentForm = () => {
 									<SelectContent>
 										{Object.entries(levels).map(
 											([category, levels]) => (
-												<SelectGroup>
+												<SelectGroup key={category}>
 													<SelectLabel>
 														{category}
 													</SelectLabel>
