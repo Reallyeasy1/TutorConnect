@@ -77,10 +77,19 @@ export const RegisterForm = () => {
           },
         });
         const data: StrapiResponseData = await response.json();
+      
         if (data?.id) {
           const account = { token: data.id };
-          const SECRET = "this is a secret";
-          const token = jwt.sign(account, SECRET);
+          console.log(account)
+          let token = "";
+          const SECRET = 'f90d7ee67d58a89a0e89dc3146c707a0bfbd534bb6607193cfbecd2edfdeed76111b5609438b2fda5d35033d6323d03aee6861a2d8e6629f4cbc76b3f5148baf';
+          try {
+            const token = jwt.sign(account, SECRET);
+            // token = account.toString();
+            console.log("JWT Token:", token);
+          } catch (error) {
+            console.error("Error signing JWT:", error);
+          }
 
           const strapiData = {
             data: {
@@ -91,7 +100,7 @@ export const RegisterForm = () => {
               isTutor: false
             },
           };
-
+console.log(strapiData);
           const strapiResponse = await fetch("http://188.166.213.34/api/accounts", {
             method: "POST",
             headers: {
@@ -99,7 +108,8 @@ export const RegisterForm = () => {
             },
             body: JSON.stringify(strapiData),
           });
-
+          
+          
           if (!strapiResponse.ok) {
             throw new Error("Failed to upload to Strapi");
           }

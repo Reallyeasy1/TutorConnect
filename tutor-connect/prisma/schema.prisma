@@ -6,8 +6,8 @@ datasource db {
   provider = "postgresql"
   //url      = env("DATABASE_URL")
   // Uncomment the following lines if you need to specify different URLs for pooling and direct connections
-  url = env("postgres_PRISMA_URL") // uses connection pooling
-  directUrl = env("postgres_URL_NON_POOLING") // uses a direct connection
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 model Client {
