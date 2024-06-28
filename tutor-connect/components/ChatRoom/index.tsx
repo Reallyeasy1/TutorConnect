@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Input } from "antd";
-import "antd/dist/antd.css";
+import "antd/dist/reset.css";
 import "font-awesome/css/font-awesome.min.css";
 import Header from "../Header";
 import Messages from "../Messages";
