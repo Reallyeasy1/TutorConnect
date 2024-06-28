@@ -22,7 +22,7 @@
       
   // "@/components/ui/*": ["./components/ui/*"],
       // "@/components/*": ["./components/*"],
-      "@/*": ["./*"]
+      "@/*": ["tutorconnect-git-main-reallyeasy1s-projects.vercel.app/*"]
       
     }
   },
