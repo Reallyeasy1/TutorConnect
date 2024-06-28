@@ -10,10 +10,10 @@ import { io } from "socket.io-client";
 
 interface ChatRoomProps {
   username: string;
-  id: string;
-  tutor: boolean;
+  id: number;
+  isTutor: boolean;
   curr_recipient: {
-    username: string | null;
+    username: string | null | undefined;
     id: number | null;
   } | null;
 }
@@ -138,11 +138,11 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
   }, [username, id]);
 
   useEffect(() => {
-    if (curr_recipient) {
+    if (curr_recipient != null && curr_recipient.username != null) {
       setRecipient(curr_recipient.username);
       //TODO: Need to change the list section to be highlighted
     }
- 
+  
     const filtered = recipient
       ? messages.filter(
           (msg) =>

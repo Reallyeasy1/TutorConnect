@@ -30,6 +30,30 @@ export default function AllAssignments() {
     const params = useParams();
     const clientId = params.clientId;
 
+     async function fetchAssignments() {
+            try {
+                const res = await fetch("/api/assignments");
+                const contentType = res.headers.get("content-type");
+                if (!res.ok) {
+                    const errorData = await res.json();
+                    setError(errorData.error || "Failed to fetch assignments");
+                    return;
+                }
+
+                if (contentType && contentType.includes("application/json")) {
+                    const data = await res.json();
+                    setAssignments(data);
+                } else {
+                    setError("Unexpected content type: " + contentType);
+                }
+            } catch (err: any) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+
     useEffect(() => {
         async function fetchAssignments() {
             try {
@@ -69,6 +93,7 @@ export default function AllAssignments() {
         return (
             <div className="text-red-500 text-center mt-10">
                 Error: {error}{" "}
+                {/* TODO: Redo retry button */}
                 <button
                     className="ml-4 text-blue-500 underline"
                     onClick={() => {

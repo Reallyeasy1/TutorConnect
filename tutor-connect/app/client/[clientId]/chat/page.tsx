@@ -10,7 +10,7 @@ export default function Chat() {
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
-  const clientId = params.clientId; // Getting the clientId from the URL
+  const clientId = parseInt(params.clientId.toString(),10); // Getting the clientId from the URL
   const tutorName = searchParams.get("tutorName")
   const tutorId = searchParams.get("tutorId")
   const [done, setDone] = useState("");

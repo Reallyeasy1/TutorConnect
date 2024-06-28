@@ -1,3 +1,64 @@
 {
+  "$schema": "https://json.schemastore.org/eslintrc",
+  "root": true,
+  "extends": [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:tailwindcss/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": [
+    "@typescript-eslint",
+    "unused-imports",
+    "import",
+    "simple-import-sort",
+    "tailwindcss"
+  ],
+  "rules": {
+    "prettier/prettier": "error",
+    "no-console": 1, // Means warning
+    "@typescript-eslint/no-explicit-any": "off",
+    "@next/next/no-html-link-for-pages": "off",
+    "tailwindcss/no-custom-classname": "off",
+    "tailwindcss/classnames-order": "error",
+    "@typescript-eslint/consistent-type-imports": "error", // Ensure `import type` is used when it's necessary
+    "import/order": "off",
+    "import/extensions": "off", // Avoid missing file extension errors, TypeScript already provides a similar feature
+    "import/prefer-default-export": "off", // Named export is easier to refactor automatically
+    "unused-imports/no-unused-imports": "warn",
+    "unused-imports/no-unused-vars": ["warn"],
+    "simple-import-sort/imports": [
+      "error",
+      {
+        "groups": [
+          // Node.js builtins and modules
+          ["^\\w"],
+          // External packages
+          ["^@?\\w"],
+          // Internal packages
+          ["^@/(utils|config|etc)"],
+          // Parent imports
+          ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+          // Other relative imports
+          ["^\\./(?=.*/)(?!/?$)", "^\\./?$"]
+        ]
+      }
+    ],
+    "simple-import-sort/exports": "error"
+  },
+  "settings": {
+    "tailwindcss": {
+      "callees": ["cn", "cva"],
+      "config": "tailwind.config.ts"
+    }
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "parser": "@typescript-eslint/parser"
+    }
+  ]
+}{
   "extends": "next/core-web-vitals"
 }

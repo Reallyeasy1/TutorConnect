@@ -77,9 +77,9 @@ export async function PUT(req: Request) {
 		const assignment = await prisma.assignment.upsert({
 			where: { id: AssignmentId },
 			update: {
-				Subject,
-				Level,
-				Location: tuteeLocation,
+				subject:Subject,
+				level:Level,
+				location: tuteeLocation,
 				minRate,
 				maxRate,
 				description,
@@ -89,9 +89,9 @@ export async function PUT(req: Request) {
 				client: { connect: { id: parseInt(clientId) } }, // Add the client property
 			},
 			create: {
-				Subject,
-				Level,
-				Location: tuteeLocation,
+				subject: Subject,
+				level: Level,
+				location: tuteeLocation,
 				minRate,
 				maxRate,
 				description,

@@ -30,7 +30,7 @@ interface Assignment {
 export const UpdateAssignmentForm = ({ defaultValues = {} }: { defaultValues?: any }) => {
     const router = useRouter();
     const params = useParams();
-    const assignmentid = params.assignmentId;
+    const assignmentid = params.assignmentId.toString();
     const clientId = params.clientId;
     const [assignments, setAssignments] = useState<Assignment[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -179,7 +179,7 @@ export const UpdateAssignmentForm = ({ defaultValues = {} }: { defaultValues?: a
                     />
                 </div>
                 {/* Max Rate */}
-                <div class="grid w-full items-center gap-1.5">
+                <div className="grid w-full items-center gap-1.5">
                     <Label htmlFor="maxRate">Max Rate</Label>
                     <Input
                         required
@@ -190,7 +190,7 @@ export const UpdateAssignmentForm = ({ defaultValues = {} }: { defaultValues?: a
                     />
                 </div>
                 {/* Description */}
-                <div class="grid w-full items-center gap-1.5">
+                <div className="grid w-full items-center gap-1.5">
                     <Label htmlFor="description">Description</Label>
                     <Input
                         required
@@ -201,7 +201,7 @@ export const UpdateAssignmentForm = ({ defaultValues = {} }: { defaultValues?: a
                     />
                 </div>
                 {/* Error Message */}
-                {error && <div class="text-red-500">{error}</div>}
+                {error && <div className="text-red-500">{error}</div>}
                 {/* Submit Button */}
                 <Button type="submit" className="w-full mt-4" style={{ backgroundColor: "#000", color: "#fff" }}>
                     Save
