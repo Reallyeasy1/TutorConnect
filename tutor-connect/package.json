@@ -38,7 +38,8 @@
     "styled-components": "^6.1.11",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "winston": "^3.13.0"
+    "winston": "^3.13.0",
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
