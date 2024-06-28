@@ -7,6 +7,7 @@ import Messages from "../Messages";
 import List from "../List";
 import { ChatContainer, StyledContainer, ChatBox, StyledButton, SendIcon, InputContainer, StyledInput } from "./styles";
 import { io } from "socket.io-client";
+import { error } from "console";
 
 interface ChatRoomProps {
   username: string;
@@ -87,8 +88,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
       setMessages([]);
       try {
         await fetchAllMessages();
-      } catch (e) {
-        console.log(e.message);
+      } catch (err: any) {
+        console.log((err as any).message);
       }
     });
 
@@ -102,10 +103,10 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
           attributes: user.attributes,
           isTutor: user.attributes.isTutor
         })).filter((user: User) => user.isTutor == !isTutor);
-
+        
         setUsers(transformedUsers);
-      } catch (e) {
-        console.log(e.message);
+      } catch (err: any) {
+        console.log(err.message);
       }
     }
 
