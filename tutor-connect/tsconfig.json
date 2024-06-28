@@ -12,7 +12,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": "tutorconnect-git-main-reallyeasy1s-projects.vercel.app",
+    // "baseUrl": "tutorconnect-git-main-reallyeasy1s-projects.vercel.app",
     "plugins": [
       {
         "name": "next"
