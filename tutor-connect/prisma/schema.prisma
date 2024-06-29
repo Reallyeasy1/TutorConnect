@@ -26,20 +26,27 @@ model Client {
 }
 
 model Assignment {
-  id           Int      @id @default(autoincrement())
-  subject      String
-  level        String
-  client       Client   @relation(fields: [clientId], references: [id])
-  clientId     Int
-  tutor        Tutor?   @relation(name: "PrimaryTutor", fields: [tutorId], references: [id])
-  tutorId      Int?
-  description  String?
-  postDate     DateTime
-  taken        Boolean
-  location     String
-  minRate      Int
-  maxRate      Int
-  avail_tutors Tutor[]  @relation(name: "AvailableTutors")
+  id               Int      @id @default(autoincrement())
+  subject          String
+  level            String
+  client           Client   @relation(fields: [clientId], references: [id])
+  clientId         Int
+  tutor            Tutor?   @relation(name: "PrimaryTutor", fields: [tutorId], references: [id])
+  tutorId          Int?
+  additionalDetails String?
+  postDate         DateTime
+  taken            Boolean
+  address          String
+  postalCode       Int
+  minRate          Int
+  maxRate          Int
+  duration         String
+  frequency        String
+  typeOfTutor      String[]
+  gender           String
+  race             String[]
+  availability     String
+  avail_tutors     Tutor[]  @relation(name: "AvailableTutors")
 }
 
 model Tutor {
