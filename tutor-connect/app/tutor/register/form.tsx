@@ -437,13 +437,11 @@ export const RegisterForm = () => {
 					const strapiResponseData = await strapiResponse.json();
 					console.log(strapiResponseData); // Outputs the result
 					console.log("Upload to Strapi success");
-     
+     */
 					router.push("/tutor/verify_email?tutortId=" + data.id);
 				} else {
 					setError("Failed to retrieve user information");
 				}
-    */
-				router.push("/tutor/verify_email?tutortId=" + data.id);
 			} else {
 				setError((await res.json()).error);
 			}
