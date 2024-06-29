@@ -29,7 +29,7 @@ export async function POST(req: Request) {
 		const from: string = "<lowethan11@gmail.com>";
 		const to: string = user.email;
 		const subject: string = "Please Activate Your Account";
-		const baseUrl: string = process.env.NEXTAUTH_URL || "http://localhost:3000";
+		const baseUrl: string = process.env.NEXTAUTH_URL || "https://tutorconnect-delta.vercel.app/";
 		const mailTemplate: string = `Hello ${user.name}, <br> Please click on the link to activate your account: ${baseUrl}/api/client/activate/${token.token}`;
 
 		sendMail(from, to, subject, mailTemplate);
