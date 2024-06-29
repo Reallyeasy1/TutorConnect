@@ -27,7 +27,7 @@ export async function POST(req: Request) {
 				token: `${randomUUID()}${randomUUID()}`.replace(/-/g, ""),
 			},
 		});
-
+ 
 		const from: string = "<lowethan11@gmail.com>";
 		const to: string = user.email;
 		const subject: string = "Please Activate Your Account";
