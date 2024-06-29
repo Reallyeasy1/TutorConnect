@@ -76,6 +76,7 @@ export const RegisterForm = () => {
             "Content-Type": "application/json",
           },
         });
+        const data = await response.json();
         /*
         // TODO: Mr Yong Zhe
         const data: StrapiResponseData = await response.json();
