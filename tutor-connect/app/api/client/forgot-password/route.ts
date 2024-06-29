@@ -29,7 +29,7 @@ export async function POST(req: Request) {
 		const to: string = user.email;
 		const subject: string = "Reset Password";
 		const baseUrl: string = process.env.NEXTAUTH_URL || "https://tutorconnect-delta.vercel.app";
-		const mailTemplate: string = `Hello ${user.name}, <br> Please click on the link to reset your password: ${baseUrl}/client/password_reset/${token.token}`;
+		const mailTemplate: string = `Hello ${user.name}, <br> Please click on the link to reset your password: https://tutorconnect-delta.vercel.app/client/password_reset/${token.token}`;
 
 		sendMail(from, to, subject, mailTemplate);
 
