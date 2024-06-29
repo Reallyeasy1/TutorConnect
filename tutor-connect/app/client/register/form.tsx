@@ -101,7 +101,7 @@ export const RegisterForm = () => {
             },
           };
 console.log(strapiData);
-          const strapiResponse = await fetch("https://188.166.213.34/api/accounts", {
+          const strapiResponse = await fetch("http://188.166.213.34/api/accounts", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
