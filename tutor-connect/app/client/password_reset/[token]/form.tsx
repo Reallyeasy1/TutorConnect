@@ -44,7 +44,7 @@ export const ResetPasswordForm = () => {
 			});
 
 			if (res.ok) {
-				router.push("http://localhost:3000/client/login");
+				router.push("/client/login");
 			} else {
 				setError((await res.json()).error);
 			}
