@@ -120,11 +120,12 @@ console.log(strapiData);
           const strapiResponseData = await strapiResponse.json();
           console.log(strapiResponseData); // Outputs the result
           console.log("Upload to Strapi success");
-          */
-          router.push("/client/verify_email?clientId=" + data.id);
+          
         } else {
           setError("Failed to retrieve user information");
         }
+      */
+        router.push("/client/verify_email?clientId=" + data.id);
       } else {
         const errorResponse = await res.json();
         setError(errorResponse.error);
