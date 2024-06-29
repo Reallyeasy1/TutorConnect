@@ -20,7 +20,7 @@ export default function ClientProfile() {
 		},
 		{
 			title: "Sign Out",
-			path: "#",
+			path: "/",
 			cName: "dropdown-link",
             action: () => signOut(),
 		},
