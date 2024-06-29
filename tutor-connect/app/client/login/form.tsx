@@ -37,13 +37,12 @@ export const Form = () => {
         });
 
         const data = await response.json();
-      
-
+      /*
         let account = {token: data?.id}
         // Need to discuss on what seed to sign for jwt 
           const SECRET = "this is a secret";
         const token = jwt.sign(account, SECRET);
-
+*/
         if (data?.id) {
           // Strapi portion (migrated to register)
          /* // Parameters for Strapi
@@ -78,7 +77,6 @@ export const Form = () => {
           console.log(strapiResponseData); // Outputs the result
           console.log("Upload to Strapi success");
           */
-
           router.push(`/client/${data.id}/assignment/client_assignment`);
         } else {
           setError("Failed to retrieve user information");
