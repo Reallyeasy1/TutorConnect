@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { parse } from "path";
 
 // TODO: Validate data here
 export async function POST(req: Request) {
@@ -8,37 +9,26 @@ export async function POST(req: Request) {
 		console.log(body);
 
 		const {
-			Subject,
-			Level,
 			clientId,
-			tuteeLocation,
-			MinRate,
-			MaxRate,
-			description,
+			level,
+			subject,
+			address,
+			postalCode,
+			minRate,
+			maxRate,
+			duration,
+			frequency,
+			additionalDetails,
+			typeOfTutor,
+			gender,
+			race,
+			availability,
 			postDate,
 		} = body;
 
 		// Validate required fields
-		if (
-			!Subject ||
-			!Level ||
-			!clientId ||
-			!tuteeLocation ||
-			!MinRate ||
-			!MaxRate ||
-			!postDate
-		) {
-			return new NextResponse(
-				JSON.stringify({
-					error: "Missing required fields",
-				}),
-				{
-					status: 400,
-				}
-			);
-		}
 
-		if (MinRate > MaxRate || MinRate < 0 || MaxRate < 0) {
+		if (minRate > maxRate || minRate < 0 || maxRate < 0) {
 			return new NextResponse(
 				JSON.stringify({
 					error: "Invalid minRate or maxRate",
@@ -81,13 +71,20 @@ export async function POST(req: Request) {
 
 		const assignment = await prisma.assignment.create({
 			data: {
-				subject: Subject,
-				level: Level,
 				client: { connect: { id: clientIdNumber } },
-				location: tuteeLocation,
-				minRate: MinRate,
-				maxRate: MaxRate,
-				description: description,
+				level,
+				subject,
+				address,
+				postalCode: parseInt(postalCode),
+				minRate: parseInt(minRate),
+				maxRate: parseInt(maxRate),
+				duration,
+				frequency,
+				additionalDetails,
+				typeOfTutor,
+				gender,
+				race,
+				availability,
 				postDate: new Date(postDate), // Ensure postDate is a valid Date
 				taken: false,
 				avail_tutors: {
