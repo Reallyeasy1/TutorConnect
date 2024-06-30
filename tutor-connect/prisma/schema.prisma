@@ -112,6 +112,6 @@ model PasswordResetClientToken {
   clientId  Int
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-}
+//generator erd {
+//  provider = "prisma-erd-generator"
+//}
