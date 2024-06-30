@@ -3,32 +3,46 @@ import { NextResponse } from "next/server";
 
 export async function PUT(req: Request) {
 	try {
-		const body = await req.json();
+        const body = await req.json();
 		console.log(body);
 
 		const {
-			assignmentid,
-			subject,
-			level,
+			assignmentId,
 			clientId,
-			location: tuteeLocation,
-			MinRate,
-			MaxRate,
-			description,
+			level,
+			subject,
+			address,
+			postalCode,
+			minRate,
+			maxRate,
+			duration,
+			frequency,
+			additionalDetails,
+			typeOfTutor,
+			gender,
+			race,
+			availability,
 			postDate,
 		} = body;
+
 		// Validate required fields
 		if (
-			!assignmentid ||
+			!assignmentId ||
 			!subject ||
 			!level ||
 			!clientId ||
-			!tuteeLocation ||
-			!(MinRate == null) ||
-			!(MaxRate == null) ||
-			!postDate
+			!address ||
+			!postalCode ||
+			minRate == null ||
+			maxRate == null ||
+			!postDate ||
+			!duration ||
+			!frequency ||
+			!typeOfTutor ||
+			!gender ||
+			!race ||
+			!availability
 		) {
-			
 			return new NextResponse(
 				JSON.stringify({
 					error: "Missing required fields",
@@ -39,7 +53,8 @@ export async function PUT(req: Request) {
 			);
 		}
 
-		if (MinRate > MaxRate || MinRate < 0 || MaxRate < 0) {
+		// Validate rates
+		if (minRate > maxRate || minRate < 0 || maxRate < 0) {
 			return new NextResponse(
 				JSON.stringify({
 					error: "Invalid minRate or maxRate",
@@ -81,15 +96,22 @@ export async function PUT(req: Request) {
 		}
 
 		const assignment = await prisma.assignment.update({
-			where: { id: parseInt(assignmentid) },
+			where: { id: parseInt(assignmentId) },
 			data: {
 				subject: subject,
 				level: level,
 				client: { connect: { id: clientIdNumber } },
-				location: tuteeLocation,
-				minRate: MinRate,
-				maxRate: MaxRate,
-				description: description,
+				address: address,
+				postalCode: postalCode,
+				minRate: minRate,
+				maxRate: maxRate,
+				duration: duration,
+				frequency: frequency,
+				additionalDetails: additionalDetails,
+				typeOfTutor: typeOfTutor,
+				gender: gender,
+				race: race,
+				availability: availability,
 				postDate: new Date(postDate), // Ensure postDate is a valid Date
 				taken: false, // Adjust as needed for your use case
 			},

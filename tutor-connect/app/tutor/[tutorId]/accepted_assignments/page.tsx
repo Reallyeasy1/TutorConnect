@@ -13,7 +13,7 @@ interface Assignment {
     id: number;
     subject: string;
     level: string;
-    location: string;
+    address: string;
     minRate: number;
     maxRate: number;
     description: string;
@@ -41,7 +41,7 @@ const AssignmentRow = ({ assignments }: { assignments: Assignment[] }) => {
                             {assignment.subject} - {assignment.level}
                         </h2>
                         <p className="text-gray-700 mb-1">
-                            <strong>Location:</strong> {assignment.location}
+                            <strong>Location:</strong> {assignment.address}
                         </p>
                         <p className="text-gray-700 mb-1">
                             <strong>Rate:</strong> ${assignment.minRate} - ${assignment.maxRate}

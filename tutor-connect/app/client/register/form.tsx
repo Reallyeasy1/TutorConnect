@@ -85,6 +85,7 @@ export const RegisterForm = () => {
           const account = { token: data.id };
           console.log(account)
           let token = "";
+          //TODO: Make the secret in environment
           const SECRET = 'f90d7ee67d58a89a0e89dc3146c707a0bfbd534bb6607193cfbecd2edfdeed76111b5609438b2fda5d35033d6323d03aee6861a2d8e6629f4cbc76b3f5148baf';
           try {
             const token = jwt.sign(account, SECRET);

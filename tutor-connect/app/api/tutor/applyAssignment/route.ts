@@ -116,14 +116,6 @@ export async function PUT(req: Request) {
 		await prisma.assignment.update({
 			where: { id: AssignmentId },
 			data: {
-				subject: Subject,
-				level: Level,
-				location: tuteeLocation,
-				minRate,
-				maxRate,
-				description,
-				postDate: new Date(postDate),
-				taken: false,
 				avail_tutors: {
 					connect: { id: tutor.id },
 				},

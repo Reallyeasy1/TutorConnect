@@ -10,7 +10,7 @@ interface Assignment {
 	id: number;
 	subject: string;
 	level: string;
-	location: string;
+	address: string;
 	minRate: number;
 	maxRate: number;
 	description: string;
@@ -134,7 +134,7 @@ export default function ViewAssignment() {
 									</h2>
 									<p className="text-gray-700 mb-1">
 										<strong>Location:</strong>{" "}
-										{assignment.location}
+										{assignment.address}
 									</p>
 									<p className="text-gray-700 mb-1">
 										<strong>Rate:</strong> $

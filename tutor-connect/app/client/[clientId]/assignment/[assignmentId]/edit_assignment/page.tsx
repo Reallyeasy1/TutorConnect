@@ -12,7 +12,7 @@ export default function UpdateAssignmentPage() {
 			<div className="h-full w-screen flex justify-center items-center bg-navy-100 py-6">
 				<div className="sm:shadow-xl px-8 pb-8 pt-12 sm:bg-white rounded-xl space-y-12">
 					<h1 className="font-semibold text-2xl">
-						Update the Assignment here
+						Update Assignment here
 					</h1>
 					<UpdateAssignmentForm />
 				</div>

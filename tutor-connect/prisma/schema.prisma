@@ -111,3 +111,7 @@ model PasswordResetClientToken {
   client    Client    @relation(fields: [clientId], references: [id])
   clientId  Int
 }
+
+generator erd {
+  provider = "prisma-erd-generator"
+}

@@ -10,7 +10,7 @@ interface Assignment {
 	id: number;
 	subject: string;
 	level: string;
-	location: string;
+	address: string;
 	minRate: number;
 	maxRate: number;
 	description: string;
@@ -84,7 +84,7 @@ export default function ViewAssignment() {
 			<NavBar />
 			<div className="container mx-auto p-6 flex flex-col items-center flex-grow">
 				<h1 className="text-4xl font-bold mb-8 text-center">
-					Client Details
+					Assignment Details
 				</h1>
 				{assignments.length === 0 ? (
 					<p className="text-gray-500 text-center">
@@ -108,7 +108,7 @@ export default function ViewAssignment() {
 									</h2>
 									<p className="text-gray-700 mb-1">
 										<strong>Location:</strong>{" "}
-										{assignment.location}
+										{assignment.address}
 									</p>
 									<p className="text-gray-700 mb-1">
 										<strong>Rate:</strong> $

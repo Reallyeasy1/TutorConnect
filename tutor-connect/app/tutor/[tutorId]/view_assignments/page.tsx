@@ -23,7 +23,7 @@ interface Assignment {
   id: number;
   subject: string;
   level: string;
-  location: string;
+  address: string;
   minRate: number;
   maxRate: number;
   description: string;
@@ -51,7 +51,7 @@ const AssignmentRow = ({ assignments }: { assignments: Assignment[] }) => {
               {assignment.subject} - {assignment.level}
             </h2>
             <p className="text-gray-700 mb-1">
-              <strong>Location:</strong> {assignment.location}
+              <strong>Location:</strong> {assignment.address}
             </p>
             <p className="text-gray-700 mb-1">
               <strong>Rate:</strong> ${assignment.minRate} - ${assignment.maxRate}
@@ -150,7 +150,7 @@ export default function AllAssignments() {
           setAssignments(data);
 
           const markerPromises = data.map((assignment: Assignment) =>
-            geocodeAddress(assignment.location).then((coords) => ({
+            geocodeAddress(assignment.address).then((coords) => ({
               ...coords,
               price: `$${assignment.minRate}`,
             }))
@@ -239,6 +239,14 @@ export default function AllAssignments() {
             </Select>
           </div>
         </div>
+        <div className="mb-4 w-full">
+          <button
+            className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+            onClick={() => router.push(`/tutor/${tutorId}/accepted_assignments`)}
+          >
+            View Accepted Assignments
+          </button>
+        </div>
       </div>
       <div className="flex-grow grid grid-cols-3 gap-8" style={{ height: "calc(100vh - 100px)" }}>
         <div className="col-span-2 p-6 overflow-auto">
@@ -282,4 +290,3 @@ export default function AllAssignments() {
     </div>
   );
 }
-
