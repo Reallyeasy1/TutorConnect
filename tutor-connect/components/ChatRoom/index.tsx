@@ -5,9 +5,16 @@ import "font-awesome/css/font-awesome.min.css";
 import Header from "../Header";
 import Messages from "../Messages";
 import List from "../List";
-import { ChatContainer, StyledContainer, ChatBox, StyledButton, SendIcon, InputContainer, StyledInput } from "./styles";
+import {
+  ChatContainer,
+  StyledContainer,
+  ChatBox,
+  StyledButton,
+  SendIcon,
+  InputContainer,
+  StyledInput,
+} from "./styles";
 import { io } from "socket.io-client";
-import { error } from "console";
 
 interface ChatRoomProps {
   username: string;
@@ -34,9 +41,15 @@ interface User {
   id: number;
   attributes: UserAttributes;
   isTutor: boolean;
+  username: string;
 }
 
-const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipient }) => {
+const ChatRoom: React.FC<ChatRoomProps> = ({
+  username,
+  id,
+  isTutor,
+  curr_recipient,
+}) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<string>("");
   const [users, setUsers] = useState<User[]>([]);
@@ -45,7 +58,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
   const socket = useRef(io("http://188.166.213.34")).current;
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       sendMessage(message);
     }
   };
@@ -53,14 +66,18 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
   const fetchAllMessages = async () => {
     let allMessages: Message[] = [];
     let page = 1;
-    let pageSize = 100; // Adjust page size if necessary
+    const pageSize = 100; // Adjust page size if necessary
 
     while (true) {
-      const res = await fetch(`http://188.166.213.34/api/messages?pagination[page]=${page}&pagination[pageSize]=${pageSize}`);
+      const res = await fetch(
+        `http://188.166.213.34/api/messages?pagination[page]=${page}&pagination[pageSize]=${pageSize}`
+      );
       const response = await res.json();
-      const newMessages = response.data.map((one: { attributes: Message }) => one.attributes);
+      const newMessages = response.data.map(
+        (one: { attributes: Message }) => one.attributes
+      );
       allMessages = [...allMessages, ...newMessages];
-      
+
       if (newMessages.length < pageSize) {
         break; // Exit loop if there are no more messages
       }
@@ -76,22 +93,25 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
       if (error) return alert(error);
     });
 
-    socket.on("welcome", async (data: { user: string; text: string }, error: string) => {
-      if (error) return alert(error);
-      const welcomeMessage: Message = {
-        user: data.user,
-        message: data.text,
-        createdAt: new Date().toISOString(),
-        recipient: recipient || ""
-      };
+    socket.on(
+      "welcome",
+      async (data: { user: string; text: string }, error: string) => {
+        if (error) return alert(error);
+        const welcomeMessage: Message = {
+          user: data.user,
+          message: data.text,
+          createdAt: new Date().toISOString(),
+          recipient: recipient || "",
+        };
 
-      setMessages([]);
-      try {
-        await fetchAllMessages();
-      } catch (err: any) {
-        console.log((err as any).message);
+        setMessages([]);
+        try {
+          await fetchAllMessages();
+        } catch (err: any) {
+          console.log((err as any).message);
+        }
       }
-    });
+    );
 
     async function loadUsers() {
       try {
@@ -100,11 +120,12 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
         console.log(usersData);
         const transformedUsers: User[] = usersData.data.map((user: any) => ({
           id: user.id,
-          attributes: user.attributes,
-          isTutor: user.attributes.isTutor
+          attributes: { username: user.attributes.username },
+          isTutor: user.attributes.isTutor,
+          username: user.attributes.username, // Ensure username is included
         }));
         // .filter((user: User) => user.isTutor == !isTutor);
-      //TODO: Fix schema on prod to include isTutor 
+        //TODO: Fix schema on prod to include isTutor
         setUsers(transformedUsers);
       } catch (err: any) {
         console.log(err.message);
@@ -117,18 +138,28 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
       loadUsers();
     });
 
-    socket.on("message", (data: { user: string; text: string; createdAt: string; recipient: string }) => {
-      const newMessage: Message = {
-        user: data.user,
-        message: data.text,
-        createdAt: data.createdAt,
-        recipient: data.recipient
-      };
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-    });
+    socket.on(
+      "message",
+      (data: { user: string; text: string; createdAt: string; recipient: string }) => {
+        const newMessage: Message = {
+          user: data.user,
+          message: data.text,
+          createdAt: data.createdAt,
+          recipient: data.recipient,
+        };
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+      }
+    );
 
     socket.on("users", (data: { users: { username: string }[] }) => {
-      setUsers(data.users);
+      const transformedUsers: User[] = data.users.map((user, index) => ({
+        id: index, // Replace with actual id if available
+        username: user.username,
+        attributes: { username: user.username }, // Ensure username is included
+        isTutor: false, // Set appropriate value
+      }));
+
+      setUsers(transformedUsers);
     });
 
     return () => {
@@ -144,7 +175,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
       setRecipient(curr_recipient.username);
       //TODO: Need to change the list section to be highlighted
     }
-   
+
     const filtered = recipient
       ? messages.filter(
           (msg) =>
@@ -152,7 +183,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
             (msg.user === recipient && msg.recipient === username)
         )
       : [];
-      
+
     setFilteredMessages(filtered);
   }, [recipient, messages, username]);
 
@@ -167,17 +198,21 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
         user: username,
         message,
         createdAt: new Date().toISOString(),
-        recipient: recipient
+        recipient: recipient,
       };
 
       setMessages((prevMessages) => [...prevMessages, newMessage]);
-      socket.emit("sendMessage", { message, user: username, createdAt: newMessage.createdAt, recipient: recipient }, (error: string) => {
-        if (error) {
-          alert(error);
+      socket.emit(
+        "sendMessage",
+        { message, user: username, createdAt: newMessage.createdAt, recipient: recipient },
+        (error: string) => {
+          if (error) {
+            alert(error);
+          }
         }
-      });
+      );
       setMessage("");
-    } 
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -190,9 +225,14 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
 
   return (
     <ChatContainer>
-      <Header room="Chat" id={id.toString()} tutor = {isTutor}/>
+      <Header room="Chat" id={id.toString()} tutor={isTutor} />
       <StyledContainer>
-        <List users={users} username={username} onUserClick={setRecipient} curr_recipient = {curr_recipient} />
+        <List
+          users={users}
+          username={username}
+          onUserClick={setRecipient}
+          curr_recipient={curr_recipient}
+        />
         <ChatBox>
           {recipient ? (
             <>
@@ -222,13 +262,3 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
 };
 
 export default ChatRoom;
-
-
-  //TODO: Bug, after messaging, the name of the message may not appear 
-      //TODO: Bug 2, will not show newer messages sometimes, takes too long to load, may consider reloading/ lazy evaluation
-      //TODO: Also fix active users as well/ classify them into rooms
-      //TODO: Add polling so the name gets generated, etc.
-      //TODO: Add timestamp as well
-      //TODO: Refresh the page after 30s
-      //TODO: Add scroll down bar if reach maximum height of room/ number of messages
-   
