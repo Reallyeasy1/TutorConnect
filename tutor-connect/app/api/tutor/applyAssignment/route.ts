@@ -7,24 +7,32 @@ export async function PUT(req: Request) {
 		console.log(body);
 
 		const {
-			AssignmentId,
-			Subject,
-			Level,
+			assignmentId,
+			subject,
+			level,
 			clientId,
-			tuteeLocation,
+			address,
+			postalCode,
 			minRate,
 			maxRate,
-			description,
+			duration,
+			frequency,
+			additionalDetails,
+			typeOfTutor,
+			gender,
+			race,
+			availability,
 			postDate,
 			tutorId,
 		} = body;
 
 		// Validate required fields
+		//|| !tuteeLocation
 		if (
 			!tutorId ||
-			!AssignmentId ||
-			!Subject ||
-			!Level ||
+			!assignmentId ||
+			!subject ||
+			!level ||
 			!clientId ||
 			!minRate ||
 			!maxRate ||
@@ -53,19 +61,6 @@ export async function PUT(req: Request) {
 			);
 		}
 
-		// Validate clientId is a number
-		const clientIdNumber = parseInt(clientId);
-		if (isNaN(clientIdNumber)) {
-			return new NextResponse(
-				JSON.stringify({
-					error: "Invalid client ID",
-				}),
-				{
-					status: 400,
-				}
-			);
-		}
-
 		// Find the tutor
 		const tutor = await prisma.tutor.findUnique({
 			where: { id: tutorIdNumber },
@@ -84,7 +79,7 @@ export async function PUT(req: Request) {
 
 		// Find the assignment with available tutors included
 		const assignment_found = await prisma.assignment.findUnique({
-			where: { id: AssignmentId },
+			where: { id: assignmentId },
 			include: { avail_tutors: true },
 		});
 
@@ -99,27 +94,32 @@ export async function PUT(req: Request) {
 			);
 		}
 
-		// Check if tutor is already in the available tutors
-		const tutorExists = assignment_found.avail_tutors.some(t => t.id === tutor.id);
-		if (tutorExists) {
-			return new NextResponse(
-				JSON.stringify({
-					error: "Tutor is already an available tutor for this assignment",
-				}),
-				{
-					status: 400,
-				}
-			);
-		}
+		// Add tutor to available tutors for the assignment
+		const updatedAvailTutors = [...assignment_found.avail_tutors, tutor];
 
 		// Update the assignment with the new available tutor
 		await prisma.assignment.update({
-			where: { id: AssignmentId },
+			where: { id: assignmentId },
 			data: {
+				level,
+				subject,
+				address,
+				postalCode,
+				minRate,
+				maxRate,
+				duration,
+				frequency,
+				additionalDetails,
+				typeOfTutor,
+				gender,
+				race,
+				availability,
+				postDate: new Date(postDate),
+				taken: false,
 				avail_tutors: {
-					connect: { id: tutor.id },
+					set: updatedAvailTutors.map((t) => ({ id: t.id })),
 				},
-				client: { connect: { id: clientIdNumber } },
+				client: { connect: { id: parseInt(clientId) } },
 			},
 		});
 
@@ -128,7 +128,7 @@ export async function PUT(req: Request) {
 			where: { id: tutor.id },
 			data: {
 				assignmentsAvailable: {
-					connect: { id: AssignmentId },
+					connect: { id: assignmentId },
 				},
 			},
 		});
@@ -142,7 +142,6 @@ export async function PUT(req: Request) {
 			}
 		);
 	} catch (err: any) {
-		console.error(err);
 		return new NextResponse(
 			JSON.stringify({
 				error: err.message,

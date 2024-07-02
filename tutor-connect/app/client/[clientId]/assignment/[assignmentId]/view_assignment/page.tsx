@@ -1,31 +1,33 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams,useParams } from "next/navigation";
+import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { Alert } from "@/components/ui/alert";
 import Footer from "@/components/footer/footer";
 import NavBar from "@/components/nav-bar/navBar";
 
 interface Assignment {
-	id: number;
-	subject: string;
-	level: string;
-	address: string;
-	minRate: number;
-	maxRate: number;
-	description: string;
-	postDate: string;
-	taken: boolean;
-	client: {
-		id: number;
-		name: string;
-	};
-	tutor: {
-		id: number;
-		name: string;
-	};
+    id: number;
+    subject: string;
+    level: string;
+    address: string;
+    postalCode: number;
+    minRate: number;
+    maxRate: number;
+    duration: string;
+    frequency: string;
+    additionalDetails: string;
+    typeOfTutor: string[];
+    gender: string;
+    race: string[];
+    availability: string;
+    postDate: string;
+    taken: boolean;
+    client: {
+        id: number;
+        name: string;
+    };
 }
-
 
 //TODO: Change to update assignment details only and only accept possible clientId
 export default function ViewAssignment() {
@@ -37,6 +39,7 @@ export default function ViewAssignment() {
 	const [error, setError] = useState<string | null>(null);
 	const [error2, setError2] = useState<string | null>(null);
 
+	
 	async function accept_assignment(assignment: Assignment) {
 		try {
 				if (clientId != null) {
@@ -74,7 +77,10 @@ export default function ViewAssignment() {
 		} catch (error: any) {
 			setError(error?.message);
 		}
-	}
+	}	
+
+
+	
 
 	useEffect(() => {
 		async function fetchAssignments() {
@@ -129,21 +135,32 @@ export default function ViewAssignment() {
 									className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl"
 								>
 									<h2 className="text-2xl font-semibold mb-2">
-										{assignment.subject} -{" "}
-										{assignment.level}
+										{assignment.level} {assignment.subject}
 									</h2>
 									<p className="text-gray-700 mb-1">
-										<strong>Location:</strong>{" "}
-										{assignment.address}
+										<strong>Address:</strong>{" "}
+										{assignment.address} Singapore{" "}
+										{assignment.postalCode}
+									</p>
+									<p className="text-gray-700 mb-1">
+										<strong>Frequency:</strong>{" "}
+										{assignment.duration},{" "}
+										{assignment.frequency}
 									</p>
 									<p className="text-gray-700 mb-1">
 										<strong>Rate:</strong> $
 										{assignment.minRate} - $
 										{assignment.maxRate}
 									</p>
+									{assignment.additionalDetails && (
+										<p className="text-gray-700 mb-1">
+											<strong>Additional Details:</strong>{" "}
+											{assignment.additionalDetails}
+										</p>
+									)}
 									<p className="text-gray-700 mb-1">
-										<strong>Description:</strong>{" "}
-										{assignment.description}
+										<strong>Available on:</strong>{" "}
+										{assignment.availability}
 									</p>
 									<p className="text-gray-700 mb-1">
 										<strong>Post Date:</strong>{" "}
@@ -167,6 +184,7 @@ export default function ViewAssignment() {
 											? "Taken"
 											: "Available"}
 									</p>
+
 									<button
 										className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors w-full"
 										onClick={() =>
@@ -176,7 +194,7 @@ export default function ViewAssignment() {
 										Edit 
 									</button>
 									
-									{ assignment.taken? 
+								{ assignment.taken? 
 									<button
 										className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors w-full"
 										onClick={() =>
@@ -196,6 +214,7 @@ export default function ViewAssignment() {
 									</button>
 }
 									{error2 && <Alert>{error2}</Alert>}
+								
 								</div>
 							))}
 					</div>

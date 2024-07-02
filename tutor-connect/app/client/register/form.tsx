@@ -76,19 +76,20 @@ export const RegisterForm = () => {
             "Content-Type": "application/json",
           },
         });
-        const data = await response.json();
-        /*
+        // const data = await response.json();
+        
         // TODO: Mr Yong Zhe
         const data: StrapiResponseData = await response.json();
       
         if (data?.id) {
           const account = { token: data.id };
           console.log(account)
-          let token = "";
+          let token = ""
           //TODO: Make the secret in environment
-          const SECRET = 'f90d7ee67d58a89a0e89dc3146c707a0bfbd534bb6607193cfbecd2edfdeed76111b5609438b2fda5d35033d6323d03aee6861a2d8e6629f4cbc76b3f5148baf';
+          const SECRET = 'This is a secret';
           try {
-            const token = jwt.sign(account, SECRET);
+            token = "a";
+            // const token = jwt.sign(account, SECRET);
             // token = account.toString();
             console.log("JWT Token:", token);
           } catch (error) {
@@ -125,7 +126,7 @@ console.log(strapiData);
         } else {
           setError("Failed to retrieve user information");
         }
-      */
+      
         router.push("/client/verify_email?clientId=" + data.id);
       } else {
         const errorResponse = await res.json();

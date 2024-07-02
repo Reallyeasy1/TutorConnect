@@ -42,7 +42,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
   const [users, setUsers] = useState<User[]>([]);
   const [recipient, setRecipient] = useState<string | null>(null);
   const [filteredMessages, setFilteredMessages] = useState<Message[]>([]);
-  const socket = useRef(io("http://localhost:1337")).current;
+  const socket = useRef(io("http://188.166.213.34")).current;
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -95,15 +95,16 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
 
     async function loadUsers() {
       try {
-        const res = await fetch("http://localhost:1337/api/accounts");
+        const res = await fetch("http://188.166.213.34/api/accounts");
         const usersData = await res.json();
         console.log(usersData);
         const transformedUsers: User[] = usersData.data.map((user: any) => ({
           id: user.id,
           attributes: user.attributes,
           isTutor: user.attributes.isTutor
-        })).filter((user: User) => user.isTutor == !isTutor);
-        
+        }));
+        // .filter((user: User) => user.isTutor == !isTutor);
+      //TODO: Fix schema on prod to include isTutor 
         setUsers(transformedUsers);
       } catch (err: any) {
         console.log(err.message);
@@ -126,9 +127,9 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
       setMessages((prevMessages) => [...prevMessages, newMessage]);
     });
 
-    // socket.on("users", (data: { users: { username: string }[] }) => {
-    //   setUsers(data.users);
-    // });
+    socket.on("users", (data: { users: { username: string }[] }) => {
+      setUsers(data.users);
+    });
 
     return () => {
       socket.off("welcome");
@@ -143,7 +144,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
       setRecipient(curr_recipient.username);
       //TODO: Need to change the list section to be highlighted
     }
-  
+   
     const filtered = recipient
       ? messages.filter(
           (msg) =>
@@ -151,6 +152,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
             (msg.user === recipient && msg.recipient === username)
         )
       : [];
+      
     setFilteredMessages(filtered);
   }, [recipient, messages, username]);
 
