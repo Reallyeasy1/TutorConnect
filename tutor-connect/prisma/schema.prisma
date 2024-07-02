@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  //url      = env("DATABASE_URL")
+  // Uncomment the following lines if you need to specify different URLs for pooling and direct connections
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model Client {
+  id                       Int                        @id @default(autoincrement())
+  email                    String                     @unique
+  password                 String
+  name                     String
+  contactNumber            Int
+  address                  String
+  postalCode               Int
+  assignments              Assignment[]
+  active                   Boolean                    @default(false)
+  activateClientToken      ActivateClientToken[]
+  passwordResetClientToken PasswordResetClientToken[]
+  image                    String?
+}
+
+model Assignment {
+  id               Int      @id @default(autoincrement())
+  subject          String
+  level            String
+  client           Client   @relation(fields: [clientId], references: [id])
+  clientId         Int
+  tutor            Tutor?   @relation(name: "PrimaryTutor", fields: [tutorId], references: [id])
+  tutorId          Int?
+  additionalDetails String?
+  postDate         DateTime
+  taken            Boolean
+  address          String
+  postalCode       Int
+  minRate          Int
+  maxRate          Int
+  duration         String
+  frequency        String
+  typeOfTutor      String[]
+  gender           String
+  race             String[]
+  availability     String
+  avail_tutors     Tutor[]  @relation(name: "AvailableTutors")
+}
+
+model Tutor {
+  id                      Int                       @id @default(autoincrement())
+  email                   String                    @unique
+  password                String
+  name                    String
+  contactNumber           Int
+  dateOfBirth             DateTime
+  gender                  String
+  age                     Int
+  nationality             String
+  race                    String
+  levelAndSubjects        Json
+  location                String[]
+  typeOfTutor             String
+  yearsOfExperience       Int
+  highestEducationLevel   String
+  assignmentsPrimary      Assignment[]              @relation(name: "PrimaryTutor")
+  assignmentsAvailable    Assignment[]              @relation(name: "AvailableTutors")
+  active                  Boolean                   @default(false)
+  activateTutorToken      ActivateTutorToken[]
+  passwordResetTutorToken PasswordResetTutorToken[]
+  image                   String?
+  introduction            String?
+  summary                 String?
+  studentsResults          String?
+}
+
+model ActivateTutorToken {
+  id          Int       @id @default(autoincrement())
+  token       String    @unique
+  createdAt   DateTime  @default(now())
+  activatedAt DateTime?
+  tutor       Tutor     @relation(fields: [tutorId], references: [id])
+  tutorId     Int
+}
+
+model PasswordResetTutorToken {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  createdAt DateTime  @default(now())
+  resetAt   DateTime?
+  tutor     Tutor     @relation(fields: [tutorId], references: [id])
+  tutorId   Int
+}
+
+model ActivateClientToken {
+  id          Int       @id @default(autoincrement())
+  token       String    @unique
+  createdAt   DateTime  @default(now())
+  activatedAt DateTime?
+  client      Client    @relation(fields: [clientId], references: [id])
+  clientId    Int
+}
+
+model PasswordResetClientToken {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  createdAt DateTime  @default(now())
+  resetAt   DateTime?
+  client    Client    @relation(fields: [clientId], references: [id])
+  clientId  Int
+}
+
+//generator erd {
+//  provider = "prisma-erd-generator"
+//}

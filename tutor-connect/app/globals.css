@@ -77,5 +77,39 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+    overflow: auto; /* Allow scrolling */
   }
+}
+
+.rdp-vhidden {
+  @apply hidden;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  border-top-color: #3498db; /* Change this color to whatever you prefer */
+  animation: spin 1s linear infinite;
+}
+
+.bg-image {
+  background-image: url("../assets/main-bg.png");
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.selected-user {
+  @apply bg-slate-300;
 }
