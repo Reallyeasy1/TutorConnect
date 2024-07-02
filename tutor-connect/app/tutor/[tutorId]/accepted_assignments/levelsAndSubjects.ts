@@ -1,5 +1,4 @@
 // levelsAndSubjects.ts
-//TODO: Change this to fix the bug
 export const levels: { [key: string]: string[] } = {
   Primary: ["Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5", "Primary 6"],
   "Lower Secondary": ["Sec 1 Express", "Sec 1 NA", "Sec 1 NT", "Sec 1 IP", "Sec 2 Express", "Sec 2 NA", "Sec 2 NT", "Sec 2 IP"],

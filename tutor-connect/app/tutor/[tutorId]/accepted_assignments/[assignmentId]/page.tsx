@@ -11,20 +11,22 @@ interface Assignment {
 	subject: string;
 	level: string;
 	address: string;
+	postalCode: number;
 	minRate: number;
 	maxRate: number;
-	description: string;
+	duration: string;
+	frequency: string;
+	additionalDetails: string;
+	typeOfTutor: string[];
+	gender: string;
+	race: string[];
+	availability: string;
 	postDate: string;
 	taken: boolean;
 	client: {
 		id: number;
 		name: string;
 	};
-	tutor: {
-		id: number;
-		name: string;
-	};
-	avail_tutors: number[];
 }
 
 export default function ViewAssignment() {
@@ -84,7 +86,7 @@ export default function ViewAssignment() {
 			<NavBar />
 			<div className="container mx-auto p-6 flex flex-col items-center flex-grow">
 				<h1 className="text-4xl font-bold mb-8 text-center">
-					Assignment Details
+					Tutee Assignment
 				</h1>
 				{assignments.length === 0 ? (
 					<p className="text-gray-500 text-center">
@@ -99,26 +101,36 @@ export default function ViewAssignment() {
 							)
 							.map((assignment) => (
 								<div
-									key={assignment.id}
-									className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl"
-								>
-									<h2 className="text-2xl font-semibold mb-2">
-										{assignment.subject} -{" "}
-										{assignment.level}
-									</h2>
+								key={assignment.id}
+								className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl"
+							>
+								<h2 className="text-2xl font-semibold mb-2">
+									{assignment.level} {assignment.subject}
+								</h2>
+								<p className="text-gray-700 mb-1">
+									<strong>Address:</strong>{" "}
+									{assignment.address} Singapore{" "}
+									{assignment.postalCode}
+								</p>
+								<p className="text-gray-700 mb-1">
+									<strong>Frequency:</strong>{" "}
+									{assignment.duration},{" "}
+									{assignment.frequency}
+								</p>
+								<p className="text-gray-700 mb-1">
+									<strong>Rate:</strong> ${assignment.minRate}{" "}
+									- ${assignment.maxRate}
+								</p>
+								{assignment.additionalDetails && (
 									<p className="text-gray-700 mb-1">
-										<strong>Location:</strong>{" "}
-										{assignment.address}
+										<strong>Additional Details:</strong>{" "}
+										{assignment.additionalDetails}
 									</p>
-									<p className="text-gray-700 mb-1">
-										<strong>Rate:</strong> $
-										{assignment.minRate} - $
-										{assignment.maxRate}
-									</p>
-									<p className="text-gray-700 mb-1">
-										<strong>Description:</strong>{" "}
-										{assignment.description}
-									</p>
+								)}
+								<p className="text-gray-700 mb-1">
+									<strong>Available on:</strong>{" "}
+									{assignment.availability}
+								</p>
 									<p className="text-gray-700 mb-1">
 										<strong>Post Date:</strong>{" "}
 										{new Date(
@@ -142,12 +154,12 @@ export default function ViewAssignment() {
 											: "Available"}
 									</p>
 									<button
-										className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors"
+										className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors w-full"
 										onClick={() =>
 											clientInfo(assignment)
 										}
 									>
-										Contact Client Here
+										Contact Client
 									</button>
 									{error2 && <Alert>{error2}</Alert>}
 								</div>

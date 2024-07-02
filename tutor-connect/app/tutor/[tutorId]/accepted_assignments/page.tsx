@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
 
 interface Assignment {
@@ -60,7 +61,7 @@ const AssignmentRow = ({ assignments }: { assignments: Assignment[] }) => {
                         </p>
                     </div>
                     <button
-                        className="absolute bottom-4 right-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors"
+                        className="w-full bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors"
                         onClick={() => (window.location.href = `/tutor/${tutorId}/accepted_assignments/${assignment.id}`)}
                     >
                         View Assignment

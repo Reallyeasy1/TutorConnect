@@ -8,5 +8,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "strapi-plugin-vercel-deploy": "^1.4.0"
+  }
 }

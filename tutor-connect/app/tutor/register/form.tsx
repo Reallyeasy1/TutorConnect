@@ -404,8 +404,6 @@ export const RegisterForm = () => {
 				});
 				const data = await response.json();
 				if (data?.id) {
-					/*
-     TODO
 					const account = { token: data.id };
 					const SECRET = "this is a secret";
 					const token = jwt.sign(account, SECRET);
@@ -416,6 +414,7 @@ export const RegisterForm = () => {
 							username: data.name,
 							email: data.email,
 							token: token,
+							isTutor: true
 						},
 					};
 
@@ -437,7 +436,7 @@ export const RegisterForm = () => {
 					const strapiResponseData = await strapiResponse.json();
 					console.log(strapiResponseData); // Outputs the result
 					console.log("Upload to Strapi success");
-     */
+     
 					router.push("/tutor/verify_email?tutortId=" + data.id);
 				} else {
 					setError("Failed to retrieve user information");

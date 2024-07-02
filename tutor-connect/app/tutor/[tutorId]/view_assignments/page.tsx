@@ -20,67 +20,98 @@ import { levels, subjectsByLevel } from "./levelsAndSubjects"; // Adjust the imp
 import { Label } from "@/components/ui/label"; // Ensure Label is imported
 
 interface Assignment {
-  id: number;
-  subject: string;
-  level: string;
-  address: string;
-  minRate: number;
-  maxRate: number;
-  description: string;
-  postDate: string;
-  taken: boolean;
-  client: {
-    id: number;
-    name: string;
-  };
+	id: number;
+	subject: string;
+	level: string;
+	address: string;
+	postalCode: number;
+	minRate: number;
+	maxRate: number;
+	duration: string;
+	frequency: string;
+	additionalDetails: string;
+	typeOfTutor: string[];
+	gender: string;
+	race: string[];
+	availability: string;
+	postDate: string;
+	taken: boolean;
+	client: {
+		id: number;
+		name: string;
+	};
 }
 
-const AssignmentRow = ({ assignments }: { assignments: Assignment[] }) => {
-  const params = useParams();
-  const tutorId = params.tutorId;
 
-  return (
-    <div className="grid grid-cols-3 gap-2 p-6">
-      {assignments.map((assignment) => (
-        <div
-          key={assignment.id}
-          className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow flex flex-col justify-between relative"
-        >
-          <div>
-            <h2 className="text-2xl font-semibold mb-2">
-              {assignment.subject} - {assignment.level}
-            </h2>
-            <p className="text-gray-700 mb-1">
-              <strong>Location:</strong> {assignment.address}
-            </p>
-            <p className="text-gray-700 mb-1">
-              <strong>Rate:</strong> ${assignment.minRate} - ${assignment.maxRate}
-            </p>
-            <p className="text-gray-700 mb-1">
-              <strong>Description:</strong> {assignment.description}
-            </p>
-            <p className="text-gray-700 mb-1">
-              <strong>Post Date:</strong> {new Date(assignment.postDate).toLocaleDateString()}
-            </p>
-            <p className="text-gray-700 mb-1">
-              <strong>Client:</strong> {assignment.client.name}
-            </p>
-            <p className={`text-gray-700 mb-1 ${assignment.taken ? "text-red-500" : "text-green-500"}`}>
-              <strong>Status:</strong> {assignment.taken ? "Taken" : "Available"}
-            </p>
-          </div>
-          <div className="mt-4">
-            <button
-              className="w-full bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors"
-              onClick={() => (window.location.href = `/tutor/${tutorId}/view_assignment/${assignment.id}`)}
-            >
-              View Assignment
-            </button>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
+const AssignmentRow = ({ assignments }: { assignments: Assignment[] }) => {
+	const params = useParams();
+	const tutorId = params.tutorId;
+
+	return (
+		<div className="grid grid-cols-3 gap-2 p-6">
+			{assignments.map((assignment) => (
+				<div
+					key={assignment.id}
+					className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl flex flex-col justify-between"
+				>
+					<div>
+						<h2 className="text-2xl font-semibold mb-2">
+							{assignment.level} {assignment.subject}
+						</h2>
+						<p className="text-gray-700 mb-1">
+							<strong>Address:</strong> {assignment.address}{" "}
+							Singapore {assignment.postalCode}
+						</p>
+						<p className="text-gray-700 mb-1">
+							<strong>Frequency:</strong> {assignment.duration},{" "}
+							{assignment.frequency}
+						</p>
+						<p className="text-gray-700 mb-1">
+							<strong>Rate:</strong> ${assignment.minRate} - $
+							{assignment.maxRate}
+						</p>
+						{assignment.additionalDetails && (
+							<p className="text-gray-700 mb-1">
+								<strong>Additional Details:</strong>{" "}
+								{assignment.additionalDetails}
+							</p>
+						)}
+						<p className="text-gray-700 mb-1">
+							<strong>Available on:</strong>{" "}
+							{assignment.availability}
+						</p>
+						<p className="text-gray-700 mb-1">
+							<strong>Post Date:</strong>{" "}
+							{new Date(assignment.postDate).toLocaleDateString()}
+						</p>
+						<p className="text-gray-700 mb-1">
+							<strong>Client:</strong> {assignment.client.name}
+						</p>
+						<p
+							className={`text-gray-700 mb-1 ${
+								assignment.taken
+									? "text-red-500"
+									: "text-green-500"
+							}`}
+						>
+							<strong>Status:</strong>{" "}
+							{assignment.taken ? "Taken" : "Available"}
+						</p>
+					</div>
+					<div className="mt-4">
+						<button
+							className="w-full bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors"
+							onClick={() =>
+								(window.location.href = `/tutor/${tutorId}/view_assignment/${assignment.id}`)
+							}
+						>
+							View Assignment
+						</button>
+					</div>
+				</div>
+			))}
+		</div>
+	);
 };
 
 export default function AllAssignments() {
