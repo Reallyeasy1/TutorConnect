@@ -39,19 +39,48 @@ export default function ViewAssignment() {
 	const [error, setError] = useState<string | null>(null);
 	const [error2, setError2] = useState<string | null>(null);
 
+	
 	async function accept_assignment(assignment: Assignment) {
 		try {
-			if (clientId != null) {
-				router.push(
-					`/client/${clientId}/assignment/${assignmentId}/view_assignment/avail_tutors`
-				);
-			} else {
-				setError2("Client ID is required");
-			}
+				if (clientId != null) {
+                        router.push(`/client/${clientId}/assignment/${assignmentId}/view_assignment/avail_tutors`);
+                } else {
+                    setError2("Client ID is required");
+                }
+			
 		} catch (error: any) {
 			setError(error?.message);
 		}
 	}
+
+		async function tutorInfo(assignment: Assignment) {
+		try {
+				if (clientId != null) {
+                        router.push(`/client/${clientId}/assignment/${assignmentId}/view_assignment/tutorInfo`);
+                } else {
+                    setError2("Client ID is required");
+                }
+			
+		} catch (error: any) {
+			setError(error?.message);
+		}
+	}
+
+	async function edit_assignment(assignment: Assignment) {
+		try {
+				if (clientId != null) {
+                        router.push(`/client/${clientId}/assignment/${assignmentId}/edit_assignment`);
+                } else {
+                    setError2("Client ID is required");
+                }
+			
+		} catch (error: any) {
+			setError(error?.message);
+		}
+	}	
+
+
+	
 
 	useEffect(() => {
 		async function fetchAssignments() {
@@ -155,15 +184,37 @@ export default function ViewAssignment() {
 											? "Taken"
 											: "Available"}
 									</p>
+
+									<button
+										className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors w-full"
+										onClick={() =>
+											edit_assignment(assignment)
+										}
+									>
+										Edit 
+									</button>
+									
+								{ assignment.taken? 
+									<button
+										className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors w-full"
+										onClick={() =>
+									tutorInfo(assignment)
+										}
+									>
+										Tutor Info
+									</button>
+										:
 									<button
 										className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors w-full"
 										onClick={() =>
 											accept_assignment(assignment)
 										}
 									>
-										View Details
+										View Tutors 
 									</button>
+}
 									{error2 && <Alert>{error2}</Alert>}
+								
 								</div>
 							))}
 					</div>

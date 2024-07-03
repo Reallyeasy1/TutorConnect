@@ -1,13 +1,14 @@
-
 import { prisma } from "@/lib/prisma"; 
 import { NextResponse } from "next/server"; 
  
 export async function GET(req: Request) { 
   try { 
-    const { searchParams } = new URL(req.url); 
-    const assignmentId = parseInt(searchParams.get('assignmentId') || '0', 10); 
- 
-    if (!assignmentId) { 
+    // Extracting the assignmentId from the URL path parameters
+    const url = new URL(req.url);
+    const pathParts = url.pathname.split('/');
+    const assignmentId = parseInt(pathParts[pathParts.length - 1], 10);
+
+    if (isNaN(assignmentId) || assignmentId <= 0) { 
       return new NextResponse(JSON.stringify({ error: 'Invalid assignment ID' }), { 
         status: 400, 
         headers: { 'Content-Type': 'application/json' }, 

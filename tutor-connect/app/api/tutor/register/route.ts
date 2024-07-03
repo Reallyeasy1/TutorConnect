@@ -53,7 +53,7 @@ export async function POST(req: Request) {
 		const from: string = "<lowethan11@gmail.com>";
 		const to: string = user.email;
 		const subject: string = "Please Activate Your Account";
-		const mailTemplate: string = `Hello ${user.name}, <br> Please click on the link to activate your account: http://localhost:3000/api/tutor/activate/${token.token}`;
+		const mailTemplate: string = `Hello ${user.name}, <br> Please click on the link to activate your account: https://tutorconnect-delta.vercel.app/api/tutor/activate/${token.token}`;
 
 		sendMail(from, to, subject, mailTemplate);
 

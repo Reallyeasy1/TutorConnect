@@ -1326,7 +1326,7 @@ export default function ProfilePage() {
 												style={locationStyle.container}
 											>
 												{locations.map((loc) => (
-													<div>
+													<div key={loc[0]}>
 														<label key={loc[0]}>
 															<input
 																type="checkbox"
@@ -1455,14 +1455,14 @@ export default function ProfilePage() {
 													htmlFor="studentsRecord"
 													style={questionStyle.title}
 												>
-													Past Students' Results
+													Past Students&apos; Results
 												</Label>
 												<span
 													style={
 														questionStyle.subtitle
 													}
 												>
-													Past students' results,
+													Past students&apos; results,
 													grades, improvements etc.
 												</span>
 												<textarea

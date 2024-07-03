@@ -81,7 +81,7 @@ export default function AllAssignments() {
 					onClick={() => {
 						setError(null);
 						setLoading(true);
-						fetchAssignments();
+						// fetchAssignments();
 					}}
 				>
 					Retry

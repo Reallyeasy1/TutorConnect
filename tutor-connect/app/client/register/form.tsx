@@ -76,11 +76,25 @@ export const RegisterForm = () => {
 						"Content-Type": "application/json",
 					},
 				});
+				// const data = await response.json();
+
+				// TODO: Mr Yong Zhe
 				const data: StrapiResponseData = await response.json();
+
 				if (data?.id) {
 					const account = { token: data.id };
-					const SECRET = "this is a secret";
-					const token = jwt.sign(account, SECRET);
+					console.log(account);
+					let token = "";
+					//TODO: Make the secret in environment
+					const SECRET = "This is a secret";
+					try {
+						token = "a";
+						// const token = jwt.sign(account, SECRET);
+						// token = account.toString();
+						console.log("JWT Token:", token);
+					} catch (error) {
+						console.error("Error signing JWT:", error);
+					}
 
 					const strapiData = {
 						data: {
@@ -88,11 +102,12 @@ export const RegisterForm = () => {
 							username: data.name,
 							email: data.email,
 							token: token,
+							isTutor: false,
 						},
 					};
-
+					console.log(strapiData);
 					const strapiResponse = await fetch(
-						"http://localhost:1337/api/accounts",
+						"http://188.166.213.34/api/accounts",
 						{
 							method: "POST",
 							headers: {
@@ -109,10 +124,11 @@ export const RegisterForm = () => {
 					const strapiResponseData = await strapiResponse.json();
 					console.log(strapiResponseData); // Outputs the result
 					console.log("Upload to Strapi success");
-					router.push("/client/verify_email?clientId=" + data.id);
 				} else {
 					setError("Failed to retrieve user information");
 				}
+
+				router.push("/client/verify_email?clientId=" + data.id);
 			} else {
 				const errorResponse = await res.json();
 				setError(errorResponse.error);

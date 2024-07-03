@@ -20,7 +20,7 @@ const Message: React.FC<MessageProps> = ({ username, message }) => {
         <MessageText color={sentByCurrentUser ? "white" : "default"}>
           {message.message}
         </MessageText>
-        <SentBy right={sentByCurrentUser ? 1 : 0}>
+        <SentBy right={sentByCurrentUser ? true : undefined}>
           {message.user} - {formattedDate} {/* Display the formatted date and time */}
         </SentBy>
       </MessageBox>

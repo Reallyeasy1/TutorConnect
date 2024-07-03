@@ -70,7 +70,6 @@ export default function AvailTutors() {
 	useEffect(() => {
 		async function getTutors() {
 			try {
-				
 				const res = await fetch(`/api/client/avail_tutors/${assignmentId}`);  // Ensure this matches your route
 				const contentType = res.headers.get("content-type");
 

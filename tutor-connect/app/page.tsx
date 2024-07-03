@@ -132,7 +132,7 @@ export default function AllAssignments() {
 					</h1>
 					<p style={styles.sectionBody}>
 						Find the perfect tutor for your needs instantly with
-						TutorConnect's personalized matchmaking algorithm
+						TutorConnect&apos;s personalized matchmaking algorithm
 					</p>
 					<a href="/client/register" style={styles.sectionButton}>
 						Register & Request Now
@@ -174,7 +174,7 @@ export default function AllAssignments() {
 					/>
 					<h3 style={styles.featureHeading}>Verified Tutors</h3>
 					<p style={styles.featureBody}>
-						All tutors' credentials are verified.
+						All tutors&apos; credentials are verified.
 					</p>
 				</div>
 			</div>

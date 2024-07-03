@@ -1,15 +1,22 @@
 import React, { useEffect, useState, useRef } from "react";
-import "antd/dist/antd.css";
+import { Input } from "antd";
+import "antd/dist/reset.css";
 import "font-awesome/css/font-awesome.min.css";
 import Header from "../Header";
 import Messages from "../Messages";
 import List from "../List";
 import { ChatContainer, StyledContainer, ChatBox, StyledButton, SendIcon, InputContainer, StyledInput } from "./styles";
 import { io } from "socket.io-client";
+import { error } from "console";
 
 interface ChatRoomProps {
   username: string;
-  id: string;
+  id: number;
+  isTutor: boolean;
+  curr_recipient: {
+    username: string | null;
+    id: number | null;
+  } | null;
 }
 
 interface Message {
@@ -26,15 +33,16 @@ interface UserAttributes {
 interface User {
   id: number;
   attributes: UserAttributes;
+  isTutor: boolean;
 }
 
-const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, tutor }) => {
+const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipient }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState<string>("");
   const [users, setUsers] = useState<User[]>([]);
   const [recipient, setRecipient] = useState<string | null>(null);
   const [filteredMessages, setFilteredMessages] = useState<Message[]>([]);
-  const socket = useRef(io("http://localhost:1337")).current;
+  const socket = useRef(io("http://188.166.213.34")).current;
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -48,7 +56,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, tutor }) => {
     let pageSize = 100; // Adjust page size if necessary
 
     while (true) {
-      const res = await fetch(`http://localhost:1337/api/messages?pagination[page]=${page}&pagination[pageSize]=${pageSize}`);
+      const res = await fetch(`http://188.166.213.34/api/messages?pagination[page]=${page}&pagination[pageSize]=${pageSize}`);
       const response = await res.json();
       const newMessages = response.data.map((one: { attributes: Message }) => one.attributes);
       allMessages = [...allMessages, ...newMessages];
@@ -80,22 +88,26 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, tutor }) => {
       setMessages([]);
       try {
         await fetchAllMessages();
-      } catch (e) {
-        console.log(e.message);
+      } catch (err: any) {
+        console.log((err as any).message);
       }
     });
 
     async function loadUsers() {
       try {
-        const res = await fetch("http://localhost:1337/api/accounts");
+        const res = await fetch("http://188.166.213.34/api/accounts");
         const usersData = await res.json();
+        console.log(usersData);
         const transformedUsers: User[] = usersData.data.map((user: any) => ({
           id: user.id,
-          attributes: user.attributes
+          attributes: user.attributes,
+          isTutor: user.attributes.isTutor
         }));
+        // .filter((user: User) => user.isTutor == !isTutor);
+      //TODO: Fix schema on prod to include isTutor 
         setUsers(transformedUsers);
-      } catch (e) {
-        console.log(e.message);
+      } catch (err: any) {
+        console.log(err.message);
       }
     }
 
@@ -128,6 +140,11 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, tutor }) => {
   }, [username, id]);
 
   useEffect(() => {
+    if (curr_recipient != null && curr_recipient.username != null) {
+      setRecipient(curr_recipient.username);
+      //TODO: Need to change the list section to be highlighted
+    }
+   
     const filtered = recipient
       ? messages.filter(
           (msg) =>
@@ -135,6 +152,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, tutor }) => {
             (msg.user === recipient && msg.recipient === username)
         )
       : [];
+      
     setFilteredMessages(filtered);
   }, [recipient, messages, username]);
 
@@ -172,9 +190,9 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, tutor }) => {
 
   return (
     <ChatContainer>
-      <Header room="Chat" id={id} tutor = {tutor}/>
+      <Header room="Chat" id={id.toString()} tutor = {isTutor}/>
       <StyledContainer>
-        <List users={users} username={username} onUserClick={setRecipient} />
+        <List users={users} username={username} onUserClick={setRecipient} curr_recipient = {curr_recipient} />
         <ChatBox>
           {recipient ? (
             <>

@@ -39,7 +39,7 @@ export const Form = () => {
         const data = await response.json();
       
 
-        let account = {token: data?.id}
+        // let account = {token: data?.id}
         // Need to discuss on what seed to sign for jwt 
         // const SECRET = "this is a secret";
         // const token = jwt.sign(account, SECRET);

@@ -414,11 +414,12 @@ export const RegisterForm = () => {
 							username: data.name,
 							email: data.email,
 							token: token,
+							isTutor: true
 						},
 					};
 
 					const strapiResponse = await fetch(
-						"http://localhost:1337/api/accounts",
+						"http://188.166.213.34/api/accounts",
 						{
 							method: "POST",
 							headers: {
@@ -435,6 +436,7 @@ export const RegisterForm = () => {
 					const strapiResponseData = await strapiResponse.json();
 					console.log(strapiResponseData); // Outputs the result
 					console.log("Upload to Strapi success");
+     
 					router.push("/tutor/verify_email?tutortId=" + data.id);
 				} else {
 					setError("Failed to retrieve user information");
@@ -473,7 +475,7 @@ export const RegisterForm = () => {
 							<CardTitle>Personal Information</CardTitle>
 							<CardDescription>
 								Fill up your personal information. Click next
-								when you're done.
+								when you&apos;re done.
 							</CardDescription>
 						</CardHeader>
 						<CardContent className="space-y-2">
