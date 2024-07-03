@@ -1,11 +1,17 @@
 import { useState } from "react";
 import { signOut } from "next-auth/react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { cookies } from "next/headers";
 
 export default function TutorProfile() {
 	const [hoveredIndex, setHoveredIndex] = useState(-1);
 	const params = useParams();
     const tutorId = params.tutorId;
+	const router = useRouter();
+	const handleSignOut = async () => {
+		await signOut({ redirect: false }); // Ensure signOut completes before redirect
+		router.push('/'); // Redirect to the home page after sign-out
+	};
 
 	const tutorItems = [
 		{
@@ -22,7 +28,7 @@ export default function TutorProfile() {
 			title: "Sign Out",
 			path: "/",
 			cName: "dropdown-link",
-			action: () => signOut(),
+			action: handleSignOut,
 		},
 	];
 
