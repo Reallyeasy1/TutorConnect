@@ -20,9 +20,9 @@ export default function TutorProfile() {
 		},
 		{
 			title: "Sign Out",
-			path: "/",
+			path: "#",
 			cName: "dropdown-link",
-			action: () => signOut(),
+			action: () => signOut({callbackUrl: '/'}),
 		},
 	];
 
