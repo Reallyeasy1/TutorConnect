@@ -875,7 +875,7 @@ export const PostAssignmentForm = () => {
 		e.preventDefault();
 		const postDate = Date.now();
 		let newLevel;
-		if (level === "Others") {
+		if (level === "Others" || level === "Poly" || level === "University") {
 			newLevel = otherLevel;
 		} else {
 			newLevel = level;
