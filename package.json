@@ -20,6 +20,7 @@
     "@react-google-maps/api": "^2.19.3",
     "@types/antd": "^1.0.0",
     "@types/nodemailer": "^6.4.15",
+    "@vercel/blob": "^0.23.4",
     "@vis.gl/react-google-maps": "^1.0.2",
     "antd": "^5.18.3",
     "bcrypt": "^5.1.1",

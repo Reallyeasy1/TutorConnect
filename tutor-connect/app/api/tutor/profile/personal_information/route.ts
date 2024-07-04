@@ -3,26 +3,33 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
 	try {
-		const {
-			email,
-			contactNumber,
-			dateOfBirth,
+		const formData = await req.formData();
+
+		const email = formData.get("email");
+		const contactNumber = formData.get("contactNumber");
+		const dateOfBirth = formData.get("dateOfBirth");
+		const gender = formData.get("gender");
+		const age = formData.get("age");
+		const nationality = formData.get("nationality");
+		const race = formData.get("race");
+		const image = formData.get("image");
+
+		let updateData: any = {
+			contactNumber: parseInt(contactNumber as string),
+			dateOfBirth: new Date(dateOfBirth as string),
 			gender,
-			age,
+			age: parseInt(age as string),
 			nationality,
 			race,
-		} = await req.json();
+		};
+
+		if (image) {
+			updateData.image = image;
+		}
 
 		const updatedTutor = await prisma.tutor.update({
 			where: { email: email as string },
-			data: {
-				contactNumber: parseInt(contactNumber),
-                dateOfBirth: new Date(dateOfBirth),
-                gender,
-                age: parseInt(age),
-                nationality,
-                race,
-			},
+			data: updateData,
 		});
 
 		return NextResponse.json({ success: "Changes made successfully" });

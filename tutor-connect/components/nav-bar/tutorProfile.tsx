@@ -7,11 +7,6 @@ export default function TutorProfile() {
 	const [hoveredIndex, setHoveredIndex] = useState(-1);
 	const params = useParams();
     const tutorId = params.tutorId;
-	const router = useRouter();
-	const handleSignOut = async () => {
-		await signOut({ redirect: false }); // Ensure signOut completes before redirect
-		router.push('/'); // Redirect to the home page after sign-out
-	};
 
 	const tutorItems = [
 		{
@@ -26,9 +21,9 @@ export default function TutorProfile() {
 		},
 		{
 			title: "Sign Out",
-			path: "/",
+			path: "#",
 			cName: "dropdown-link",
-			action: handleSignOut,
+			action: () => signOut({callbackUrl: '/'}),
 		},
 	];
 

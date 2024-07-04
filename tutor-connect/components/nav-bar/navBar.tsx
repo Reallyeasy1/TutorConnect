@@ -30,6 +30,7 @@ const NavBar = () => {
 	const loginRef = useRef<HTMLDivElement>(null);
 	const clientProfileRef = useRef<HTMLDivElement>(null);
 	const tutorProfileRef = useRef<HTMLDivElement>(null);
+	const [userImage, setUserImage] = useState<string | null>(null);
 
 	const { data: session } = useSession();
 
@@ -82,6 +83,46 @@ const NavBar = () => {
 		};
 		document.addEventListener("mousedown", handler);
 	});
+
+	useEffect(() => {
+		const fetchUserDetails = async () => {
+			if (session?.user?.email) {
+				try {
+					let res;
+					if (session.user.randomKey == "tutor") {
+						res = await fetch("/api/tutor/getTutorDetails", {
+							method: "POST",
+							body: JSON.stringify({
+								email: session.user.email,
+							}),
+							headers: {
+								"Content-Type": "application/json",
+							},
+						});
+					} else {
+						res = await fetch("/api/client/getClientDetails", {
+							method: "POST",
+							body: JSON.stringify({
+								email: session.user.email,
+							}),
+							headers: {
+								"Content-Type": "application/json",
+							},
+						});
+					}
+					if (res.ok) {
+						const userData = await res.json();
+						setUserImage(userData.image);
+					} else {
+						console.error("Failed to fetch client details");
+					}
+				} catch (error) {
+					console.error("Error fetching user details:", error);
+				}
+			}
+		};
+		fetchUserDetails();
+	}, [session]);
 
 	const hoverText = (index: number) => ({
 		color: hoverIndex === index ? "#5790AB" : "#000000",
@@ -254,14 +295,18 @@ const NavBar = () => {
 							>
 								<Image
 									src={
-										session.user.image
-											? session.user.image
+										userImage
+											? userImage
 											: "/images/Blank Profile Photo.jpg"
 									}
 									alt="Profile Picture"
 									width={40}
 									height={40}
 									className="rounded-full mr-2"
+									style={{
+										width: "40px",
+										height: "40px",
+									}}
 								/>
 								<div style={profile.container}>
 									<span style={profile.name}>
@@ -287,11 +332,19 @@ const NavBar = () => {
 								className="flex items-center"
 							>
 								<Image
-									src="/images/Blank Profile Photo.jpg"
+									src={
+										userImage
+											? userImage
+											: "/images/Blank Profile Photo.jpg"
+									}
 									alt="Profile Picture"
 									width={40}
 									height={40}
 									className="rounded-full  mr-2"
+									style={{
+										width: "40px",
+										height: "40px",
+									}}
 								/>
 								<div style={profile.container}>
 									<span style={profile.name}>
