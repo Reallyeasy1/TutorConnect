@@ -42,7 +42,7 @@ interface Assignment {
 	};
 }
 
-const AssignmentRow = ({ assignments }: { assignments: Assignment[] }) => {
+const AssignmentRow = ({ assignments, selectedAssignment }: { assignments: Assignment[], selectedAssignment: Assignment | null }) => {
 	const params = useParams();
 	const tutorId = params.tutorId;
 
@@ -51,7 +51,8 @@ const AssignmentRow = ({ assignments }: { assignments: Assignment[] }) => {
 			{assignments.map((assignment) => (
 				<div
 					key={assignment.id}
-					className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl flex flex-col justify-between"
+          className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl flex flex-col justify-between"
+          style={{border: selectedAssignment == assignment ? "4px solid #5790AB" : "none"}}
 				>
 					<div>
 						<h2 className="text-2xl font-semibold mb-2">
@@ -121,11 +122,13 @@ export default function AllAssignments() {
 	const router = useRouter();
 	const params = useParams();
 	const tutorId = params.tutorId;
-	const center = { lat: 1.287953, lng: 103.851784 };
+	const [center, setCenter] = useState({ lat: 1.287953, lng: 103.851784 });
 	const [map, setMap] = useState<google.maps.Map | null>(null);
 	const [markers, setMarkers] = useState<
-		{ lat: number; lng: number; price: string }[]
+		{ lat: number; lng: number; price: string, assignment: Assignment }[]
 	>([]);
+	const [selectedAssignment, setSelectedAssignment] =
+		useState<Assignment | null>(null);
 
 	const { isLoaded, loadError } = useJsApiLoader({
 		googleMapsApiKey: process.env.MAPS_API_KEY!,
@@ -181,10 +184,13 @@ export default function AllAssignments() {
 					const data = await res.json();
 					setAssignments(data);
 
-					const markerPromises = data.map((assignment: Assignment) =>
+          const availableAssignments = data.filter((assignment: Assignment) => assignment.taken === false);
+
+					const markerPromises = availableAssignments.map((assignment: Assignment) =>
 						geocodeAddress(assignment.address).then((coords) => ({
 							...coords,
 							price: `$${assignment.minRate}`,
+							assignment: assignment,
 						}))
 					);
 					const markerResults = await Promise.all(markerPromises);
@@ -203,16 +209,21 @@ export default function AllAssignments() {
 		fetchAssignments();
 	}, []);
 
-  const filteredAssignments = assignments.filter(
-    (assignment) =>
-      (!selectedLevel || assignment.level === selectedLevel) &&
-      (!selectedSubject || assignment.subject === selectedSubject)
-  );
+	const handleMarkerClick = (assignment: Assignment, markerLat: number, markerLng: number) => {
+		setSelectedAssignment(assignment);
+    setCenter({ lat: markerLat, lng: markerLng });
+	};
 
-  const clearFilters = () => {
-    setSelectedLevel(null);
-    setSelectedSubject(null);
-  };
+	const filteredAssignments = assignments.filter(
+		(assignment) =>
+			(!selectedLevel || assignment.level === selectedLevel) &&
+			(!selectedSubject || assignment.subject === selectedSubject)
+	);
+
+	const clearFilters = () => {
+		setSelectedLevel(null);
+		setSelectedSubject(null);
+	};
 
 	if (error) {
 		return <div className="text-red-500">Error: {error}</div>;
@@ -295,10 +306,14 @@ export default function AllAssignments() {
 							</SelectContent>
 						</Select>
 					</div>
-          <div className="w-1/6">
-            <Label><span>&nbsp;</span></Label>
-            <Button onClick={clearFilters} className="w-full">Clear Filters</Button>
-          </div>
+					<div className="w-1/6">
+						<Label>
+							<span>&nbsp;</span>
+						</Label>
+						<Button onClick={clearFilters} className="w-full">
+							Clear Filters
+						</Button>
+					</div>
 				</div>
 				<div className="mb-4 w-full">
 					<button
@@ -324,7 +339,7 @@ export default function AllAssignments() {
 						</p>
 					) : (
 						groupedAssignments.map((group, index) => (
-							<AssignmentRow key={index} assignments={group} />
+							<AssignmentRow key={index} assignments={group} selectedAssignment={selectedAssignment} />
 						))
 					)}
 				</div>
@@ -355,6 +370,7 @@ export default function AllAssignments() {
 										}}
 										icon={createMarkerIcon(marker.price)}
 										label={createMarkerLabel(marker.price)}
+										onClick={() => handleMarkerClick(marker.assignment, marker.lat, marker.lng)}
 									/>
 								))}
 							</GoogleMap>
