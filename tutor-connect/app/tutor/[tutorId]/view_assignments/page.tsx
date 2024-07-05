@@ -14,8 +14,8 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { levels, subjectsByLevel } from "./levelsAndSubjects"; // Adjust the import path as necessary
-import { Label } from "@/components/ui/label"; // Ensure Label is imported
+import { levels, subjectsByLevel } from "@/utils/levelsAndSubjects";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import {
 	MultiSelector,
