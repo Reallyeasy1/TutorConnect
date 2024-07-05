@@ -126,9 +126,9 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
       setMessages((prevMessages) => [...prevMessages, newMessage]);
     });
 
-    // socket.on("users", (data: { users: { username: string }[] }) => {
-    //   setUsers(data.users);
-    // });
+    socket.on("users", (data: { users: User[] }) => {
+      setUsers(data.users);
+    });
 
     return () => {
       socket.off("welcome");
