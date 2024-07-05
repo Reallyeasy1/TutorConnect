@@ -136,9 +136,7 @@ export default function Rates() {
 							<th></th>
 							<th style={styles.tableHeader}>Part-Time Tutors</th>
 							<th style={styles.tableHeader}>Full-Time Tutors</th>
-							<th style={styles.tableHeader}>
-								Ex/Current MOE Teachers
-							</th>
+							<th style={styles.tableHeader}>Ex/Current MOE Teachers</th>
 						</tr>
 					</thead>
 					<tbody>
