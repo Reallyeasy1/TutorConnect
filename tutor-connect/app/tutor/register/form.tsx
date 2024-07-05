@@ -357,7 +357,7 @@ export const RegisterForm = () => {
 								</div>
 								<div className="col-span-1 space-y-1">
 									<Label htmlFor="dateOfBirth">
-										Date Of Birth (MM-DD-YYYY)
+										Date Of Birth
 									</Label>
 									<Popover>
 										<PopoverTrigger asChild>
@@ -373,7 +373,7 @@ export const RegisterForm = () => {
 												>
 													<CalendarIcon className="mr-2 h-4 w-4" />
 													{dateOfBirth ? (
-														dateOfBirth.toLocaleDateString()
+														dateOfBirth.toLocaleDateString("en-GB")
 													) : (
 														<span>Pick a date</span>
 													)}
