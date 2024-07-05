@@ -403,11 +403,13 @@ export const RegisterForm = () => {
 					},
 				});
 				const data = await response.json();
+				console.log("data", data)
+				let token = ""
 				if (data?.id) {
 					const account = { token: data.id };
 					const SECRET = "this is a secret";
-					const token = jwt.sign(account, SECRET);
-
+					// const token = jwt.sign(account, SECRET);
+					token = "a"
 					const strapiData = {
 						data: {
 							id: data.id,
@@ -419,7 +421,7 @@ export const RegisterForm = () => {
 					};
 
 					const strapiResponse = await fetch(
-						"http://188.166.213.34/api/accounts",
+						"https://www.tutorconnect.live/api/accounts",
 						{
 							method: "POST",
 							headers: {
