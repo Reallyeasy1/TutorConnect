@@ -18,7 +18,6 @@ export default function AllAssignments() {
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "center",
-			//backgroundColor: "#EFF8FA",
 			padding: "2em 0",
 		},
 		sectionLeftImage: {
