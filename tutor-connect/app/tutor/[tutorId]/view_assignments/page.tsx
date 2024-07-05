@@ -17,7 +17,14 @@ import {
 import { levels, subjectsByLevel } from "./levelsAndSubjects"; // Adjust the import path as necessary
 import { Label } from "@/components/ui/label"; // Ensure Label is imported
 import { Button } from "@/components/ui/button";
-import { clear } from "console";
+import {
+	MultiSelector,
+	MultiSelectorContent,
+	MultiSelectorInput,
+	MultiSelectorItem,
+	MultiSelectorList,
+	MultiSelectorTrigger,
+} from "@/components/ui/multiselect";
 
 interface Assignment {
 	id: number;
@@ -42,7 +49,13 @@ interface Assignment {
 	};
 }
 
-const AssignmentRow = ({ assignments, selectedAssignment }: { assignments: Assignment[], selectedAssignment: Assignment | null }) => {
+const AssignmentRow = ({
+	assignments,
+	selectedAssignment,
+}: {
+	assignments: Assignment[];
+	selectedAssignment: Assignment | null;
+}) => {
 	const params = useParams();
 	const tutorId = params.tutorId;
 
@@ -51,12 +64,17 @@ const AssignmentRow = ({ assignments, selectedAssignment }: { assignments: Assig
 			{assignments.map((assignment) => (
 				<div
 					key={assignment.id}
-          className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl flex flex-col justify-between"
-          style={{border: selectedAssignment == assignment ? "4px solid #5790AB" : "none"}}
+					className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl flex flex-col justify-between"
+					style={{
+						border:
+							selectedAssignment == assignment
+								? "4px solid #5790AB"
+								: "none",
+					}}
 				>
 					<div>
 						<h2 className="text-2xl font-semibold mb-2">
-							{assignment.level} {assignment.subject}
+							{assignment.level.includes("Poly") || assignment.level.includes("University") ? assignment.level.substring(assignment.level.indexOf(" ") + 1) : assignment.level} {assignment.subject}
 						</h2>
 						<p className="text-gray-700 mb-1">
 							<strong>Address:</strong> {assignment.address}{" "}
@@ -118,14 +136,14 @@ export default function AllAssignments() {
 	const [assignments, setAssignments] = useState<Assignment[]>([]);
 	const [error, setError] = useState<string | null>(null);
 	const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
-	const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
+	const [selectedSubject, setSelectedSubject] = useState<string[]>([]);
 	const router = useRouter();
 	const params = useParams();
 	const tutorId = params.tutorId;
 	const [center, setCenter] = useState({ lat: 1.287953, lng: 103.851784 });
 	const [map, setMap] = useState<google.maps.Map | null>(null);
 	const [markers, setMarkers] = useState<
-		{ lat: number; lng: number; price: string, assignment: Assignment }[]
+		{ lat: number; lng: number; price: string; assignment: Assignment }[]
 	>([]);
 	const [selectedAssignment, setSelectedAssignment] =
 		useState<Assignment | null>(null);
@@ -184,14 +202,19 @@ export default function AllAssignments() {
 					const data = await res.json();
 					setAssignments(data);
 
-          const availableAssignments = data.filter((assignment: Assignment) => assignment.taken === false);
+					const availableAssignments = data.filter(
+						(assignment: Assignment) => assignment.taken === false
+					);
 
-					const markerPromises = availableAssignments.map((assignment: Assignment) =>
-						geocodeAddress(assignment.address).then((coords) => ({
-							...coords,
-							price: `$${assignment.minRate}`,
-							assignment: assignment,
-						}))
+					const markerPromises = availableAssignments.map(
+						(assignment: Assignment) =>
+							geocodeAddress(assignment.address).then(
+								(coords) => ({
+									...coords,
+									price: `$${assignment.minRate}`,
+									assignment: assignment,
+								})
+							)
 					);
 					const markerResults = await Promise.all(markerPromises);
 					const validMarkers = markerResults.filter(
@@ -209,21 +232,30 @@ export default function AllAssignments() {
 		fetchAssignments();
 	}, []);
 
-	const handleMarkerClick = (assignment: Assignment, markerLat: number, markerLng: number) => {
+	const handleMarkerClick = (
+		assignment: Assignment,
+		markerLat: number,
+		markerLng: number
+	) => {
 		setSelectedAssignment(assignment);
-    setCenter({ lat: markerLat, lng: markerLng });
+		setCenter({ lat: markerLat, lng: markerLng });
 	};
 
 	const filteredAssignments = assignments.filter(
 		(assignment) =>
-			(!selectedLevel || assignment.level === selectedLevel) &&
-			(!selectedSubject || assignment.subject === selectedSubject)
+			(!selectedLevel || assignment.level.includes(selectedLevel)) &&
+			(!selectedSubject.length ||
+				selectedSubject.includes(assignment.subject))
 	);
 
 	const clearFilters = () => {
 		setSelectedLevel(null);
-		setSelectedSubject(null);
+		setSelectedSubject([]);
 	};
+
+	const filteredMarkers = markers.filter((marker) =>
+		filteredAssignments.some((assignment) => assignment.id === marker.assignment.id)
+	);
 
 	if (error) {
 		return <div className="text-red-500">Error: {error}</div>;
@@ -247,7 +279,7 @@ export default function AllAssignments() {
 			<NavBar />
 			<div className="p-6">
 				<div className="flex space-x-4 mb-4">
-					<div className="w-5/12">
+					<div className="w-5/12 space-y-1">
 						<Label htmlFor="level">Level</Label>
 						<Select
 							value={selectedLevel || ""}
@@ -279,34 +311,36 @@ export default function AllAssignments() {
 							</SelectContent>
 						</Select>
 					</div>
-					<div className="w-5/12">
+					<div className="w-5/12 space-y-1">
 						<Label htmlFor="subject">Subject</Label>
-						<Select
-							value={selectedSubject || ""}
-							onValueChange={(value: string) =>
-								setSelectedSubject(value)
-							}
-							disabled={!selectedLevel}
+						<MultiSelector
+							values={selectedSubject}
+							onValuesChange={setSelectedSubject}
+							loop={false}
+							disabled={!selectedLevel || selectedLevel === "Poly" || selectedLevel === "University"}
+							className="space-y-0"
 						>
-							<SelectTrigger className="w-full">
-								<SelectValue placeholder="Select a Subject" />
-							</SelectTrigger>
-							<SelectContent>
-								{selectedLevel &&
-									subjectsByLevel[selectedLevel].map(
-										(subject) => (
-											<SelectItem
-												key={subject}
-												value={subject}
-											>
-												{subject}
-											</SelectItem>
-										)
-									)}
-							</SelectContent>
-						</Select>
+							<MultiSelectorTrigger className="w-full">
+								<MultiSelectorInput placeholder={"Select a Subject"} style={{ fontSize: "15px" }}/>
+							</MultiSelectorTrigger>
+							<MultiSelectorContent>
+								<MultiSelectorList>
+									{selectedLevel &&
+										subjectsByLevel[selectedLevel].map(
+											(subject) => (
+												<MultiSelectorItem
+													key={subject}
+													value={subject}
+												>
+													{subject}
+												</MultiSelectorItem>
+											)
+										)}
+								</MultiSelectorList>
+							</MultiSelectorContent>
+						</MultiSelector>
 					</div>
-					<div className="w-1/6">
+					<div className="w-1/6 space-y-1">
 						<Label>
 							<span>&nbsp;</span>
 						</Label>
@@ -339,7 +373,11 @@ export default function AllAssignments() {
 						</p>
 					) : (
 						groupedAssignments.map((group, index) => (
-							<AssignmentRow key={index} assignments={group} selectedAssignment={selectedAssignment} />
+							<AssignmentRow
+								key={index}
+								assignments={group}
+								selectedAssignment={selectedAssignment}
+							/>
 						))
 					)}
 				</div>
@@ -361,7 +399,7 @@ export default function AllAssignments() {
 								}}
 								onLoad={(map) => setMap(map)}
 							>
-								{markers.map((marker, index) => (
+								{filteredMarkers.map((marker, index) => (
 									<Marker
 										key={index}
 										position={{
@@ -370,7 +408,13 @@ export default function AllAssignments() {
 										}}
 										icon={createMarkerIcon(marker.price)}
 										label={createMarkerLabel(marker.price)}
-										onClick={() => handleMarkerClick(marker.assignment, marker.lat, marker.lng)}
+										onClick={() =>
+											handleMarkerClick(
+												marker.assignment,
+												marker.lat,
+												marker.lng
+											)
+										}
 									/>
 								))}
 							</GoogleMap>

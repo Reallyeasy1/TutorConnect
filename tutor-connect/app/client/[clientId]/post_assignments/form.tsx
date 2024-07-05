@@ -112,7 +112,6 @@ export const PostAssignmentForm = () => {
 	const [level, setLevel] = useState<Level | "">("");
 	const [otherLevel, setOtherLevel] = useState("");
 	const [subject, setSubject] = useState("");
-	const [otherSubject, setOtherSubject] = useState("");
 
 	const subjectsByLevel: Record<Level, string[]> = {
 		"Primary 1": [
@@ -875,8 +874,19 @@ export const PostAssignmentForm = () => {
 		e.preventDefault();
 		const postDate = Date.now();
 		let newLevel;
-		if (level === "Others" || level === "Poly" || level === "University") {
+		if (subject === "") {
+			setError("Please enter a subject");
+			return;
+		}
+
+		if (level === "Others") {
 			newLevel = otherLevel;
+		} else if (level === "Poly" || level === "University") {
+			if (otherLevel === "") {
+				setError("Please state the year and school (e.g. Y2 NUS)");
+				return;
+			}
+			newLevel = level + " " + otherLevel;
 		} else {
 			newLevel = level;
 		}
@@ -1392,6 +1402,10 @@ export const PostAssignmentForm = () => {
 									placeholder="Example: Mon - Wed: 3pm - 5pm"
 								/>
 							</div>
+							{/* Error Message */}
+							{error && (
+								<div className="text-red-500">{error}</div>
+							)}
 						</CardContent>
 						<CardFooter className="flex justify-between space-x-2">
 							<Button onClick={onBack} className="flex-1">
