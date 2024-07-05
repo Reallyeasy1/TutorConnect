@@ -89,43 +89,6 @@ export default function Rates() {
 			border: "1px solid #ddd",
 		},
 	};
-	const tableStyle = {
-		width: "100%",
-		borderCollapse: "collapse" as "collapse",
-		margin: "20px 0",
-	};
-
-	const thTdStyle = {
-		border: "1px solid #ddd",
-		padding: "8px",
-		textAlign: "center" as "center",
-	};
-
-	const headerStyle = {
-		backgroundColor: "#f2f2f2",
-	};
-
-	const sectionStyle = {
-		marginBottom: "40px",
-	};
-
-	const titleStyle = {
-		fontSize: "24px",
-		margin: "20px 0",
-		textAlign: "center" as "center",
-	};
-
-	const subtitleStyle = {
-		fontSize: "18px",
-		marginBottom: "20px",
-		textAlign: "center" as "center",
-	};
-
-	const rowIconStyle = {
-		width: "30px",
-		height: "30px",
-		marginBottom: "10px",
-	};
 
 	return (
 		<div>
