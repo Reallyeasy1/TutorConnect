@@ -42,11 +42,7 @@ export default function Rates() {
 			textAlign: "center" as "center",
 			marginBottom: "16px",
 		},
-		emptyRow: {
-			backgroundColor: "ffffff",
-		},
 		emptyCell: {
-			backgroundColor: "ffffff",
 			padding: "8px",
 			width: "200px",
 		},
@@ -56,6 +52,7 @@ export default function Rates() {
 			border: "1px solid #ddd",
 			display: "block",
 			margin: "auto",
+            backgroundColor: "#ffffff",
 		},
 		table: {
 			width: "100%",
@@ -102,7 +99,7 @@ export default function Rates() {
 				</div>
 				<table style={styles.table}>
 					<thead>
-						<tr style={styles.emptyRow}>
+						<tr>
 							<th style={styles.emptyCell}></th>
 							<th style={styles.emptyCell}>
 								<Image
@@ -213,7 +210,7 @@ export default function Rates() {
 					</div>
 					<table style={styles.table}>
 						<thead>
-							<tr style={styles.emptyRow}>
+							<tr>
 								<th style={styles.emptyCell}>
 									<Image
 										src="/images/student.png"
