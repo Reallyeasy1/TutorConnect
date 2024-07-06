@@ -24,7 +24,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
-import { set } from "date-fns";
+import { PutBlobResult } from "@vercel/blob";
 
 type CheckedSubjects = {
 	preschool: string[];
@@ -39,13 +39,11 @@ export default function ProfilePage() {
 	const { data: session, status } = useSession();
 	const router = useRouter();
 	const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-	const [file, setFile] = useState<File | null>(null); // Changed to File type for handling file uploads
 	const [error1, setError1] = useState<string | null>(null);
 	const [error2, setError2] = useState<string | null>(null);
 	const [error3, setError3] = useState<string | null>(null);
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
 	const [contactNumber, setContactNumber] = useState("");
 	const [dateOfBirth, setDateOfBirth] = useState<Date>();
 	const [age, setAge] = useState("");
@@ -56,6 +54,9 @@ export default function ProfilePage() {
 	const [typeOfTutor, setTypeofTutor] = useState("");
 	const [highestEducationLevel, setHighestEducationLevel] = useState("");
 	const [image, setImage] = useState("");
+	const [newImage, setNewImage] = useState<File | null>(null);
+	const [preview, setPreview] = useState<string | null>(null);
+	const [imageUpload, setImageUpload] = useState<string | null>(null);
 	const [showSubjects, setShowSubjects] = useState({
 		preschool: false,
 		primary: false,
@@ -265,11 +266,11 @@ export default function ProfilePage() {
 					});
 					if (res.ok) {
 						const tutorData = await res.json();
-						console.log(tutorData);
 						if (tutorData) {
 							setName(tutorData.name);
+							setImage(tutorData.image);
 							setEmail(tutorData.email);
-							setContactNumber(tutorData.contactNumber);
+							setContactNumber(String(tutorData.contactNumber));
 							setDateOfBirth(new Date(tutorData.dateOfBirth));
 							setGender(tutorData.gender);
 							setAge(tutorData.age);
@@ -339,7 +340,6 @@ export default function ProfilePage() {
 		}
 	};
 
-	/*
 	const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files && e.target.files[0];
 		if (file) {
@@ -350,14 +350,13 @@ export default function ProfilePage() {
 				return;
 			}
 
-			const blobUrl = URL.createObjectURL(file);
-			setProfile({
-				...profile,
-				image: blobUrl,
-			});
+			const previewURL = URL.createObjectURL(file);
+			setPreview(previewURL);
+			setNewImage(file);
+			return;
 		}
 	};
-	*/
+
 	const handleLevelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { id, checked } = event.target;
 		setShowSubjects({ ...showSubjects, [id]: checked });
@@ -407,23 +406,58 @@ export default function ProfilePage() {
 		}
 
 		try {
+			const formData = new FormData();
+			formData.append("email", email);
+			formData.append("contactNumber", contactNumber);
+			formData.append("dateOfBirth", dateOfBirth?.toISOString() || "");
+			formData.append("gender", gender);
+			formData.append("age", age);
+			formData.append("nationality", nationality);
+			formData.append("race", race);
+
+			if (newImage) {
+				if (image) {
+					const deleteRes = await fetch(
+						`/api/tutor/profile/image_upload`,
+						{
+							method: "DELETE",
+							headers: {
+								"Content-Type": "application/json",
+							},
+							body: JSON.stringify({ image }),
+						}
+					);
+
+					if (!deleteRes.ok) {
+						alert("Failed to delete old image");
+						return;
+					}
+				}
+
+				const imageRes = await fetch(
+					`/api/tutor/profile/image_upload?filename=${newImage.name}`,
+					{
+						method: "POST",
+						body: newImage,
+					}
+				);
+				
+				if (imageRes.ok) {
+					const imageBlob: PutBlobResult = await imageRes.json();
+					formData.append("image", imageBlob.url);
+				} else {
+					alert("Failed to upload new image");
+					return;
+				}
+			}
+			console.log(formData);
 			const res = await fetch("/api/tutor/profile/personal_information", {
 				method: "POST",
-				body: JSON.stringify({
-					email,
-					contactNumber,
-					dateOfBirth,
-					gender,
-					age,
-					nationality,
-					race,
-				}),
-				headers: {
-					"Content-Type": "application/json",
-				},
+				body: formData,
 			});
 			if (res.ok) {
 				alert("Changes saved successfully");
+				router.refresh();
 			} else {
 				alert("Failed to save changes");
 			}
@@ -459,7 +493,7 @@ export default function ProfilePage() {
 		} catch {
 			console.error("Error updating tutor preferences:", error2);
 		}
-	}
+	};
 
 	const savecademicQualificationsChanges = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -740,7 +774,9 @@ export default function ProfilePage() {
 									<div style={profileCard.profileImage}>
 										<Image
 											src={
-												image
+												preview
+													? preview
+													: image
 													? image
 													: "/images/Blank Profile Photo.jpg"
 											}
@@ -757,6 +793,7 @@ export default function ProfilePage() {
 											type="file"
 											id="fileInput"
 											style={{ display: "none" }}
+											onChange={handlePhotoChange}
 											accept=".png, .jpg, .jpeg, .gif"
 										/>
 										<button
@@ -1388,13 +1425,18 @@ export default function ProfilePage() {
 													style={
 														questionStyle.inputArea
 													}
-													placeholder={introduction ? introduction : `Enter your introduction (maximum ${maxWords} words)`}
+													placeholder={
+														introduction
+															? introduction
+															: `Enter your introduction (maximum ${maxWords} words)`
+													}
 													rows={5}
 												/>
 												<div
 													style={questionStyle.count}
 												>
-													{!introduction || introduction.trim() === ""
+													{!introduction ||
+													introduction.trim() === ""
 														? 0
 														: introduction
 																.trim()
@@ -1435,13 +1477,18 @@ export default function ProfilePage() {
 													style={
 														questionStyle.inputArea
 													}
-													placeholder={summary ? summary : `Enter your experiences and achievements (maximum ${maxWords} words)`}
+													placeholder={
+														summary
+															? summary
+															: `Enter your experiences and achievements (maximum ${maxWords} words)`
+													}
 													rows={5}
 												/>
 												<div
 													style={questionStyle.count}
 												>
-													{!summary || summary.trim() === ""
+													{!summary ||
+													summary.trim() === ""
 														? 0
 														: summary
 																.trim()
@@ -1476,14 +1523,19 @@ export default function ProfilePage() {
 													style={
 														questionStyle.inputArea
 													}
-													placeholder={studentsResults ? studentsResults : `Enter your past students' results (maximum ${maxWords} words)`}
+													placeholder={
+														studentsResults
+															? studentsResults
+															: `Enter your past students' results (maximum ${maxWords} words)`
+													}
 													rows={5}
 												/>
 												<div
 													style={questionStyle.count}
 												>
-													{!studentsResults || studentsResults.trim() ===
-													""
+													{!studentsResults ||
+													studentsResults.trim() ===
+														""
 														? 0
 														: studentsResults
 																.trim()

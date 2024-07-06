@@ -7,13 +7,15 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import type { PutBlobResult } from "@vercel/blob";
 
 export default function ProfilePage() {
 	const { data: session, status } = useSession();
 	const router = useRouter();
 	const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-	const [file, setFile] = useState<File | null>(null); // Changed to File type for handling file uploads
 	const [error, setError] = useState<string | null>(null);
+	const [newImage, setNewImage] = useState<File | null>(null);
+	const [preview, setPreview] = useState<string | null>(null);
 	const [profile, setProfile] = useState({
 		email: "",
 		contactNumber: "",
@@ -80,10 +82,13 @@ export default function ProfilePage() {
 				return;
 			}
 
-			const blobUrl = URL.createObjectURL(file);
-			setProfile({
-				...profile,
-				image: blobUrl,
+			const previewURL = URL.createObjectURL(file);
+			setPreview(previewURL);
+			setNewImage(file);
+			setModifiedFields((prevModifiedFields) => {
+				const newModifiedFields = new Set(prevModifiedFields);
+				newModifiedFields.add("image");
+				return newModifiedFields;
 			});
 		}
 	};
@@ -126,16 +131,50 @@ export default function ProfilePage() {
 			formData.append("contactNumber", profile.contactNumber);
 			formData.append("address", profile.address);
 			formData.append("postalCode", profile.postalCode);
-			if (profile.image) {
-				formData.append("image", profile.image);
+			if (modifiedFields.has("image") && newImage) {
+				if (profile.image) {
+					const imageLink = profile.image;
+					const deleteRes = await fetch(
+						`/api/client/edit_profile/image_upload`,
+						{
+							method: "DELETE",
+							headers: {
+								"Content-Type": "application/json",
+							},
+							body: JSON.stringify({ imageLink }),
+						}
+					);
+
+					if (!deleteRes.ok) {
+						alert("Failed to delete old image");
+						return;
+					}
+				}
+				const imageRes = await fetch(
+					`/api/client/edit_profile/image_upload?filename=${newImage.name}`,
+					{
+						method: "POST",
+						body: newImage,
+					}
+				);
+
+				if (imageRes.ok) {
+					const imageBlob: PutBlobResult = await imageRes.json();
+					formData.append("image", imageBlob.url);
+				} else {
+					alert("Failed to upload new image");
+					return;
+				}
 			}
 
 			const res = await fetch("/api/client/edit_profile", {
 				method: "POST",
 				body: formData,
 			});
+
 			if (res.ok) {
 				alert("Changes saved successfully");
+				router.refresh();
 			} else {
 				alert("Failed to save changes");
 			}
@@ -316,7 +355,9 @@ export default function ProfilePage() {
 								<div style={profileCard.profileImage}>
 									<Image
 										src={
-											profile.image
+											preview
+												? preview
+												: profile.image
 												? profile.image
 												: "/images/Blank Profile Photo.jpg"
 										}

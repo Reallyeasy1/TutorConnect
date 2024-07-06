@@ -4,6 +4,12 @@ require('dotenv').config();
 module.exports = {
     images: {
       domains: ['mdbootstrap.com'],
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: '8t1hxbtfqqmkco8e.public.blob.vercel-storage.com',
+        },
+      ],
     }, env: {
     MAPS_API_KEY: process.env.MAPS_API_KEY,
   }, 

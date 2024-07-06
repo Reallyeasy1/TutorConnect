@@ -1,5 +1,3 @@
-//TODO: Change the assignments format to the one from github
-//TODO: Add filter function here
 "use client";
 
 import { useEffect, useState } from "react";
@@ -8,16 +6,25 @@ import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
 } from "@/components/ui/select";
-import { levels, subjectsByLevel } from "./levelsAndSubjects"; // Adjust the import path as necessary
-import { Label } from "@/components/ui/label"; // Ensure Label is imported
+import { levels, subjectsByLevel } from "@/utils/levelsAndSubjects";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import {
+	MultiSelector,
+	MultiSelectorContent,
+	MultiSelectorInput,
+	MultiSelectorItem,
+	MultiSelectorList,
+	MultiSelectorTrigger,
+} from "@/components/ui/multiselect";
 
 interface Assignment {
 	id: number;
@@ -42,8 +49,13 @@ interface Assignment {
 	};
 }
 
-
-const AssignmentRow = ({ assignments }: { assignments: Assignment[] }) => {
+const AssignmentRow = ({
+	assignments,
+	selectedAssignment,
+}: {
+	assignments: Assignment[];
+	selectedAssignment: Assignment | null;
+}) => {
 	const params = useParams();
 	const tutorId = params.tutorId;
 
@@ -53,10 +65,16 @@ const AssignmentRow = ({ assignments }: { assignments: Assignment[] }) => {
 				<div
 					key={assignment.id}
 					className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl flex flex-col justify-between"
+					style={{
+						border:
+							selectedAssignment == assignment
+								? "4px solid #5790AB"
+								: "none",
+					}}
 				>
 					<div>
 						<h2 className="text-2xl font-semibold mb-2">
-							{assignment.level} {assignment.subject}
+							{assignment.level.includes("Poly") || assignment.level.includes("University") ? assignment.level.substring(assignment.level.indexOf(" ") + 1) : assignment.level} {assignment.subject}
 						</h2>
 						<p className="text-gray-700 mb-1">
 							<strong>Address:</strong> {assignment.address}{" "}
@@ -115,209 +133,296 @@ const AssignmentRow = ({ assignments }: { assignments: Assignment[] }) => {
 };
 
 export default function AllAssignments() {
-  const [assignments, setAssignments] = useState<Assignment[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
-  const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
-  const router = useRouter();
-  const params = useParams();
-  const tutorId = params.tutorId;
-  const center = { lat: 1.287953, lng: 103.851784 };
-  const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [markers, setMarkers] = useState<
-    { lat: number; lng: number; price: string }[]
-  >([]);
+	const [assignments, setAssignments] = useState<Assignment[]>([]);
+	const [error, setError] = useState<string | null>(null);
+	const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
+	const [selectedSubject, setSelectedSubject] = useState<string[]>([]);
+	const router = useRouter();
+	const params = useParams();
+	const tutorId = params.tutorId;
+	const [center, setCenter] = useState({ lat: 1.287953, lng: 103.851784 });
+	const [map, setMap] = useState<google.maps.Map | null>(null);
+	const [markers, setMarkers] = useState<
+		{ lat: number; lng: number; price: string; assignment: Assignment }[]
+	>([]);
+	const [selectedAssignment, setSelectedAssignment] =
+		useState<Assignment | null>(null);
 
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: process.env.MAPS_API_KEY!,
-    libraries: ["places"],
-  });
+	const { isLoaded, loadError } = useJsApiLoader({
+		googleMapsApiKey: process.env.MAPS_API_KEY!,
+		libraries: ["places"],
+	});
 
-  const geocodeAddress = async (address: string) => {
-    const response = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${process.env.MAPS_API_KEY}`
-    );
-    const data = await response.json();
-    if (data.status === "OK") {
-      const { lat, lng } = data.results[0].geometry.location;
-      return { lat, lng };
-    } else {
-      console.error(`Geocoding error: ${data.status}`);
-      return null;
-    }
-  };
+	const geocodeAddress = async (address: string) => {
+		const response = await fetch(
+			`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+				address
+			)}&key=${process.env.MAPS_API_KEY}`
+		);
+		const data = await response.json();
+		if (data.status === "OK") {
+			const { lat, lng } = data.results[0].geometry.location;
+			return { lat, lng };
+		} else {
+			console.error(`Geocoding error: ${data.status}`);
+			return null;
+		}
+	};
 
-  const createMarkerIcon = (price: string): google.maps.Symbol => ({
-    path: "M 0,0 h 25 a 5,5 0 0 1 5,5 v 18 a 5,5 0 0 1 -5,5 h -25 a 5,5 0 0 1 -5,-5 v -18 a 5,5 0 0 1 5,-5 z",
-    fillColor: "white",
-    fillOpacity: 1,
-    strokeColor: "grey",
-    strokeWeight: 2,
-    scale: 1,
-    labelOrigin: new google.maps.Point(12.5, 14),
-  });
+	const createMarkerIcon = (price: string): google.maps.Symbol => ({
+		path: "M 0,0 h 25 a 5,5 0 0 1 5,5 v 18 a 5,5 0 0 1 -5,5 h -25 a 5,5 0 0 1 -5,-5 v -18 a 5,5 0 0 1 5,-5 z",
+		fillColor: "white",
+		fillOpacity: 1,
+		strokeColor: "grey",
+		strokeWeight: 2,
+		scale: 1,
+		labelOrigin: new google.maps.Point(12.5, 14),
+	});
 
-  const createMarkerLabel = (price: string): google.maps.MarkerLabel => ({
-    text: price,
-    color: "black",
-    fontSize: "12px",
-    fontWeight: "bold",
-    fontFamily: "Poppins",
-  });
+	const createMarkerLabel = (price: string): google.maps.MarkerLabel => ({
+		text: price,
+		color: "black",
+		fontSize: "12px",
+		fontWeight: "bold",
+		fontFamily: "Poppins",
+	});
 
-  useEffect(() => {
-    async function fetchAssignments() {
-      try {
-        const res = await fetch("/api/assignments");
-        const contentType = res.headers.get("content-type");
-        if (!res.ok) {
-          const errorData = await res.json();
-          setError(errorData.error || "Failed to fetch assignments");
-          return;
-        }
+	useEffect(() => {
+		async function fetchAssignments() {
+			try {
+				const res = await fetch("/api/assignments");
+				const contentType = res.headers.get("content-type");
+				if (!res.ok) {
+					const errorData = await res.json();
+					setError(errorData.error || "Failed to fetch assignments");
+					return;
+				}
 
-        if (contentType && contentType.includes("application/json")) {
-          const data = await res.json();
-          setAssignments(data);
+				if (contentType && contentType.includes("application/json")) {
+					const data = await res.json();
+					setAssignments(data);
 
-          const markerPromises = data.map((assignment: Assignment) =>
-            geocodeAddress(assignment.address).then((coords) => ({
-              ...coords,
-              price: `$${assignment.minRate}`,
-            }))
-          );
-          const markerResults = await Promise.all(markerPromises);
-          const validMarkers = markerResults.filter((result) => result !== null);
-          setMarkers(validMarkers);
-        } else {
-          setError("Unexpected content type: " + contentType);
-        }
-      } catch (err: any) {
-        setError(err.message);
-      }
-    }
+					const availableAssignments = data.filter(
+						(assignment: Assignment) => assignment.taken === false
+					);
 
-    fetchAssignments();
-  }, []);
+					const markerPromises = availableAssignments.map(
+						(assignment: Assignment) =>
+							geocodeAddress(assignment.address).then(
+								(coords) => ({
+									...coords,
+									price: `$${assignment.minRate}`,
+									assignment: assignment,
+								})
+							)
+					);
+					const markerResults = await Promise.all(markerPromises);
+					const validMarkers = markerResults.filter(
+						(result) => result !== null
+					);
+					setMarkers(validMarkers);
+				} else {
+					setError("Unexpected content type: " + contentType);
+				}
+			} catch (err: any) {
+				setError(err.message);
+			}
+		}
 
-  const filteredAssignments = assignments.filter(
-    (assignment) =>
-      (!selectedLevel || assignment.level === selectedLevel) &&
-      (!selectedSubject || assignment.subject === selectedSubject)
-  );
+		fetchAssignments();
+	}, []);
 
-  if (error) {
-    return <div className="text-red-500">Error: {error}</div>;
-  }
+	const handleMarkerClick = (
+		assignment: Assignment,
+		markerLat: number,
+		markerLng: number
+	) => {
+		setSelectedAssignment(assignment);
+		setCenter({ lat: markerLat, lng: markerLng });
+	};
 
-  if (loadError) {
-    return <div className="text-red-500">Error loading map</div>;
-  }
+	const filteredAssignments = assignments.filter(
+		(assignment) =>
+			(!selectedLevel || assignment.level.includes(selectedLevel)) &&
+			(!selectedSubject.length ||
+				selectedSubject.includes(assignment.subject))
+	);
 
-  const assignmentFiltered = filteredAssignments.filter((assignment) => !assignment.taken);
+	const clearFilters = () => {
+		setSelectedLevel(null);
+		setSelectedSubject([]);
+	};
 
-  const groupedAssignments = [];
-  for (let i = 0; i < assignmentFiltered.length; i += 3) {
-    groupedAssignments.push(assignmentFiltered.slice(i, i + 3));
-  }
+	const filteredMarkers = markers.filter((marker) =>
+		filteredAssignments.some((assignment) => assignment.id === marker.assignment.id)
+	);
 
-  return (
-    <div className="relative min-h-screen flex flex-col bg-cover bg-center">
-      <NavBar />
-      <div className="p-6">
-        <div className="flex space-x-4 mb-4">
-          <div className="w-1/2">
-            <Label htmlFor="level">Level</Label>
-            <Select
-              value={selectedLevel || ""}
-              onValueChange={(value: string) => setSelectedLevel(value)}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select a Level" />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.entries(levels).map(([category, levels]) => (
-                  <SelectGroup key={category}>
-                    <SelectLabel>{category}</SelectLabel>
-                    {levels.map((level) => (
-                      <SelectItem key={level} value={level}>
-                        {level}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="w-1/2">
-            <Label htmlFor="subject">Subject</Label>
-            <Select
-              value={selectedSubject || ""}
-              onValueChange={(value: string) => setSelectedSubject(value)}
-              disabled={!selectedLevel}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select a Subject" />
-              </SelectTrigger>
-              <SelectContent>
-                {selectedLevel &&
-                  subjectsByLevel[selectedLevel].map((subject) => (
-                    <SelectItem key={subject} value={subject}>
-                      {subject}
-                    </SelectItem>
-                  ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        <div className="mb-4 w-full">
-          <button
-            className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
-            onClick={() => router.push(`/tutor/${tutorId}/accepted_assignments`)}
-          >
-            View Accepted Assignments
-          </button>
-        </div>
-      </div>
-      <div className="flex-grow grid grid-cols-3 gap-8" style={{ height: "calc(100vh - 100px)" }}>
-        <div className="col-span-2 p-6 overflow-auto">
-          {groupedAssignments.length === 0 ? (
-            <p className="text-gray-500 text-center">No assignments available.</p>
-          ) : (
-            groupedAssignments.map((group, index) => <AssignmentRow key={index} assignments={group} />)
-          )}
-        </div>
-        <div className="col-span-1 h-full p-6">
-          <div className="h-full bg-gray-300">
-            {isLoaded && (
-              <GoogleMap
-                center={center}
-                zoom={11}
-                mapContainerStyle={{ width: "100%", height: "100%" }}
-                options={{
-                  zoomControl: false,
-                  streetViewControl: false,
-                  mapTypeControl: false,
-                  fullscreenControl: false,
-                }}
-                onLoad={(map) => setMap(map)}
-              >
-                {markers.map((marker, index) => (
-                  <Marker
-                    key={index}
-                    position={{ lat: marker.lat, lng: marker.lng }}
-                    icon={createMarkerIcon(marker.price)}
-                    label={createMarkerLabel(marker.price)}
-                  />
-                ))}
-              </GoogleMap>
-            )}
-            
-          </div>
-          
-        </div>
-      </div>
-      <Footer />
-    </div>
-  );
+	if (error) {
+		return <div className="text-red-500">Error: {error}</div>;
+	}
+
+	if (loadError) {
+		return <div className="text-red-500">Error loading map</div>;
+	}
+
+	const assignmentFiltered = filteredAssignments.filter(
+		(assignment) => !assignment.taken
+	);
+
+	const groupedAssignments = [];
+	for (let i = 0; i < assignmentFiltered.length; i += 3) {
+		groupedAssignments.push(assignmentFiltered.slice(i, i + 3));
+	}
+
+	return (
+		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
+			<NavBar />
+			<div className="p-6">
+				<div className="flex space-x-4 mb-4">
+					<div className="w-5/12 space-y-1">
+						<Label htmlFor="level">Level</Label>
+						<Select
+							value={selectedLevel || ""}
+							onValueChange={(value: string) =>
+								setSelectedLevel(value)
+							}
+						>
+							<SelectTrigger className="w-full">
+								<SelectValue placeholder="Select a Level" />
+							</SelectTrigger>
+							<SelectContent>
+								{Object.entries(levels).map(
+									([category, levels]) => (
+										<SelectGroup key={category}>
+											<SelectLabel>
+												{category}
+											</SelectLabel>
+											{levels.map((level: string) => (
+												<SelectItem
+													key={level}
+													value={level}
+												>
+													{level}
+												</SelectItem>
+											))}
+										</SelectGroup>
+									)
+								)}
+							</SelectContent>
+						</Select>
+					</div>
+					<div className="w-5/12 space-y-1">
+						<Label htmlFor="subject">Subject</Label>
+						<MultiSelector
+							values={selectedSubject}
+							onValuesChange={setSelectedSubject}
+							loop={false}
+							disabled={!selectedLevel || selectedLevel === "Poly" || selectedLevel === "University"}
+							className="space-y-0"
+						>
+							<MultiSelectorTrigger className="w-full">
+								<MultiSelectorInput placeholder={"Select a Subject"} style={{ fontSize: "15px" }}/>
+							</MultiSelectorTrigger>
+							<MultiSelectorContent>
+								<MultiSelectorList>
+									{selectedLevel &&
+										subjectsByLevel[selectedLevel].map(
+											(subject: string) => (
+												<MultiSelectorItem
+													key={subject}
+													value={subject}
+												>
+													{subject}
+												</MultiSelectorItem>
+											)
+										)}
+								</MultiSelectorList>
+							</MultiSelectorContent>
+						</MultiSelector>
+					</div>
+					<div className="w-1/6 space-y-1">
+						<Label>
+							<span>&nbsp;</span>
+						</Label>
+						<Button onClick={clearFilters} className="w-full">
+							Clear Filters
+						</Button>
+					</div>
+				</div>
+				<div className="mb-4 w-full">
+					<button
+						className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+						onClick={() =>
+							router.push(
+								`/tutor/${tutorId}/accepted_assignments`
+							)
+						}
+					>
+						View Accepted Assignments
+					</button>
+				</div>
+			</div>
+			<div
+				className="flex-grow grid grid-cols-3 gap-8"
+				style={{ height: "calc(100vh - 100px)" }}
+			>
+				<div className="col-span-2 p-6 overflow-auto">
+					{groupedAssignments.length === 0 ? (
+						<p className="text-gray-500 text-center">
+							No assignments available.
+						</p>
+					) : (
+						groupedAssignments.map((group, index) => (
+							<AssignmentRow
+								key={index}
+								assignments={group}
+								selectedAssignment={selectedAssignment}
+							/>
+						))
+					)}
+				</div>
+				<div className="col-span-1 h-full p-6">
+					<div className="h-full bg-gray-300">
+						{isLoaded && (
+							<GoogleMap
+								center={center}
+								zoom={11}
+								mapContainerStyle={{
+									width: "100%",
+									height: "100%",
+								}}
+								options={{
+									zoomControl: false,
+									streetViewControl: false,
+									mapTypeControl: false,
+									fullscreenControl: false,
+								}}
+								onLoad={(map) => setMap(map)}
+							>
+								{filteredMarkers.map((marker, index) => (
+									<Marker
+										key={index}
+										position={{
+											lat: marker.lat,
+											lng: marker.lng,
+										}}
+										icon={createMarkerIcon(marker.price)}
+										label={createMarkerLabel(marker.price)}
+										onClick={() =>
+											handleMarkerClick(
+												marker.assignment,
+												marker.lat,
+												marker.lng
+											)
+										}
+									/>
+								))}
+							</GoogleMap>
+						)}
+					</div>
+				</div>
+			</div>
+			<Footer />
+		</div>
+	);
 }

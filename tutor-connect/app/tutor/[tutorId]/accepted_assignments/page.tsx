@@ -102,7 +102,7 @@ export default function AppliedAssignments() {
         }
 
         fetchAssignments();
-    }, []);
+    }, [tutorId]);
 
     if (error) {
         return <div className="text-red-500">Error: {error}</div>;

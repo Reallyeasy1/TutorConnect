@@ -136,7 +136,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
       socket.off("message");
       socket.off("users");
     };
-  }, [username, id]);
+  }, [username, id, isTutor, recipient, socket]);
 
   useEffect(() => {
     if (curr_recipient != null && curr_recipient.username != null) {
@@ -153,7 +153,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ username, id, isTutor, curr_recipie
       : [];
       
     setFilteredMessages(filtered);
-  }, [recipient, messages, username]);
+  }, [recipient, messages, username, curr_recipient]);
 
   const sendMessage = (message: string) => {
     if (!recipient) {

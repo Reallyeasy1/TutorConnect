@@ -27,8 +27,9 @@
   @apply w-full p-4 text-left bg-[#5790AB] text-white cursor-pointer border border-gray-300 flex justify-between items-center relative; /* Increase padding to p-6 */
   border-bottom: 0; /* Remove bottom border */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadowing */
-  font-size: 1.25rem; /* Increase font size */
+  font-size: 22px; /* Increase font size */
   font-weight: bold; /* Make text bold */
+  font: Poppins;
 }
 
 .accordionTrigger:last-child {
@@ -40,7 +41,7 @@
   font-size: 2rem; /* Adjust font size */
   @apply text-[#5790AB] bg-white rounded-full h-10 w-10 flex items-center justify-center font-bold;
   position: relative;
-  top: -2px; /* Move the plus sign slightly higher */
+  top:2px; /* Move the plus sign slightly higher */
 }
 
 .accordionTrigger[data-state="open"]::after {
@@ -50,6 +51,8 @@
 .accordionContent {
   @apply p-6 border-t border-gray-300 bg-gray-100; /* Light grey background */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadowing */
+  font-size: 18px;
+  font: Poppins;
 }
 
 .tabsList {

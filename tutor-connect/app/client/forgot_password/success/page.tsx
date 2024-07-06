@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 
-export default async function SuccessPage() {
+export default function SuccessPage() {
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
 			<NavBar />

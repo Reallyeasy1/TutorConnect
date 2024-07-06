@@ -91,7 +91,7 @@ export default function AvailTutors() {
 		}
 
 		getTutors();
-	}, []);
+	}, [assignmentId]);
 
 	if (error) {
 		return <div className="text-red-500">Error: {error}</div>;
