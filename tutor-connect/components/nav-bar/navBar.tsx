@@ -209,7 +209,7 @@ const NavBar = () => {
 				</div>
 				<div>
 					<a
-						href="#"
+						href="/faq"
 						style={hoverText(3)}
 						onMouseEnter={() => handleMouseEnter(3)}
 						onMouseLeave={handleMouseLeave}

@@ -113,3 +113,9 @@
 .selected-user {
   @apply bg-slate-300;
 }
+
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
