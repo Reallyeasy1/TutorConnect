@@ -21,6 +21,7 @@
     "antd": "^5.18.3",
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
+    "cmdk": "^1.0.0",
     "daisyui": "^4.12.10",
     "dotenv": "^16.4.5",
     "font-awesome": "^4.7.0",
