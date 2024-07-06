@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "@formkit/auto-animate": "^0.8.2",
+    "emoji-picker-react": "^4.10.0",
+    "googlemaps": "^1.12.0",
+    "jsonwebtoken": "^9.0.2",
+    "lottie-react": "^2.4.0",
+    "react-cookie": "^7.1.4",
+    "socket.io-client": "^4.7.5",
+    "zustand": "^4.5.2"
+  },
+  "devDependencies": {
+    "daisyui": "^4.12.2"
+  }
+}
