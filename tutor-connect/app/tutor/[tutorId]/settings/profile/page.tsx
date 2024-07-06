@@ -433,7 +433,7 @@ export default function ProfilePage() {
 						return;
 					}
 				}
-
+				
 				const imageRes = await fetch(
 					`/api/tutor/profile/image_upload?filename=${newImage.name}`,
 					{
@@ -462,7 +462,7 @@ export default function ProfilePage() {
 				alert("Failed to save changes");
 			}
 		} catch (error) {
-			console.error("Error updating client details:", error);
+			console.error("Error updating tutor details:", error);
 		}
 	};
 
