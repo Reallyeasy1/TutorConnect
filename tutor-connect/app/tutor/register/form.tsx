@@ -33,6 +33,7 @@ import { useRouter } from "next/navigation";
 import jwt from "jsonwebtoken";
 import { subjectsByCategory } from "@/utils/levelsAndSubjects";
 import { locations } from "@/utils/locations";
+import { Alert } from "@/components/ui/alert";
 
 type CheckedSubjects = {
 	"Pre-School": string[];
@@ -144,6 +145,11 @@ export const RegisterForm = () => {
 		e.preventDefault();
 		const levelAndSubjects = checkedSubjects;
 
+		if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
+			setError('Invalid email address');
+			return;
+		  }
+
 		if (
 			password.length < 8 ||
 			!/[a-z]/.test(password) ||
@@ -161,6 +167,16 @@ export const RegisterForm = () => {
 			setError("Contact number must be 8 digits");
 			return;
 		}
+
+		if (!/^\d{2}$/.test(age)) {
+			setError("Age must be a number");
+			return;
+		}
+
+		if (location.length === 0) {
+			setError('Please select a location');
+			return;
+		  }
 
 		try {
 			const res = await fetch("/api/tutor/register", {
@@ -373,7 +389,9 @@ export const RegisterForm = () => {
 												>
 													<CalendarIcon className="mr-2 h-4 w-4" />
 													{dateOfBirth ? (
-														dateOfBirth.toLocaleDateString("en-GB")
+														dateOfBirth.toLocaleDateString(
+															"en-GB"
+														)
 													) : (
 														<span>Pick a date</span>
 													)}
@@ -493,6 +511,11 @@ export const RegisterForm = () => {
 									</Select>
 								</div>
 							</div>
+							{error && (
+								<div style={{ maxWidth: "1150px" }}>
+									<Alert>{error}</Alert>
+								</div>
+							)}
 						</CardContent>
 						<CardFooter>
 							<Button onClick={onNext} className="w-full">
@@ -501,7 +524,6 @@ export const RegisterForm = () => {
 						</CardFooter>
 					</Card>
 				</TabsContent>
-
 				<TabsContent value="tutorPreferences">
 					<Card>
 						<CardHeader>
@@ -608,6 +630,11 @@ export const RegisterForm = () => {
 									))}
 								</div>
 							</div>
+							{error && (
+								<div style={{ maxWidth: "1150px" }}>
+									<Alert>{error}</Alert>
+								</div>
+							)}
 						</CardContent>
 						<CardFooter className="flex justify-between space-x-2">
 							<Button onClick={onBack} className="flex-1">
@@ -619,7 +646,6 @@ export const RegisterForm = () => {
 						</CardFooter>
 					</Card>
 				</TabsContent>
-
 				<TabsContent value="academicQualifications">
 					<Card>
 						<CardHeader>
@@ -723,6 +749,11 @@ export const RegisterForm = () => {
 									</SelectContent>
 								</Select>
 							</div>
+							{error && (
+								<div style={{ maxWidth: "1150px" }}>
+									<Alert>{error}</Alert>
+								</div>
+							)}
 						</CardContent>
 						<CardFooter className="flex justify-between space-x-2">
 							<Button onClick={onBack} className="flex-1">
