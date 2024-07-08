@@ -70,6 +70,7 @@ export default function ViewTutorsPage() {
 	const [selectedSubject, setSelectedSubject] = useState<string[]>([]);
 	const [tutorType, setTutorType] = useState("");
 	const [yearsOfExperience, setYearsOfExperience] = useState("");
+	const [nameSearch, setNameSearch] = useState("");
 
 	useEffect(() => {
 		const fetchTutors = async () => {
@@ -120,16 +121,19 @@ export default function ViewTutorsPage() {
 		setTutorType("");
 		setYearsOfExperience("");
 		setFilteredTutors(tutors);
+		setNameSearch("");
 	};
 
 	const search = () => {
 		let filtered = tutors.filter(
 			(tutor: Tutor) =>
+				tutor.name.toLowerCase().includes(nameSearch.toLowerCase()) &&
 				(!gender || tutor.gender === gender) &&
 				(!race || tutor.race === race) &&
 				(!selectedLevel ||
-					tutor.levelAndSubjects[selectedLevel as keyof CheckedSubjects]
-						.length > 0) &&
+					tutor.levelAndSubjects[
+						selectedLevel as keyof CheckedSubjects
+					].length > 0) &&
 				(!selectedSubject.length ||
 					selectedSubject.every((subject) =>
 						tutor.levelAndSubjects[
@@ -141,22 +145,28 @@ export default function ViewTutorsPage() {
 					tutor.yearsOfExperience >= parseInt(yearsOfExperience))
 		);
 		setFilteredTutors(filtered);
-		console.log(tutors)
+		console.log(tutors);
 	};
 
 	const styles = {
-		headerTitle: {
+		sectionTitle: {
 			fontWeight: "bold",
-			fontSize: "30px",
+			fontSize: "24px",
 			font: "Poppins",
-			color: "#000",
-			padding: "10px 0 20px 0",
+			color: "#fff",
+			textAlign: "center" as "center",
+			padding: "10px 0",
+			backgroundColor: "#5790AB",
+			borderRadius: "10px",
+			width: "300px",
+			display: "flex",
+			justifyContent: "center",
 		},
 		tutorContainer: {
 			display: "grid",
 			gridTemplateRows: "repeat(auto-fill, minmax(300px, 1fr))",
-			gap: "20px",
-			padding: "20px",
+			gap: "10px",
+			padding: "10px",
 		},
 		tutorCard: {
 			border: "1px solid lightgray",
@@ -263,12 +273,21 @@ export default function ViewTutorsPage() {
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
 			<NavBar />
 			<div className="flex-grow flex flex-col justify-center items-center py-6">
-				<h1 style={styles.headerTitle}>View Tutors</h1>
 				<div style={styles.filterSection}>
 					<div
 						className="grid grid-cols-2 gap-4"
 						style={{ padding: "7px" }}
 					>
+						<div className="col-span-2 space-y-1" style={{ display: "flex", justifyContent: "center" }}>
+							<h1 style={styles.sectionTitle}>Tutor Search</h1>
+						</div>
+						<div className="col-span-2 space-y-1">
+							<Input
+								placeholder="Search by name"
+								value={nameSearch}
+								onChange={(e) => setNameSearch(e.target.value)}
+							/>
+						</div>
 						<div className="col-span-1 space-y-1">
 							<Label htmlFor="age" style={{ fontWeight: "bold" }}>
 								Gender
@@ -386,16 +405,16 @@ export default function ViewTutorsPage() {
 								<MultiSelectorContent>
 									<MultiSelectorList>
 										{selectedLevel &&
-											subjectsByCategory[selectedLevel].map(
-												(subject: string) => (
-													<MultiSelectorItem
-														key={subject}
-														value={subject}
-													>
-														{subject}
-													</MultiSelectorItem>
-												)
-											)}
+											subjectsByCategory[
+												selectedLevel
+											].map((subject: string) => (
+												<MultiSelectorItem
+													key={subject}
+													value={subject}
+												>
+													{subject}
+												</MultiSelectorItem>
+											))}
 									</MultiSelectorList>
 								</MultiSelectorContent>
 							</MultiSelector>
