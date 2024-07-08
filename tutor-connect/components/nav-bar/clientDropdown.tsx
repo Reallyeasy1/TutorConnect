@@ -19,7 +19,7 @@ export default function ClientDropdown() {
         },
         {
             title: "View Tutors",
-            path: "#",
+            path: `/client/${clientId}/view_tutors`,
             cName: "dropdown-link"
         },
     ]

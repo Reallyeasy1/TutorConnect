@@ -142,6 +142,7 @@ export default function AllAssignments() {
 	const tutorId = params.tutorId;
 	const [center, setCenter] = useState({ lat: 1.287953, lng: 103.851784 });
 	const [map, setMap] = useState<google.maps.Map | null>(null);
+	const [zoom, setZoom] = useState(11);
 	const [markers, setMarkers] = useState<
 		{ lat: number; lng: number; price: string; assignment: Assignment }[]
 	>([]);
@@ -239,6 +240,7 @@ export default function AllAssignments() {
 	) => {
 		setSelectedAssignment(assignment);
 		setCenter({ lat: markerLat, lng: markerLng });
+		setZoom(15);
 	};
 
 	const filteredAssignments = assignments.filter(
@@ -386,7 +388,7 @@ export default function AllAssignments() {
 						{isLoaded && (
 							<GoogleMap
 								center={center}
-								zoom={11}
+								zoom={zoom}
 								mapContainerStyle={{
 									width: "100%",
 									height: "100%",

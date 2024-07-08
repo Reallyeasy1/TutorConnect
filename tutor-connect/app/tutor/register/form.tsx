@@ -229,7 +229,7 @@ export const RegisterForm = () => {
 					};
 
 					const strapiResponse = await fetch(
-						"http://188.166.213.34/api/accounts",
+						"https://www.tutorconnect.live/api/accounts",
 						{
 							method: "POST",
 							headers: {
@@ -683,26 +683,14 @@ export const RegisterForm = () => {
 										</SelectTrigger>
 									</div>
 									<SelectContent>
-										<SelectItem value="Poly/A level">
-											Poly / A Level student
-										</SelectItem>
-										<SelectItem value="Undergraduate">
-											Undergraduate
-										</SelectItem>
-										<SelectItem value="Part-Time">
+										<SelectItem value="Part-Time Tutor">
 											Part-Time Tutor
 										</SelectItem>
-										<SelectItem value="Full-Time">
+										<SelectItem value="Full-Time Tutor">
 											Full-Time Tutor
 										</SelectItem>
-										<SelectItem value="NIE Trainee">
-											NIE Trainee
-										</SelectItem>
-										<SelectItem value="Ex-MOE">
-											Ex-MOE Teacher
-										</SelectItem>
-										<SelectItem value="Current MOE">
-											Current MOE Teacher
+										<SelectItem value="Ex/Current MOE Teacher">
+											Ex/Current MOE Teacher
 										</SelectItem>
 									</SelectContent>
 								</Select>

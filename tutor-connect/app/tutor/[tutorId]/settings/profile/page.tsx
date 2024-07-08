@@ -25,14 +25,16 @@ import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { PutBlobResult } from "@vercel/blob";
+import { subjectsByCategory } from "@/utils/levelsAndSubjects";
+import { locations } from "@/utils/locations";
 
 type CheckedSubjects = {
-	preschool: string[];
-	primary: string[];
-	secondary: string[];
-	jc: string[];
-	ib: string[];
-	diplomaOrDegree: string[];
+	"Pre-School": string[];
+	"Primary School": string[];
+	"Secondary School": string[];
+	"Junior College": string[];
+	"IB/IGCSE": string[];
+	"Diploma/Degree": string[];
 };
 
 export default function ProfilePage() {
@@ -56,200 +58,27 @@ export default function ProfilePage() {
 	const [image, setImage] = useState("");
 	const [newImage, setNewImage] = useState<File | null>(null);
 	const [preview, setPreview] = useState<string | null>(null);
-	const [imageUpload, setImageUpload] = useState<string | null>(null);
 	const [showSubjects, setShowSubjects] = useState({
-		preschool: false,
-		primary: false,
-		secondary: false,
-		jc: false,
-		ib: false,
-		diplomaOrDegree: false,
+		"Pre-School": false,
+		"Primary School": false,
+		"Secondary School": false,
+		"Junior College": false,
+		"IB/IGCSE": false,
+		"Diploma/Degree": false,
 	});
 	const [checkedSubjects, setCheckedSubjects] = useState<CheckedSubjects>({
-		preschool: [],
-		primary: [],
-		secondary: [],
-		jc: [],
-		ib: [],
-		diplomaOrDegree: [],
+		"Pre-School": [],
+		"Primary School": [],
+		"Secondary School": [],
+		"Junior College": [],
+		"IB/IGCSE": [],
+		"Diploma/Degree": [],
 	});
 	const [location, setLocation] = useState<string[]>([]);
 	const maxWords = 100;
 	const [introduction, setIntroduction] = useState("");
 	const [summary, setSummary] = useState("");
 	const [studentsResults, setStudentsResults] = useState("");
-
-	const preschoolSubjects = [
-		"English",
-		"Math",
-		"Chinese",
-		"Tamil",
-		"Malay",
-		"Phonics",
-		"Creative Writing",
-	];
-
-	const primarySchoolSubjects = [
-		"English",
-		"Math",
-		"Science",
-		"Chinese",
-		"Higher Chinese",
-		"Tamil",
-		"Higher Tamil",
-		"Malay",
-		"Higher Malay",
-		"Hindi",
-		"Art",
-		"Creative Writing",
-		"GEP",
-		"Math Olympiad",
-		"Science Olympiad",
-	];
-
-	const secondarySchoolSubjects = [
-		"English",
-		"L. Sec Math",
-		"L. Sec Science",
-		"A Math",
-		"E Math",
-		"Physics",
-		"Chemistry",
-		"Biology",
-		"Physics/Chemistry",
-		"Biology/Chemistry",
-		"Biology/Physics",
-		"Geography",
-		"History",
-		"Literature",
-		"Principle of Accounting (POA)",
-		"Social Studies",
-		"Chinese",
-		"Higher Chinese",
-		"Malay",
-		"Higher Malay",
-		"Tamil",
-		"Higer Tamil",
-		"Hindi",
-		"Music",
-		"Art",
-		"Design and Technology",
-		"Food and Nutrition",
-	];
-
-	const jcSubjects = [
-		"General Paper",
-		"Math",
-		"Chemistry",
-		"Physics",
-		"Biology",
-		"Computing",
-		"Economics",
-		"History",
-		"Geography",
-		"Literature",
-		"Chinese",
-		"Chinese Studies",
-		"Malay",
-		"Malay Studies",
-		"Tamil",
-		"Tamil Studies",
-		"Knowledge & Inquiry",
-		"Art",
-		"H3 Math",
-		"H3 Physics",
-		"H3 Chemistry",
-		"H3 Biology",
-		"H3 Economics",
-		"H3 History",
-		"H3 Geography",
-		"H3 English Literature",
-		"H3 Chinese Language & Literature",
-		"H3 Art",
-	];
-
-	const ibSubjects = [
-		"English",
-		"English Literature",
-		"Chinese",
-		"Malay",
-		"Tamil",
-		"Business Management",
-		"Economics",
-		"Geography",
-		"History",
-		"Biology",
-		"Chemistry",
-		"Physics",
-		"Computer Science",
-		"Math",
-		"Art",
-	];
-
-	const diplomaOrDegreeSubjects = [
-		"Business Admin",
-		"Accounting",
-		"Finance",
-		"Marketing",
-		"Human Resource",
-		"Mass Communication",
-		"Engineering",
-		"Computer Science",
-		"Information Technology",
-		"Law",
-		"Psychology",
-		"Math",
-		"Applied Math",
-		"Statistics",
-		"Physics",
-		"Chemistry",
-		"Biology",
-		"Geography",
-		"History",
-		"Literature",
-		"Economics",
-		"Architecture",
-		"Real Estate",
-		"Sociology",
-		"Medicine",
-		"Biological Science",
-		"Chemical Engineering",
-		"Electrical Engineering",
-		"Mechanical Engineering",
-		"Life Science",
-		"Communication Studies",
-	];
-
-	const locations = [
-		[
-			"North",
-			"Kranji, Marsiling, Woodlands, Admiralty, Sembawang, Yishun, Khatib, Yio Chu Kang, Ang Mo Kio",
-		],
-		[
-			"South",
-			"Harbourfront, Telok Blangah, Pasir Panjang, Labrador Park, Mount Faber, West Coast, Sentosa Cove, Tiong Bahru, Bukit Merah",
-		],
-		[
-			"East",
-			"Pasir Ris, Tampines, Simei, Tanah Merah, Bedok, Kembangan, Eunos, Paya Lebar, Aljunied, Kallang, Geylang, Katong, Joo Chiat, Marine Parade, Siglap, Bedok, Chai Chee, East Coast, Kaki Bukit, Ubi, Dakota",
-		],
-		[
-			"West",
-			"Boon Lay, Jurong, Clementi, Dover, Buona Vista, Commonwealth, Queenstown, Redhill, Alexandra, Kent Ridge, Farrer Rd, Holland, Ghim Moh",
-		],
-		[
-			"Central",
-			"Bishan, Braddell, Toa Payoh, Balestier, Novena, Newton, Orchard, Chinatown, Stevens, Bendemeer, Bartley, Macpherson, Lorong Chuan, Bartley, Tai Seng, Tanjong Rhu, Bugis, Lavender, Boon Keng, Farrer Park, Little India, Marymount, Jalan Besar, Caldecott, Botanic Gardens, Farrer Road, Holland Village, Thomson Road, Bukit Timah Road, Stevens Road, River Valley, Marina Bay, City Hall, Raffles Place, Shenton Way, Outram, Clarke Quay",
-		],
-		[
-			"NorthWest",
-			"Bukit Batok, Bukit Gombak, Hillview, Bukit Panjang, Choa Chu Kang, Yew Tee, Cashew, Beauty World",
-		],
-		[
-			"NorthEast",
-			"Punggol, Sengkang, Buangkok, Hougang, Kovan, Potong Pasir, Woodleigh, Serangoon, Seletar",
-		],
-	];
 
 	useEffect(() => {
 		const fetchTutorDetails = async () => {
@@ -363,6 +192,7 @@ export default function ProfilePage() {
 		console.log(showSubjects);
 	};
 
+
 	const handleSubjectChange = (
 		event: React.ChangeEvent<HTMLInputElement>
 	) => {
@@ -384,7 +214,6 @@ export default function ProfilePage() {
 				),
 			});
 		}
-		console.log(checkedSubjects);
 	};
 
 	const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -395,6 +224,8 @@ export default function ProfilePage() {
 		} else {
 			setLocation(location.filter((loc) => loc !== value));
 		}
+		console.log(showSubjects)
+		console.log(checkedSubjects)
 	};
 
 	const savePersonalInformation = async (e: React.FormEvent) => {
@@ -433,7 +264,7 @@ export default function ProfilePage() {
 						return;
 					}
 				}
-				
+
 				const imageRes = await fetch(
 					`/api/tutor/profile/image_upload?filename=${newImage.name}`,
 					{
@@ -441,7 +272,7 @@ export default function ProfilePage() {
 						body: newImage,
 					}
 				);
-				
+
 				if (imageRes.ok) {
 					const imageBlob: PutBlobResult = await imageRes.json();
 					formData.append("image", imageBlob.url);
@@ -842,7 +673,7 @@ export default function ProfilePage() {
 											</div>
 											<div className="col-span-1 space-y-1">
 												<Label htmlFor="dateOfBirth">
-													Date Of Birth (MM-DD-YYYY)
+													Date Of Birth
 												</Label>
 												<Popover>
 													<PopoverTrigger asChild>
@@ -860,7 +691,7 @@ export default function ProfilePage() {
 															>
 																<CalendarIcon className="mr-2 h-4 w-4" />
 																{dateOfBirth ? (
-																	dateOfBirth.toLocaleDateString()
+																	dateOfBirth.toLocaleDateString("en-GB")
 																) : (
 																	<span>
 																		Pick a
@@ -1045,312 +876,78 @@ export default function ProfilePage() {
 											>
 												Levels and Subjects
 											</Label>
-											<div style={{ marginTop: "10px" }}>
-												<label>
-													<input
-														type="checkbox"
-														id="preschool"
-														onChange={
-															handleLevelChange
-														}
-														style={{
-															marginRight: "10px",
-														}}
-														checked={
-															showSubjects.preschool
-														}
-													/>
-													Pre-School
-												</label>
-											</div>
-											{showSubjects.preschool && (
+											{Object.entries(
+												subjectsByCategory
+											).map(([category, subjects]) => (
 												<div
-													style={
-														subjectStyle.container
-													}
+													key={category}
+													style={{
+														marginTop: "10px",
+													}}
 												>
-													{preschoolSubjects.map(
-														(subject) => (
-															<label
-																key={subject}
-															>
-																<input
-																	type="checkbox"
-																	id="preschool"
-																	value={
-																		subject
-																	}
-																	onChange={
-																		handleSubjectChange
-																	}
-																	style={
-																		subjectStyle.checkboxes
-																	}
-																	checked={checkedSubjects.preschool.includes(
-																		subject
-																	)}
-																/>
-																{subject}
-															</label>
-														)
+													<label key={category}>
+														<input
+															type="checkbox"
+															id={category}
+															onChange={
+																handleLevelChange
+															}
+															style={
+																subjectStyle.checkboxes
+															}
+															checked={
+																showSubjects[
+																	category as keyof CheckedSubjects
+																]
+															}
+														/>
+														{category}
+													</label>
+													{showSubjects[
+														category as keyof CheckedSubjects
+													] && (
+														<div
+															style={
+																subjectStyle.container
+															}
+														>
+															{subjects.map(
+																(subject) => (
+																	<label
+																		key={
+																			subject
+																		}
+																	>
+																		<input
+																			type="checkbox"
+																			id={
+																				category
+																			}
+																			value={
+																				subject
+																			}
+																			onChange={
+																				handleSubjectChange
+																			}
+																			style={
+																				subjectStyle.checkboxes
+																			}
+																			checked={checkedSubjects[
+																				category as keyof CheckedSubjects
+																			].includes(
+																				subject
+																			)}
+																		/>
+																		{
+																			subject
+																		}
+																	</label>
+																)
+															)}
+														</div>
 													)}
 												</div>
-											)}
-											<div>
-												<label>
-													<input
-														type="checkbox"
-														id="primary"
-														onChange={
-															handleLevelChange
-														}
-														style={
-															subjectStyle.checkboxes
-														}
-														checked={
-															showSubjects.primary
-														}
-													/>
-													Primary School
-												</label>
-											</div>
-											{showSubjects.primary && (
-												<div
-													style={
-														subjectStyle.container
-													}
-												>
-													{primarySchoolSubjects.map(
-														(subject) => (
-															<label
-																key={subject}
-															>
-																<input
-																	type="checkbox"
-																	id="primary"
-																	value={
-																		subject
-																	}
-																	onChange={
-																		handleSubjectChange
-																	}
-																	style={
-																		subjectStyle.checkboxes
-																	}
-																	checked={checkedSubjects.primary.includes(
-																		subject
-																	)}
-																/>
-																{subject}
-															</label>
-														)
-													)}
-												</div>
-											)}
-											<div>
-												<label>
-													<input
-														type="checkbox"
-														id="secondary"
-														onChange={
-															handleLevelChange
-														}
-														style={
-															subjectStyle.checkboxes
-														}
-														checked={
-															showSubjects.secondary
-														}
-													/>
-													Secondary School
-												</label>
-											</div>
-											{showSubjects.secondary && (
-												<div
-													style={
-														subjectStyle.container
-													}
-												>
-													{secondarySchoolSubjects.map(
-														(subject) => (
-															<label
-																key={subject}
-															>
-																<input
-																	type="checkbox"
-																	id="secondary"
-																	value={
-																		subject
-																	}
-																	onChange={
-																		handleSubjectChange
-																	}
-																	style={
-																		subjectStyle.checkboxes
-																	}
-																	checked={checkedSubjects.secondary.includes(
-																		subject
-																	)}
-																/>
-																{subject}
-															</label>
-														)
-													)}
-												</div>
-											)}
-											<div>
-												<label>
-													<input
-														type="checkbox"
-														id="jc"
-														onChange={
-															handleLevelChange
-														}
-														style={
-															subjectStyle.checkboxes
-														}
-														checked={
-															showSubjects.jc
-														}
-													/>
-													Junior College
-												</label>
-											</div>
-											{showSubjects.jc && (
-												<div
-													style={
-														subjectStyle.container
-													}
-												>
-													{jcSubjects.map(
-														(subject) => (
-															<label
-																key={subject}
-															>
-																<input
-																	type="checkbox"
-																	id="jc"
-																	value={
-																		subject
-																	}
-																	onChange={
-																		handleSubjectChange
-																	}
-																	style={
-																		subjectStyle.checkboxes
-																	}
-																	checked={checkedSubjects.jc.includes(
-																		subject
-																	)}
-																/>
-																{subject}
-															</label>
-														)
-													)}
-												</div>
-											)}
-											<div>
-												<label>
-													<input
-														type="checkbox"
-														id="ib"
-														onChange={
-															handleLevelChange
-														}
-														style={
-															subjectStyle.checkboxes
-														}
-														checked={
-															showSubjects.ib
-														}
-													/>
-													IB/IGCSE
-												</label>
-											</div>
-											{showSubjects.ib && (
-												<div
-													style={
-														subjectStyle.container
-													}
-												>
-													{ibSubjects.map(
-														(subject) => (
-															<label
-																key={subject}
-															>
-																<input
-																	type="checkbox"
-																	id="ib"
-																	value={
-																		subject
-																	}
-																	onChange={
-																		handleSubjectChange
-																	}
-																	style={
-																		subjectStyle.checkboxes
-																	}
-																	checked={checkedSubjects.ib.includes(
-																		subject
-																	)}
-																/>
-																{subject}
-															</label>
-														)
-													)}
-												</div>
-											)}
-											<div>
-												<label>
-													<input
-														type="checkbox"
-														id="diplomaOrDegree"
-														onChange={
-															handleLevelChange
-														}
-														style={
-															subjectStyle.checkboxes
-														}
-														checked={
-															showSubjects.diplomaOrDegree
-														}
-													/>
-													Diploma/Degree
-												</label>
-											</div>
-											{showSubjects.diplomaOrDegree && (
-												<div
-													style={
-														subjectStyle.container
-													}
-												>
-													{diplomaOrDegreeSubjects.map(
-														(subject) => (
-															<label
-																key={subject}
-															>
-																<input
-																	type="checkbox"
-																	id="diplomaOrDegree"
-																	value={
-																		subject
-																	}
-																	onChange={
-																		handleSubjectChange
-																	}
-																	style={
-																		subjectStyle.checkboxes
-																	}
-																	checked={checkedSubjects.diplomaOrDegree.includes(
-																		subject
-																	)}
-																/>
-																{subject}
-															</label>
-														)
-													)}
-												</div>
-											)}
+											))}
 										</div>
 										<div className="space-y-1">
 											<Label
