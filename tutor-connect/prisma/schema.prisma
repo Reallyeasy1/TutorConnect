@@ -73,7 +73,7 @@ model Tutor {
   image                   String?
   introduction            String?
   summary                 String?
-  studentsResults          String?
+  studentsResults         String?
 }
 
 model ActivateTutorToken {

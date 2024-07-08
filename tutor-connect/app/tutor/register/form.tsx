@@ -81,7 +81,6 @@ export const RegisterForm = () => {
 	const handleLevelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { id, checked } = event.target;
 		setShowSubjects({ ...showSubjects, [id]: checked });
-		console.log(showSubjects);
 	};
 
 	const handleSubjectChange = (
