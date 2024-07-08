@@ -107,10 +107,6 @@ export default function AppliedAssignments() {
     const [selectedAssignment, setSelectedAssignment] =
 		useState<Assignment | null>(null);
 
-	if (error) {
-		return <div className="text-red-500">Error: {error}</div>;
-	}
-
 	const groupedAssignments = [];
 	for (let i = 0; i < assignments.length; i += 3) {
 		groupedAssignments.push(assignments.slice(i, i + 3));
@@ -207,6 +203,14 @@ export default function AppliedAssignments() {
 		setSelectedAssignment(assignment);
 		setCenter({ lat: markerLat, lng: markerLng });
 	};
+
+	if (loadError) {
+		return <div className="text-red-500">Error loading map</div>;
+	}
+
+	if (error) {
+		return <div className="text-red-500">Error: {error}</div>;
+	}
 
 	return (
 		<div className="flex flex-col min-h-screen">
