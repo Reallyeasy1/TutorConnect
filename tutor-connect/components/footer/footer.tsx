@@ -53,10 +53,10 @@ const Footer = () => {
         <h3 style={titleStyle}>Quick Links</h3>
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
             <div style={{ width: '50%' }}>
-                <a href="#" style={linkStyle}>Tuition Rates</a>
+                <a href="/rates" style={linkStyle}>Tuition Rates</a>
             </div>
             <div style={{ width: '50%' }}>
-                <a href="#" style={linkStyle}>FAQ</a>
+                <a href="/faq" style={linkStyle}>FAQ</a>
             </div>
             <div style={{ width: '50%' }}>
                 <a href="#" style={linkStyle}>Terms & Conditions</a>

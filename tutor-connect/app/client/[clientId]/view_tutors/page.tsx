@@ -33,6 +33,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { subjectsByCategory } from "@/utils/levelsAndSubjects";
+import { useRouter } from "next/navigation";
 
 type Tutor = {
 	id: number;
@@ -71,6 +72,7 @@ export default function ViewTutorsPage() {
 	const [tutorType, setTutorType] = useState("");
 	const [yearsOfExperience, setYearsOfExperience] = useState("");
 	const [nameSearch, setNameSearch] = useState("");
+	const router = useRouter();
 
 	useEffect(() => {
 		const fetchTutors = async () => {
@@ -146,6 +148,12 @@ export default function ViewTutorsPage() {
 		);
 		setFilteredTutors(filtered);
 		console.log(tutors);
+	};
+
+	const viewProfile = (id: number) => {
+		return () => {
+			router.push(`/${id}/tutor_profile`);
+		};
 	};
 
 	const styles = {
@@ -278,10 +286,22 @@ export default function ViewTutorsPage() {
 						className="grid grid-cols-2 gap-4"
 						style={{ padding: "7px" }}
 					>
-						<div className="col-span-2 space-y-1" style={{ display: "flex", justifyContent: "center" }}>
+						<div
+							className="col-span-2 space-y-1"
+							style={{
+								display: "flex",
+								justifyContent: "center",
+							}}
+						>
 							<h1 style={styles.sectionTitle}>Tutor Search</h1>
 						</div>
 						<div className="col-span-2 space-y-1">
+							<Label
+								htmlFor="search"
+								style={{ fontWeight: "bold" }}
+							>
+								Search
+							</Label>
 							<Input
 								placeholder="Search by name"
 								value={nameSearch}
@@ -289,7 +309,10 @@ export default function ViewTutorsPage() {
 							/>
 						</div>
 						<div className="col-span-1 space-y-1">
-							<Label htmlFor="age" style={{ fontWeight: "bold" }}>
+							<Label
+								htmlFor="gender"
+								style={{ fontWeight: "bold" }}
+							>
 								Gender
 							</Label>
 							<Select
@@ -314,7 +337,7 @@ export default function ViewTutorsPage() {
 						</div>
 						<div className="col-span-1 space-y-1">
 							<Label
-								htmlFor="gender"
+								htmlFor="race"
 								style={{ fontWeight: "bold" }}
 							>
 								Race
@@ -557,7 +580,7 @@ export default function ViewTutorsPage() {
 									</div>
 								</div>
 								<div style={styles.buttonSection}>
-									<Button style={styles.blueButton}>
+									<Button style={styles.blueButton} onClick={viewProfile(tutor.id)}>
 										View Profile
 									</Button>
 									<Button style={styles.whiteButton}>
