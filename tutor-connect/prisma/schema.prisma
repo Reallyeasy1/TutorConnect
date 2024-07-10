@@ -27,12 +27,12 @@ model Client {
 }
 
 model Assignment {
-  id                Int      @id @default(autoincrement())
+  id                Int       @id @default(autoincrement())
   subject           String
   level             String
-  client            Client   @relation(fields: [clientId], references: [id])
+  client            Client    @relation(fields: [clientId], references: [id])
   clientId          Int
-  tutor             Tutor?   @relation(name: "PrimaryTutor", fields: [tutorId], references: [id])
+  tutor             Tutor?    @relation(name: "PrimaryTutor", fields: [tutorId], references: [id])
   tutorId           Int?
   additionalDetails String?
   postDate          DateTime
@@ -47,7 +47,8 @@ model Assignment {
   gender            String
   race              String[]
   availability      String
-  avail_tutors      Tutor[]  @relation(name: "AvailableTutors")
+  avail_tutors      Tutor[]   @relation(name: "AvailableTutors")
+  coordinates       Decimal[]
 }
 
 model Tutor {
