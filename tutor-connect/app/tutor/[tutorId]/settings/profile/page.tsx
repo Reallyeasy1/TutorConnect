@@ -7,19 +7,9 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
@@ -107,15 +97,11 @@ export default function ProfilePage() {
 							setRace(tutorData.race);
 							setYearsOfExperience(tutorData.yearsOfExperience);
 							setTypeofTutor(tutorData.typeOfTutor);
-							setHighestEducationLevel(
-								tutorData.highestEducationLevel
-							);
+							setHighestEducationLevel(tutorData.highestEducationLevel);
 							setLocation(tutorData.location);
 							setCheckedSubjects(tutorData.levelAndSubjects);
 							for (const level in tutorData.levelAndSubjects) {
-								if (
-									tutorData.levelAndSubjects[level].length > 0
-								) {
+								if (tutorData.levelAndSubjects[level].length > 0) {
 									setShowSubjects((prevShowSubjects) => ({
 										...prevShowSubjects,
 										[level]: true,
@@ -156,10 +142,7 @@ export default function ProfilePage() {
 		router.push("/tutor/forgot_password");
 	};
 
-	const handleTextChange = (
-		event: React.ChangeEvent<HTMLTextAreaElement>,
-		setState: React.Dispatch<React.SetStateAction<string>>
-	) => {
+	const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>, setState: React.Dispatch<React.SetStateAction<string>>) => {
 		const text = event.target.value;
 		const words = text.trim().split(/\s+/);
 		if (words.length <= maxWords) {
@@ -192,10 +175,7 @@ export default function ProfilePage() {
 		console.log(showSubjects);
 	};
 
-
-	const handleSubjectChange = (
-		event: React.ChangeEvent<HTMLInputElement>
-	) => {
+	const handleSubjectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { id, value, checked } = event.target;
 		const level = id as keyof typeof checkedSubjects;
 
@@ -209,9 +189,7 @@ export default function ProfilePage() {
 		} else {
 			setCheckedSubjects({
 				...checkedSubjects,
-				[id]: checkedSubjects[level].filter(
-					(subject) => subject !== value
-				),
+				[id]: checkedSubjects[level].filter((subject) => subject !== value),
 			});
 		}
 	};
@@ -224,8 +202,8 @@ export default function ProfilePage() {
 		} else {
 			setLocation(location.filter((loc) => loc !== value));
 		}
-		console.log(showSubjects)
-		console.log(checkedSubjects)
+		console.log(showSubjects);
+		console.log(checkedSubjects);
 	};
 
 	const savePersonalInformation = async (e: React.FormEvent) => {
@@ -248,16 +226,13 @@ export default function ProfilePage() {
 
 			if (newImage) {
 				if (image) {
-					const deleteRes = await fetch(
-						`/api/tutor/profile/image_upload`,
-						{
-							method: "DELETE",
-							headers: {
-								"Content-Type": "application/json",
-							},
-							body: JSON.stringify({ image }),
-						}
-					);
+					const deleteRes = await fetch(`/api/tutor/profile/image_upload`, {
+						method: "DELETE",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({ image }),
+					});
 
 					if (!deleteRes.ok) {
 						alert("Failed to delete old image");
@@ -265,13 +240,10 @@ export default function ProfilePage() {
 					}
 				}
 
-				const imageRes = await fetch(
-					`/api/tutor/profile/image_upload?filename=${newImage.name}`,
-					{
-						method: "POST",
-						body: newImage,
-					}
-				);
+				const imageRes = await fetch(`/api/tutor/profile/image_upload?filename=${newImage.name}`, {
+					method: "POST",
+					body: newImage,
+				});
 
 				if (imageRes.ok) {
 					const imageBlob: PutBlobResult = await imageRes.json();
@@ -330,31 +302,25 @@ export default function ProfilePage() {
 		e.preventDefault();
 
 		try {
-			const res = await fetch(
-				"/api/tutor/profile/academic_qualifications",
-				{
-					method: "POST",
-					body: JSON.stringify({
-						email,
-						yearsOfExperience,
-						typeOfTutor,
-						highestEducationLevel,
-					}),
-					headers: {
-						"Content-Type": "application/json",
-					},
-				}
-			);
+			const res = await fetch("/api/tutor/profile/academic_qualifications", {
+				method: "POST",
+				body: JSON.stringify({
+					email,
+					yearsOfExperience,
+					typeOfTutor,
+					highestEducationLevel,
+				}),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
 			if (res.ok) {
 				alert("Changes saved successfully");
 			} else {
 				alert("Failed to save changes");
 			}
 		} catch (error) {
-			console.error(
-				"Error updating tutor academic qualifications:",
-				error
-			);
+			console.error("Error updating tutor academic qualifications:", error);
 		}
 	};
 
@@ -573,21 +539,13 @@ export default function ProfilePage() {
 									Profile
 								</a>
 							</li>
-							<li
-								style={hoverText(0)}
-								onMouseEnter={() => handleMouseEnter(0)}
-								onMouseLeave={handleMouseLeave}
-							>
+							<li style={hoverText(0)} onMouseEnter={() => handleMouseEnter(0)} onMouseLeave={handleMouseLeave}>
 								<a href="#" style={sidebar.navLink}>
 									<span style={sidebar.icon}>🔔</span>
 									Notifications
 								</a>
 							</li>
-							<li
-								style={hoverText(1)}
-								onMouseEnter={() => handleMouseEnter(1)}
-								onMouseLeave={handleMouseLeave}
-							>
+							<li style={hoverText(1)} onMouseEnter={() => handleMouseEnter(1)} onMouseLeave={handleMouseLeave}>
 								<a href="#" style={sidebar.navLink}>
 									<span style={sidebar.icon}>❓</span>
 									Help
@@ -604,13 +562,7 @@ export default function ProfilePage() {
 								<form onSubmit={savePersonalInformation}>
 									<div style={profileCard.profileImage}>
 										<Image
-											src={
-												preview
-													? preview
-													: image
-													? image
-													: "/images/Blank Profile Photo.jpg"
-											}
+											src={preview ? preview : image ? image : "/images/Blank Profile Photo.jpg"}
 											alt="Profile Picture"
 											width={100}
 											height={100}
@@ -630,90 +582,52 @@ export default function ProfilePage() {
 										<button
 											type="button"
 											style={profileCard.editIcon}
-											onClick={() =>
-												document
-													.getElementById("fileInput")
-													?.click()
-											}
+											onClick={() => document.getElementById("fileInput")?.click()}
 										>
 											✏️
 										</button>
 									</div>
-									<h2 style={profileCard.tutorName}>
-										{name}
-									</h2>
+									<h2 style={profileCard.tutorName}>{name}</h2>
 									<div className="space-y-2">
 										<div className="space-y-1">
-											<Label htmlFor="email">
-												Email (Cannot be changed)
-											</Label>
-											<Input
-												type="email"
-												name="email"
-												value={email}
-												readOnly
-											/>
+											<Label htmlFor="email">Email (Cannot be changed)</Label>
+											<Input type="email" name="email" value={email} readOnly />
 										</div>
 										<div className="grid grid-cols-2 gap-4">
 											<div className="col-span-1 space-y-1">
-												<Label htmlFor="contactNumber">
-													Contact Number
-												</Label>
+												<Label htmlFor="contactNumber">Contact Number</Label>
 												<Input
 													type="contactNumber"
 													name="contactNumber"
 													value={contactNumber}
-													onChange={(e) =>
-														setContactNumber(
-															e.target.value
-														)
-													}
+													onChange={(e) => setContactNumber(e.target.value)}
 													required
 												/>
 											</div>
 											<div className="col-span-1 space-y-1">
-												<Label htmlFor="dateOfBirth">
-													Date Of Birth
-												</Label>
+												<Label htmlFor="dateOfBirth">Date Of Birth</Label>
 												<Popover>
 													<PopoverTrigger asChild>
 														<div>
 															<Button
 																type="button"
-																variant={
-																	"outline"
-																}
+																variant={"outline"}
 																className={cn(
 																	"w-full justify-start text-left font-normal",
-																	!dateOfBirth &&
-																		"text-muted-foreground"
+																	!dateOfBirth && "text-muted-foreground"
 																)}
 															>
 																<CalendarIcon className="mr-2 h-4 w-4" />
-																{dateOfBirth ? (
-																	dateOfBirth.toLocaleDateString("en-GB")
-																) : (
-																	<span>
-																		Pick a
-																		date
-																	</span>
-																)}
+																{dateOfBirth ? dateOfBirth.toLocaleDateString("en-GB") : <span>Pick a date</span>}
 															</Button>
 														</div>
 													</PopoverTrigger>
-													<PopoverContent
-														align="start"
-														className=" w-auto p-0"
-													>
+													<PopoverContent align="start" className=" w-auto p-0">
 														<Calendar
 															mode="single"
 															captionLayout="dropdown-buttons"
-															selected={
-																dateOfBirth
-															}
-															onSelect={
-																setDateOfBirth
-															}
+															selected={dateOfBirth}
+															onSelect={setDateOfBirth}
 															fromYear={1960}
 															toYear={2030}
 														/>
@@ -724,161 +638,81 @@ export default function ProfilePage() {
 										<div className="grid grid-cols-2 gap-4">
 											<div className="col-span-1 space-y-1">
 												<Label htmlFor="age">Age</Label>
-												<Input
-													required
-													value={age}
-													onChange={(e) =>
-														setAge(e.target.value)
-													}
-													id="age"
-													type="age"
-												/>
+												<Input required value={age} onChange={(e) => setAge(e.target.value)} id="age" type="age" />
 											</div>
 											<div className="col-span-1 space-y-1">
-												<Label htmlFor="gender">
-													Gender
-												</Label>
-												<Select
-													required
-													value={gender}
-													onValueChange={(
-														value: string
-													) => setGender(value)}
-												>
+												<Label htmlFor="gender">Gender</Label>
+												<Select required value={gender} onValueChange={(value: string) => setGender(value)}>
 													<div>
 														<SelectTrigger className="w-full">
-															<SelectValue
-																placeholder={
-																	gender
-																}
-															/>
+															<SelectValue placeholder={gender} />
 														</SelectTrigger>
 													</div>
 													<SelectContent>
-														<SelectItem value="Male">
-															Male
-														</SelectItem>
-														<SelectItem value="Female">
-															Female
-														</SelectItem>
+														<SelectItem value="Male">Male</SelectItem>
+														<SelectItem value="Female">Female</SelectItem>
 													</SelectContent>
 												</Select>
 											</div>
 										</div>
 										<div className="grid grid-cols-2 gap-4">
 											<div className="col-span-1 space-y-1">
-												<Label htmlFor="nationality">
-													Nationality
-												</Label>
-												<Select
-													required
-													value={nationality}
-													onValueChange={(
-														value: string
-													) => setNationality(value)}
-												>
+												<Label htmlFor="nationality">Nationality</Label>
+												<Select required value={nationality} onValueChange={(value: string) => setNationality(value)}>
 													<div>
 														<SelectTrigger className="w-full">
-															<SelectValue
-																placeholder={
-																	nationality
-																}
-															/>
+															<SelectValue placeholder={nationality} />
 														</SelectTrigger>
 													</div>
 													<SelectContent>
-														<SelectItem value="Singaporean">
-															Singaporean
-														</SelectItem>
-														<SelectItem value="Singapore PR">
-															Singapore PR
-														</SelectItem>
-														<SelectItem value="Others">
-															Others
-														</SelectItem>
+														<SelectItem value="Singaporean">Singaporean</SelectItem>
+														<SelectItem value="Singapore PR">Singapore PR</SelectItem>
+														<SelectItem value="Others">Others</SelectItem>
 													</SelectContent>
 												</Select>
 											</div>
 											<div className="col-span-1 space-y-1">
-												<Label htmlFor="race">
-													Race
-												</Label>
-												<Select
-													required
-													value={race}
-													onValueChange={(
-														value: string
-													) => setRace(value)}
-												>
+												<Label htmlFor="race">Race</Label>
+												<Select required value={race} onValueChange={(value: string) => setRace(value)}>
 													<div>
 														<SelectTrigger className="w-full">
-															<SelectValue
-																placeholder={
-																	race
-																}
-															/>
+															<SelectValue placeholder={race} />
 														</SelectTrigger>
 													</div>
 													<SelectContent>
-														<SelectItem value="Chinese">
-															Chinese
-														</SelectItem>
-														<SelectItem value="Malay">
-															Malay
-														</SelectItem>
-														<SelectItem value="Indian">
-															Indian
-														</SelectItem>
-														<SelectItem value="Others">
-															Others
-														</SelectItem>
+														<SelectItem value="Chinese">Chinese</SelectItem>
+														<SelectItem value="Malay">Malay</SelectItem>
+														<SelectItem value="Indian">Indian</SelectItem>
+														<SelectItem value="Others">Others</SelectItem>
 													</SelectContent>
 												</Select>
 											</div>
 										</div>
 									</div>
 									<div style={profileCard.buttonContainer}>
-										<button
-											type="button"
-											style={
-												profileCard.resetPasswordButton
-											}
-											onClick={handleResetPassword}
-										>
+										<button type="button" style={profileCard.resetPasswordButton} onClick={handleResetPassword}>
 											Reset Password
 										</button>
-										<button
-											type="submit"
-											style={profileCard.saveButton}
-										>
+										<button type="submit" style={profileCard.saveButton}>
 											Save Changes
 										</button>
 									</div>
-									{error1 && (
-										<p style={{ color: "red" }}>{error1}</p>
-									)}
+									{error1 && <p style={{ color: "red" }}>{error1}</p>}
 								</form>
 							</div>
 						</div>
 					</div>
 					<div style={profileCard.container}>
 						<div style={sidebar.container}>
-							<h2 style={sidebar.title}>
-								Tutor Preferences & Experience
-							</h2>
+							<h2 style={sidebar.title}>Tutor Preferences & Experience</h2>
 							<form onSubmit={saveTutorPreferences}>
 								<div style={profileCard.card}>
 									<div className="space-y-3">
 										<div className="space-y-1">
-											<Label
-												htmlFor="levelsAndSubjects"
-												style={{ fontSize: "20px" }}
-											>
+											<Label htmlFor="levelsAndSubjects" style={{ fontSize: "20px" }}>
 												Levels and Subjects
 											</Label>
-											{Object.entries(
-												subjectsByCategory
-											).map(([category, subjects]) => (
+											{Object.entries(subjectsByCategory).map(([category, subjects]) => (
 												<div
 													key={category}
 													style={{
@@ -889,237 +723,106 @@ export default function ProfilePage() {
 														<input
 															type="checkbox"
 															id={category}
-															onChange={
-																handleLevelChange
-															}
-															style={
-																subjectStyle.checkboxes
-															}
-															checked={
-																showSubjects[
-																	category as keyof CheckedSubjects
-																]
-															}
+															onChange={handleLevelChange}
+															style={subjectStyle.checkboxes}
+															checked={showSubjects[category as keyof CheckedSubjects]}
 														/>
 														{category}
 													</label>
-													{showSubjects[
-														category as keyof CheckedSubjects
-													] && (
-														<div
-															style={
-																subjectStyle.container
-															}
-														>
-															{subjects.map(
-																(subject) => (
-																	<label
-																		key={
-																			subject
-																		}
-																	>
-																		<input
-																			type="checkbox"
-																			id={
-																				category
-																			}
-																			value={
-																				subject
-																			}
-																			onChange={
-																				handleSubjectChange
-																			}
-																			style={
-																				subjectStyle.checkboxes
-																			}
-																			checked={checkedSubjects[
-																				category as keyof CheckedSubjects
-																			].includes(
-																				subject
-																			)}
-																		/>
-																		{
-																			subject
-																		}
-																	</label>
-																)
-															)}
+													{showSubjects[category as keyof CheckedSubjects] && (
+														<div style={subjectStyle.container}>
+															{subjects.map((subject) => (
+																<label key={subject}>
+																	<input
+																		type="checkbox"
+																		id={category}
+																		value={subject}
+																		onChange={handleSubjectChange}
+																		style={subjectStyle.checkboxes}
+																		checked={checkedSubjects[category as keyof CheckedSubjects].includes(subject)}
+																	/>
+																	{subject}
+																</label>
+															))}
 														</div>
 													)}
 												</div>
 											))}
 										</div>
 										<div className="space-y-1">
-											<Label
-												htmlFor="location"
-												style={{ fontSize: "20px" }}
-											>
+											<Label htmlFor="location" style={{ fontSize: "20px" }}>
 												Locations
 											</Label>
-											<div
-												style={locationStyle.container}
-											>
+											<div style={locationStyle.container}>
 												{locations.map((loc) => (
 													<div key={loc[0]}>
 														<label key={loc[0]}>
 															<input
 																type="checkbox"
 																value={loc[0]}
-																onChange={
-																	handleLocationChange
-																}
-																style={
-																	locationStyle.checkboxes
-																}
-																checked={location.includes(
-																	loc[0]
-																)}
+																onChange={handleLocationChange}
+																style={locationStyle.checkboxes}
+																checked={location.includes(loc[0])}
 															/>
 															{loc[0]}
-															<span
-																style={
-																	locationStyle.places
-																}
-															>
-																{loc[1]}
-															</span>
+															<span style={locationStyle.places}>{loc[1]}</span>
 														</label>
 													</div>
 												))}
 											</div>
 										</div>
 										<div className="space-y-1">
-											<Label
-												htmlFor="experiences"
-												style={{ fontSize: "20px" }}
-											>
+											<Label htmlFor="experiences" style={{ fontSize: "20px" }}>
 												Experiences
 											</Label>
 											<div className="space-y-1">
-												<Label
-													htmlFor="yearsOfExperience"
-													style={questionStyle.title}
-												>
-													Short introduction of
-													yourself
+												<Label htmlFor="yearsOfExperience" style={questionStyle.title}>
+													Short introduction of yourself
 												</Label>
-												<span
-													style={
-														questionStyle.subtitle
-													}
-												>
-													Personal Qualities, Teaching
-													Style etc.
-												</span>
+												<span style={questionStyle.subtitle}>Personal Qualities, Teaching Style etc.</span>
 												<textarea
 													value={introduction}
-													onChange={(e) =>
-														handleTextChange(
-															e,
-															setIntroduction
-														)
-													}
-													style={
-														questionStyle.inputArea
-													}
-													placeholder={
-														introduction
-															? introduction
-															: `Enter your introduction (maximum ${maxWords} words)`
-													}
+													onChange={(e) => handleTextChange(e, setIntroduction)}
+													style={questionStyle.inputArea}
+													placeholder={introduction ? introduction : `Enter your introduction (maximum ${maxWords} words)`}
 													rows={5}
 												/>
-												<div
-													style={questionStyle.count}
-												>
-													{!introduction ||
-													introduction.trim() === ""
-														? 0
-														: introduction
-																.trim()
-																.split(/\s+/)
-																.length}
-													/{maxWords} words
+												<div style={questionStyle.count}>
+													{!introduction || introduction.trim() === "" ? 0 : introduction.trim().split(/\s+/).length}/
+													{maxWords} words
 												</div>
 											</div>
 											<div className="space-y-1">
-												<Label
-													htmlFor="summary"
-													style={questionStyle.title}
-												>
-													Summary of Teaching
-													Experiences and Academic
-													Achievements
+												<Label htmlFor="summary" style={questionStyle.title}>
+													Summary of Teaching Experiences and Academic Achievements
 												</Label>
-												<span
-													style={
-														questionStyle.subtitle
-													}
-												>
-													Schools or number of
-													students taught, grades
-													achieved by students etc.
+												<span style={questionStyle.subtitle}>
+													Schools or number of students taught, grades achieved by students etc.
 													<br />
-													Academic results, awards,
-													scholarships etc.
+													Academic results, awards, scholarships etc.
 												</span>
 												<textarea
 													value={summary}
-													onChange={(e) =>
-														handleTextChange(
-															e,
-															setSummary
-														)
-													}
-													style={
-														questionStyle.inputArea
-													}
+													onChange={(e) => handleTextChange(e, setSummary)}
+													style={questionStyle.inputArea}
 													placeholder={
-														summary
-															? summary
-															: `Enter your experiences and achievements (maximum ${maxWords} words)`
+														summary ? summary : `Enter your experiences and achievements (maximum ${maxWords} words)`
 													}
 													rows={5}
 												/>
-												<div
-													style={questionStyle.count}
-												>
-													{!summary ||
-													summary.trim() === ""
-														? 0
-														: summary
-																.trim()
-																.split(/\s+/)
-																.length}
-													/{maxWords} words
+												<div style={questionStyle.count}>
+													{!summary || summary.trim() === "" ? 0 : summary.trim().split(/\s+/).length}/{maxWords} words
 												</div>
 											</div>
 											<div className="space-y-1">
-												<Label
-													htmlFor="studentsRecord"
-													style={questionStyle.title}
-												>
+												<Label htmlFor="studentsRecord" style={questionStyle.title}>
 													Past Students&apos; Results
 												</Label>
-												<span
-													style={
-														questionStyle.subtitle
-													}
-												>
-													Past students&apos; results,
-													grades, improvements etc.
-												</span>
+												<span style={questionStyle.subtitle}>Past students&apos; results, grades, improvements etc.</span>
 												<textarea
 													value={studentsResults}
-													onChange={(e) =>
-														handleTextChange(
-															e,
-															setStudentsResults
-														)
-													}
-													style={
-														questionStyle.inputArea
-													}
+													onChange={(e) => handleTextChange(e, setStudentsResults)}
+													style={questionStyle.inputArea}
 													placeholder={
 														studentsResults
 															? studentsResults
@@ -1127,170 +830,91 @@ export default function ProfilePage() {
 													}
 													rows={5}
 												/>
-												<div
-													style={questionStyle.count}
-												>
-													{!studentsResults ||
-													studentsResults.trim() ===
-														""
+												<div style={questionStyle.count}>
+													{!studentsResults || studentsResults.trim() === ""
 														? 0
-														: studentsResults
-																.trim()
-																.split(/\s+/)
-																.length}
+														: studentsResults.trim().split(/\s+/).length}
 													/{maxWords} words
 												</div>
 											</div>
 										</div>
 									</div>
 									<div style={profileCard.buttonContainer}>
-										<button
-											type="submit"
-											style={profileCard.buttonFull}
-										>
+										<button type="submit" style={profileCard.buttonFull}>
 											Save Changes
 										</button>
 									</div>
-									{error2 && (
-										<p style={{ color: "red" }}>{error2}</p>
-									)}
+									{error2 && <p style={{ color: "red" }}>{error2}</p>}
 								</div>
 							</form>
 						</div>
 					</div>
 					<div style={profileCard.container}>
 						<div style={sidebar.container}>
-							<h2 style={sidebar.title}>
-								Academic Qualifications
-							</h2>
+							<h2 style={sidebar.title}>Academic Qualifications</h2>
 							<form onSubmit={savecademicQualificationsChanges}>
 								<div style={profileCard.card}>
 									<div className="space-y-2">
 										<div className="space-y-1">
-											<Label htmlFor="yearsOfExperience">
-												Years of Teaching Experience
-											</Label>
+											<Label htmlFor="yearsOfExperience">Years of Teaching Experience</Label>
 											<Input
 												required
 												value={yearsOfExperience}
-												onChange={(e) =>
-													setYearsOfExperience(
-														e.target.value
-													)
-												}
+												onChange={(e) => setYearsOfExperience(e.target.value)}
 												id="yearsOfExperience"
 												type="yearsOfExperience"
 											/>
 										</div>
 										<div className="space-y-1">
-											<Label htmlFor="typeOfTutor">
-												Type of Tutor
-											</Label>
-											<Select
-												required
-												value={typeOfTutor}
-												onValueChange={(
-													value: string
-												) => setTypeofTutor(value)}
-											>
+											<Label htmlFor="typeOfTutor">Type of Tutor</Label>
+											<Select required value={typeOfTutor} onValueChange={(value: string) => setTypeofTutor(value)}>
 												<div>
 													<SelectTrigger className="w-full">
-														<SelectValue
-															placeholder={
-																typeOfTutor
-															}
-														/>
+														<SelectValue placeholder={typeOfTutor} />
 													</SelectTrigger>
 												</div>
 												<SelectContent>
-													<SelectItem value="Poly/A level">
-														Poly / A Level student
-													</SelectItem>
-													<SelectItem value="Undergraduate">
-														Undergraduate
-													</SelectItem>
-													<SelectItem value="Part-Time">
-														Part-Time Tutor
-													</SelectItem>
-													<SelectItem value="Full-Time">
-														Full-Time Tutor
-													</SelectItem>
-													<SelectItem value="NIE Trainee">
-														NIE Trainee
-													</SelectItem>
-													<SelectItem value="Ex-MOE">
-														Ex-MOE Teacher
-													</SelectItem>
-													<SelectItem value="Current MOE">
-														Current MOE Teacher
-													</SelectItem>
+													<SelectItem value="Poly/A level">Poly / A Level student</SelectItem>
+													<SelectItem value="Undergraduate">Undergraduate</SelectItem>
+													<SelectItem value="Part-Time">Part-Time Tutor</SelectItem>
+													<SelectItem value="Full-Time">Full-Time Tutor</SelectItem>
+													<SelectItem value="NIE Trainee">NIE Trainee</SelectItem>
+													<SelectItem value="Ex-MOE">Ex-MOE Teacher</SelectItem>
+													<SelectItem value="Current MOE">Current MOE Teacher</SelectItem>
 												</SelectContent>
 											</Select>
 										</div>
 										<div className="space-y-1">
-											<Label htmlFor="highestEducationLevel">
-												Highest Education Level
-											</Label>
+											<Label htmlFor="highestEducationLevel">Highest Education Level</Label>
 											<Select
 												required
 												value={highestEducationLevel}
-												onValueChange={(
-													value: string
-												) =>
-													setHighestEducationLevel(
-														value
-													)
-												}
+												onValueChange={(value: string) => setHighestEducationLevel(value)}
 											>
 												<div>
 													<SelectTrigger className="w-full">
-														<SelectValue
-															placeholder={
-																highestEducationLevel
-															}
-														/>
+														<SelectValue placeholder={highestEducationLevel} />
 													</SelectTrigger>
 												</div>
 												<SelectContent>
-													<SelectItem value="Diploma">
-														Poly Diploma
-													</SelectItem>
-													<SelectItem value="A levels">
-														A Levels
-													</SelectItem>
-													<SelectItem value="Undergraduate">
-														Undergraduate
-													</SelectItem>
-													<SelectItem value="Bachelor Degree">
-														Bachelor Degree
-													</SelectItem>
-													<SelectItem value="Post-Graduate Diploma">
-														Post-Graduate Diploma
-													</SelectItem>
-													<SelectItem value="Masters Degree">
-														Masters Degree
-													</SelectItem>
-													<SelectItem value="PHD">
-														PHD
-													</SelectItem>
-													<SelectItem value="Others">
-														Others
-													</SelectItem>
+													<SelectItem value="Diploma">Poly Diploma</SelectItem>
+													<SelectItem value="A levels">A Levels</SelectItem>
+													<SelectItem value="Undergraduate">Undergraduate</SelectItem>
+													<SelectItem value="Bachelor Degree">Bachelor Degree</SelectItem>
+													<SelectItem value="Post-Graduate Diploma">Post-Graduate Diploma</SelectItem>
+													<SelectItem value="Masters Degree">Masters Degree</SelectItem>
+													<SelectItem value="PHD">PHD</SelectItem>
+													<SelectItem value="Others">Others</SelectItem>
 												</SelectContent>
 											</Select>
 										</div>
 									</div>
 									<div style={profileCard.buttonContainer}>
-										<button
-											type="submit"
-											style={profileCard.buttonFull}
-										>
+										<button type="submit" style={profileCard.buttonFull}>
 											Save Changes
 										</button>
 									</div>
-									{error3 && (
-										<p style={{ color: "red" }}>{error3}</p>
-									)}
+									{error3 && <p style={{ color: "red" }}>{error3}</p>}
 								</div>
 							</form>
 						</div>
