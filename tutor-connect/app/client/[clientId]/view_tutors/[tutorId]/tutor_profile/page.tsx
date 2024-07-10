@@ -32,11 +32,21 @@ type CheckedSubjects = {
 	"IB/IGCSE": string[];
 	"Diploma/Degree": string[];
 };
+
+type Review = {
+	id: number;
+	tutorId: number;
+	clientId: number;
+	rating: number;
+	review: string;
+	createdAt: string;
+};
 // TODO: Fetch rating from database
 export default function TutorProfile() {
 	const params = useParams();
 	const tutorId = params.tutorId;
 	const [profile, setProfile] = useState<Tutor | null>(null);
+	const [reviews, setReviews] = useState<Review[]>([]);
 
 	useEffect(() => {
 		const fetchTutorDetails = async () => {
@@ -55,6 +65,22 @@ export default function TutorProfile() {
 					setProfile(tutorData);
 				} else {
 					console.error("Failed to fetch tutor details");
+				}
+
+				const reviews = await fetch("/api/tutor/getReviews", {
+					method: "POST",
+					body: JSON.stringify({
+						tutorId: tutorId,
+					}),
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+				if (reviews.ok) {
+					const reviewsData = await reviews.json();
+					setReviews(reviewsData.reviews)
+				} else {
+					console.error("Failed to fetch reviews");
 				}
 			} catch (error) {
 				console.error("Error fetching tutor details:", error);
@@ -243,7 +269,7 @@ export default function TutorProfile() {
 							</p>
 						</div>
 						<div>
-							<Tabs>
+							<Tabs defaultValue="about">
 								<TabsList
 									className="grid w-full grid-cols-2"
 									style={{ marginBottom: "20px", backgroundColor: "#eff8fa", color: "#5790AB" }}
@@ -285,6 +311,14 @@ export default function TutorProfile() {
 											: "Tutor has yet to update"}
 									</p>
 								</TabsContent>
+								<TabsContent value="reviews">
+									{reviews.map((review) => (
+										<div key={review.id}>
+											<StarRating rating={review.rating} />
+											<p>{review.review}</p>
+										</div>
+									))}
+									</TabsContent>
 							</Tabs>
 						</div>
 					</div>

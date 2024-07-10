@@ -6,18 +6,6 @@ import Footer from "@/components/footer/footer";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import {
-	MultiSelector,
-	MultiSelectorContent,
-	MultiSelectorInput,
-	MultiSelectorItem,
-	MultiSelectorList,
-	MultiSelectorTrigger,
-} from "@/components/ui/multiselect";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { subjectsByCategory } from "@/utils/levelsAndSubjects";
 import { useParams, useRouter } from "next/navigation";
 import { ReviewForm } from "./form";
 import { Filter } from "./filter";
@@ -52,13 +40,6 @@ export default function ViewTutorsPage() {
 	const limit = 8;
 	const [startIndex, setStartIndex] = useState(0);
 	const [endIndex, setEndIndex] = useState(limit);
-	const [gender, setGender] = useState("");
-	const [race, setRace] = useState("");
-	const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
-	const [selectedSubject, setSelectedSubject] = useState<string[]>([]);
-	const [tutorType, setTutorType] = useState("");
-	const [yearsOfExperience, setYearsOfExperience] = useState("");
-	const [nameSearch, setNameSearch] = useState("");
 	const [clientName, setClientName] = useState("");
 	const [clientImage, setClientImage] = useState("");
 	const router = useRouter();
@@ -88,7 +69,7 @@ export default function ViewTutorsPage() {
 		};
 
 		fetchTutors();
-	}, [page, limit]);
+	}, [clientId, page, limit]);
 
 	const handlePreviousPage = () => {
 		if (page > 1) {
@@ -104,17 +85,6 @@ export default function ViewTutorsPage() {
 			setStartIndex(startIndex + limit);
 			setEndIndex(endIndex + limit);
 		}
-	};
-
-	const clearFilters = () => {
-		setGender("");
-		setRace("");
-		setSelectedLevel(null);
-		setSelectedSubject([]);
-		setTutorType("");
-		setYearsOfExperience("");
-		setFilteredTutors(tutors);
-		setNameSearch("");
 	};
 
 	const viewProfile = (id: number) => {
