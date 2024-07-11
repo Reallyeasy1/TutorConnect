@@ -340,7 +340,7 @@ const NavBar = () => {
 									alt="Profile Picture"
 									width={40}
 									height={40}
-									className="rounded-full  mr-2"
+									className="rounded-full mr-2"
 									style={{
 										width: "40px",
 										height: "40px",

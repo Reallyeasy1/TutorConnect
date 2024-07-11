@@ -81,12 +81,12 @@ model Tutor {
 
 model Review {
   id        Int      @id @default(autoincrement())
-  tutor     Tutor    @relation(fields: [tutorId], references: [id], name: "TutorReviews")
+  tutor     Tutor    @relation(fields: [tutorId], references: [id], name: "TutorReviews", onDelete: Cascade)
   tutorId   Int
   review    String
   rating    Int
   clientId  Int
-  client    Client   @relation(fields: [clientId], references: [id], name: "ClientReviews")
+  client    Client   @relation(fields: [clientId], references: [id], name: "ClientReviews", onDelete: Cascade)
   createdAt DateTime @default(now())
 }
 

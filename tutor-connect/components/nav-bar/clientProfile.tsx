@@ -19,6 +19,11 @@ export default function ClientProfile() {
 			cName: "dropdown-link",
 		},
 		{
+			title: "My Reviews",
+			path: "#",
+			cName: "dropdown-link",
+		},
+		{
 			title: "Sign Out",
 			path: "#",
 			cName: "dropdown-link",
@@ -28,7 +33,7 @@ export default function ClientProfile() {
 
 	return (
 		<div className="relative inline-block" style={{zIndex:50}}>
-			<ul className="absolute right-2 top-8 w-fit bg-white border border-gray-300 rounded shadow-lg">
+			<ul className="absolute right-5 top-8 bg-white border border-gray-300 rounded shadow-lg" style={{width: "110px"}}>
 				{clientItems.map((item, index) => (
 					<li
 						key={index}
