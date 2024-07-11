@@ -12,7 +12,7 @@ const StarRating: React.FC<StarRatingProps> = ({ rating, starSize = '32px' }) =>
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
     const emptyStars = totalStars - Math.ceil(rating);
-    const starCut = (rating / totalStars) * 100 + '%';
+    const starCut = (rating - Math.floor(rating)) * 100 + '%';
 
     return (
         <div style={{ display: 'flex' }}>

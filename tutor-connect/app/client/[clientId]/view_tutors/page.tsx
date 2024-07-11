@@ -88,9 +88,12 @@ export default function ViewTutorsPage() {
 	};
 
 	const viewProfile = (id: number) => {
-		return () => {
-			router.push(`/client/${clientId}/view_tutors/${id}/tutor_profile`);
-		};
+		const queryParams = new URLSearchParams({
+			clientName: clientName,
+			clientImage: clientImage,
+		}).toString();
+
+		return () => router.push(`/client/${clientId}/view_tutors/${id}/tutor_profile?${queryParams}`);
 	};
 
 	const styles = {
@@ -227,11 +230,7 @@ export default function ViewTutorsPage() {
 								<Button style={styles.blueButton} onClick={viewProfile(tutor.id)}>
 									View Profile
 								</Button>
-								<ReviewForm
-									tutor={tutor}
-									clientName={clientName}
-									clientImage={clientImage}
-								/>
+								<ReviewForm tutor={tutor} clientName={clientName} clientImage={clientImage} />
 								<Button style={styles.blueButton}>Make a Request</Button>
 							</div>
 						</div>

@@ -9,10 +9,16 @@ export async function POST(req: Request) {
 			where: {
 				tutorId: parseInt(tutorId),
 			},
+			include: {
+				client: true,
+			},
 		});
+
+		const averageRating = reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length;
 
 		return NextResponse.json({
 			reviews,
+			averageRating,
 		});
 	} catch (err: any) {
 		return NextResponse.json({ error: err.message }, { status: 500 });

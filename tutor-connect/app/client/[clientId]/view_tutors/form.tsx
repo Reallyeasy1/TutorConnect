@@ -52,6 +52,11 @@ export const ReviewForm: FC<ReviewFormProps> = ({ tutor, clientName, clientImage
     const postReview = async (e: React.FormEvent) => {
         e.preventDefault();
 
+		if (clientName === "") {
+			setError("You must be logged in to post a review");
+			return;
+		}
+
         if (rating === 0) {
             setError("Rating cannot be empty");
             return;
