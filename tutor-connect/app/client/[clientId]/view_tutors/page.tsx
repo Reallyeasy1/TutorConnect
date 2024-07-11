@@ -9,6 +9,8 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { useParams, useRouter } from "next/navigation";
 import { ReviewForm } from "./form";
 import { Filter } from "./filter";
+import TelegramLoading from "@/components/TelegramLoading";
+import Loading from "@/app/loading";
 
 type Tutor = {
 	id: number;
@@ -42,6 +44,7 @@ export default function ViewTutorsPage() {
 	const [endIndex, setEndIndex] = useState(limit);
 	const [clientName, setClientName] = useState("");
 	const [clientImage, setClientImage] = useState("");
+	const [loading, setLoading] = useState<boolean>(true);
 	const router = useRouter();
 	const params = useParams();
 	const clientId = params.clientId;
@@ -65,6 +68,8 @@ export default function ViewTutorsPage() {
 				setClientName(clientData.name);
 			} catch (error) {
 				console.error("Error fetching tutors:", error);
+			} finally {
+				setLoading(false);
 			}
 		};
 
@@ -186,6 +191,7 @@ export default function ViewTutorsPage() {
 			<div className="flex-grow flex flex-col justify-center items-center py-6">
 				<Filter tutors={tutors} setFilteredTutors={setFilteredTutors} />
 			</div>
+			{loading && <Loading />}
 			<div className="flex-grow flex flex-col justify-center items-center">
 				<div style={styles.tutorContainer}>
 					{filteredTutors.slice(startIndex, endIndex).map((tutor: Tutor) => (

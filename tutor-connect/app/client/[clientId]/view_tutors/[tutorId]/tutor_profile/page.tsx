@@ -11,6 +11,9 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { Button } from "@/components/ui/button";
 import { Client } from "@prisma/client";
 import { ReviewForm } from "../../form";
+import Spinner from "@/components/spinner/spinner";
+import TelegramLoading from "@/components/TelegramLoading";
+import Loading from "@/app/loading";
 
 type Tutor = {
 	id: number;
@@ -60,6 +63,7 @@ export default function TutorProfile() {
 	const limit = 5;
 	const [startIndex, setStartIndex] = useState(0);
 	const [endIndex, setEndIndex] = useState(limit);
+	const [loading, setLoading] = useState<boolean>(true);
 	const searchParams = useSearchParams()
 	const clientName = searchParams.get("clientName");
 	const clientImage = searchParams.get("clientImage");
@@ -103,6 +107,8 @@ export default function TutorProfile() {
 				}
 			} catch (error) {
 				console.error("Error fetching tutor details:", error);
+			} finally {
+				setLoading(false);
 			}
 		};
 		fetchTutorDetails();
@@ -332,6 +338,7 @@ export default function TutorProfile() {
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
 			<NavBar />
+			{loading && <Loading />}
 			{profile && (
 				<div style={styles.sectionContainer}>
 					<div style={styles.leftSide}>
