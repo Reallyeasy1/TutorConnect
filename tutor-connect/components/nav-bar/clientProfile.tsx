@@ -20,7 +20,7 @@ export default function ClientProfile() {
 		},
 		{
 			title: "My Reviews",
-			path: "#",
+			path: `/client/${clientId}/my_reviews`,
 			cName: "dropdown-link",
 		},
 		{

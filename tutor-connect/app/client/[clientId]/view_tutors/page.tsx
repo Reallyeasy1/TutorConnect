@@ -9,7 +9,6 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { useParams, useRouter } from "next/navigation";
 import { ReviewForm } from "./form";
 import { Filter } from "./filter";
-import TelegramLoading from "@/components/TelegramLoading";
 import Loading from "@/app/loading";
 
 type Tutor = {
