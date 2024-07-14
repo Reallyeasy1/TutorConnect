@@ -227,24 +227,24 @@ export const RegisterForm = () => {
 						},
 					};
 
-					const strapiResponse = await fetch(
-						"https://www.tutorconnect.live/api/accounts",
-						{
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json",
-							},
-							body: JSON.stringify(strapiData),
-						}
-					);
+					// const strapiResponse = await fetch(
+					// 	"https://www.tutorconnect.live/api/accounts",
+					// 	{
+					// 		method: "POST",
+					// 		headers: {
+					// 			"Content-Type": "application/json",
+					// 		},
+					// 		body: JSON.stringify(strapiData),
+					// 	}
+					// );
 
-					if (!strapiResponse.ok) {
-						throw new Error("Failed to upload to Strapi");
-					}
+					// if (!strapiResponse.ok) {
+					// 	throw new Error("Failed to upload to Strapi");
+					// }
 
-					const strapiResponseData = await strapiResponse.json();
-					console.log(strapiResponseData); // Outputs the result
-					console.log("Upload to Strapi success");
+					// const strapiResponseData = await strapiResponse.json();
+					// console.log(strapiResponseData); // Outputs the result
+					// console.log("Upload to Strapi success");
 
 					router.push("/tutor/verify_email?tutortId=" + data.id);
 				} else {
