@@ -143,6 +143,8 @@ export default function MyReviews() {
 			fontWeight: "bold" as "bold",
 			font: "Poppins",
 			marginRight: "20px",
+			alignItems: "center",
+			display: "flex",
 		},
 		activeButton: {
 			backgroundColor: "#5790AB",

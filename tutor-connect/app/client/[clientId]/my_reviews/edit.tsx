@@ -97,13 +97,14 @@ export const EditReview: FC<ReviewFormProps> = ({ review }) => {
 		},
 		whiteButton: {
 			backgroundColor: "#fff",
-			color: "#000",
+			color: "#5790AB",
 			font: "Poppins",
 			fontWeight: "bold",
 			fontSize: "16px",
 			width: "100%",
 			gridColumn: "span 1",
 			marginTop: "10px",
+			border: "1px solid #5790AB",
 		},
 		inactiveButton: {
 			backgroundColor: "#fff",
