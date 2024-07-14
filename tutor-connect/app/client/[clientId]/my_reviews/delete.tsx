@@ -69,7 +69,7 @@ export const DeletePopup: FC<ReviewFormProps> = ({ reviewId }) => {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button variant="destructive" style={{ font: "Poppins", fontWeight: "bold" }}>
+				<Button variant="destructive" style={{ font: "Poppins", fontWeight: "bold", fontSize: "16px" }}>
 					Delete
 				</Button>
 			</DialogTrigger>

@@ -95,6 +95,16 @@ export const EditReview: FC<ReviewFormProps> = ({ review }) => {
 			gridColumn: "span 1",
 			marginTop: "10px",
 		},
+		whiteButton: {
+			backgroundColor: "#fff",
+			color: "#000",
+			font: "Poppins",
+			fontWeight: "bold",
+			fontSize: "16px",
+			width: "100%",
+			gridColumn: "span 1",
+			marginTop: "10px",
+		},
 		inactiveButton: {
 			backgroundColor: "#fff",
 			color: "#5790AB",
@@ -257,7 +267,7 @@ export const EditReview: FC<ReviewFormProps> = ({ review }) => {
 								Save Changes
 							</Button>
 							<DialogClose asChild>
-								<Button variant="outline" className="w-full">
+								<Button variant="outline" className="w-full" style={styles.whiteButton}>
 									Cancel
 								</Button>
 							</DialogClose>
