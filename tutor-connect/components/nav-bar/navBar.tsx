@@ -194,7 +194,7 @@ const NavBar = () => {
 						Home
 					</a>
 				</div>
-				<div className="relative" ref={clientDropdownRef}>
+				{(session?.user?.randomKey == "client" || !session) && (<div className="relative" ref={clientDropdownRef}>
 					<button
 						style={hoverText(0)}
 						onMouseEnter={() => handleMouseEnter(0)}
@@ -213,8 +213,8 @@ const NavBar = () => {
 						/>
 					</button>
 					{clientsDropdown && <ClientDropdown />}
-				</div>
-				<div className="relative" ref={tutorDropdownRef}>
+				</div>)}
+				{(session?.user?.randomKey == "tutor" || !session) && (<div className="relative" ref={tutorDropdownRef}>
 					<button
 						style={hoverText(1)}
 						onMouseEnter={() => handleMouseEnter(1)}
@@ -233,7 +233,7 @@ const NavBar = () => {
 						/>
 					</button>
 					{tutorsDropdown && <TutorDropdown />}
-				</div>
+				</div>)}
 				<div>
 					<a
 						href="/rates"

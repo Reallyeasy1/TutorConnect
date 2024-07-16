@@ -273,6 +273,21 @@ export default function ProfilePage() {
 		e.preventDefault();
 		const levelAndSubjects = checkedSubjects;
 
+		if (introduction.trim().split(/\s+/).length > 100) {
+			setError2("Max word limit exceeded for Short Introduction of yourself.");
+			return;
+		}
+
+		if (summary.trim().split(/\s+/).length > 100) {
+			setError2("Max word limit exceeded for Summary of Teaching Experiences and Academic Achievements.");
+			return;
+		}
+
+		if (studentsResults.trim().split(/\s+/).length > 100) {
+			setError2("Max word limit exceeded for Past Students' Results.");
+			return;
+		}
+
 		try {
 			const res = await fetch("/api/tutor/profile/preferences", {
 				method: "POST",
@@ -290,6 +305,7 @@ export default function ProfilePage() {
 			});
 			if (res.ok) {
 				alert("Changes saved successfully");
+				router.refresh();
 			} else {
 				alert("Failed to save changes");
 			}
@@ -316,6 +332,7 @@ export default function ProfilePage() {
 			});
 			if (res.ok) {
 				alert("Changes saved successfully");
+				router.refresh();
 			} else {
 				alert("Failed to save changes");
 			}
@@ -874,13 +891,9 @@ export default function ProfilePage() {
 													</SelectTrigger>
 												</div>
 												<SelectContent>
-													<SelectItem value="Poly/A level">Poly / A Level student</SelectItem>
-													<SelectItem value="Undergraduate">Undergraduate</SelectItem>
-													<SelectItem value="Part-Time">Part-Time Tutor</SelectItem>
-													<SelectItem value="Full-Time">Full-Time Tutor</SelectItem>
-													<SelectItem value="NIE Trainee">NIE Trainee</SelectItem>
-													<SelectItem value="Ex-MOE">Ex-MOE Teacher</SelectItem>
-													<SelectItem value="Current MOE">Current MOE Teacher</SelectItem>
+													<SelectItem value="Part-Time Tutor">Part-Time Tutor</SelectItem>
+													<SelectItem value="Full-Time Tutor">Full-Time Tutor</SelectItem>
+													<SelectItem value="Ex/Current MOE Teacher">Ex/Current MOE Teacher</SelectItem>
 												</SelectContent>
 											</Select>
 										</div>

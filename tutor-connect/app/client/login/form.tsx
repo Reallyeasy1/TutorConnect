@@ -7,7 +7,6 @@ import { Label } from "@radix-ui/react-label";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import jwt from "jsonwebtoken";
 
 export const Form = () => {
   const router = useRouter();
@@ -77,6 +76,7 @@ export const Form = () => {
           console.log(strapiResponseData); // Outputs the result
           console.log("Upload to Strapi success");
           */
+
           router.push(`/client/${data.id}/assignment/client_assignment`);
         } else {
           setError("Failed to retrieve user information");
