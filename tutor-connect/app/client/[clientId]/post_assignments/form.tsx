@@ -16,24 +16,9 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect } from "react";
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectLabel,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { levels, subjectsByLevel } from "@/utils/levelsAndSubjects";
 
 export const PostAssignmentForm = () => {
@@ -66,9 +51,7 @@ export const PostAssignmentForm = () => {
 	useEffect(() => {
 		async function getDetails() {
 			try {
-				const response = await fetch(
-					`/api/client/getDetails?clientId=${clientId}`
-				);
+				const response = await fetch(`/api/client/getDetails?clientId=${clientId}`);
 				const data = await response.json();
 				setAddress(data.address);
 				setPostalCode(data.postalCode);
@@ -113,16 +96,14 @@ export const PostAssignmentForm = () => {
 
 	const geocodeAddress = async (address: string) => {
 		const response = await fetch(
-			`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-				address
-			)}&key=${process.env.MAPS_API_KEY}`
+			`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${process.env.MAPS_API_KEY}`
 		);
 		const data = await response.json();
 		if (data.status === "OK") {
 			const { lat, lng } = data.results[0].geometry.location;
 			const locationString = `${lat},${lng}`;
 			setLocation(locationString);
-			console.log(location)
+			console.log(location);
 			return;
 		} else {
 			setError("Invalid address, please enter a valid address");
@@ -203,145 +184,97 @@ export const PostAssignmentForm = () => {
 
 	return (
 		<form onSubmit={onSubmit}>
-			<Tabs
-				value={currentTab}
-				onValueChange={setCurrentTab}
-				className="w-full"
-			>
+			<Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
 				<TabsList className="grid w-full grid-cols-2">
-					<TabsTrigger value="lessonDetails">
-						Lesson Details
-					</TabsTrigger>
-					<TabsTrigger value="tutorDetails">
-						Tutor Details
-					</TabsTrigger>
+					<TabsTrigger value="lessonDetails">Lesson Details</TabsTrigger>
+					<TabsTrigger value="tutorDetails">Tutor Details</TabsTrigger>
 				</TabsList>
 				<TabsContent value="lessonDetails">
 					<Card style={{ minWidth: "500px" }}>
 						<CardHeader>
 							<CardTitle>Lesson Details</CardTitle>
-							<CardDescription>
-								Fill up your lesson details. Click next when
-								you&apos;re done.
-							</CardDescription>
+							<CardDescription>Fill up your lesson details. Click next when you&apos;re done.</CardDescription>
 						</CardHeader>
 						<CardContent className="space-y-2">
 							<div className="space-y-2">
 								<Label htmlFor="Level">Level</Label>
-								<Select
-									required
-									value={level}
-									onValueChange={(value: string) =>
-										setLevel(value)
-									}
-								>
+								<Select required value={level} onValueChange={(value: string) => setLevel(value)}>
 									<div>
 										<SelectTrigger className="w-full">
 											<SelectValue placeholder="Select a Level" />
 										</SelectTrigger>
 									</div>
 									<SelectContent>
-										{Object.entries(levels).map(
-											([category, levels]) => (
-												<SelectGroup key = {category}>
-													<SelectLabel>
-														{category}
-													</SelectLabel>
-													{levels.map((level) => (
-														<SelectItem
-															key={level}
-															value={level}
-														>
-															{level}
-														</SelectItem>
-													))}
-												</SelectGroup>
-											)
-										)}
+										{Object.entries(levels).map(([category, levels]) => (
+											<SelectGroup key={category}>
+												<SelectLabel>{category}</SelectLabel>
+												{levels.map((level) => (
+													<SelectItem key={level} value={level}>
+														{level}
+													</SelectItem>
+												))}
+											</SelectGroup>
+										))}
 									</SelectContent>
 								</Select>
 								{level === "Others" && (
 									<Input
 										required
 										placeholder="Enter Level (Example: Grade 5)"
-										onChange={(e) =>
-											setOtherLevel(e.target.value)
-										}
+										onChange={(e) => setOtherLevel(e.target.value)}
 										id="otherLevel"
 										type="text"
 									/>
 								)}
-								{(level === "Poly" ||
-									level === "University") && (
+								{(level === "Poly" || level === "University") && (
 									<Input
 										required
 										placeholder="Enter Level (Example: Y2 NUS/Y1 SP)"
-										onChange={(e) =>
-											setOtherLevel(e.target.value)
-										}
+										onChange={(e) => setOtherLevel(e.target.value)}
 										id="otherLevel"
 										type="text"
 									/>
 								)}
 							</div>
-							{level !== "Poly" &&
-								level !== "University" &&
-								level !== "Others" &&
-								level && (
-									<div className="space-y-2">
-										<Label htmlFor="Subject">Subject</Label>
-										<Select
-											required
-											value={subject}
-											onValueChange={(value) =>
-												setSubject(value)
-											}
-										>
-											<div>
-												<SelectTrigger className="w-full">
-													<SelectValue placeholder="Select a Subject" />
-												</SelectTrigger>
-											</div>
-											<SelectContent>
-												{subjectsByLevel[level].map(
-													(subject: string) => (
-														<SelectItem
-															key={subject}
-															value={subject}
-														>
-															{subject}
-														</SelectItem>
-													)
-												)}
-											</SelectContent>
-										</Select>
-									</div>
-								)}
-							{(level === "Poly" ||
-								level === "University" && level) && (
+							{level !== "Poly" && level !== "University" && level !== "Others" && level && (
+								<div className="space-y-2">
+									<Label htmlFor="Subject">Subject</Label>
+									<Select required value={subject} onValueChange={(value) => setSubject(value)}>
+										<div>
+											<SelectTrigger className="w-full">
+												<SelectValue placeholder="Select a Subject" />
+											</SelectTrigger>
+										</div>
+										<SelectContent>
+											{subjectsByLevel[level].map((subject: string) => (
+												<SelectItem key={subject} value={subject}>
+													{subject}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+								</div>
+							)}
+							{(level === "Poly" || (level === "University" && level)) && (
 								<div className="space-y-2">
 									<Label htmlFor="Subject">Subject</Label>
 									<Input
 										required
 										value={subject}
-										onChange={(e) =>
-											setSubject(e.target.value)
-										}
+										onChange={(e) => setSubject(e.target.value)}
 										id="subject"
 										type="text"
 										placeholder="Please specify Module Name and Module Code (if any)"
 									/>
 								</div>
 							)}
-							{(level === "Others" && level) && (
+							{level === "Others" && level && (
 								<div className="space-y-2">
 									<Label htmlFor="Subject">Subject</Label>
 									<Input
 										required
 										value={subject}
-										onChange={(e) =>
-											setSubject(e.target.value)
-										}
+										onChange={(e) => setSubject(e.target.value)}
 										id="subject"
 										type="text"
 										placeholder="Enter Subject (Example: Piano)"
@@ -351,56 +284,30 @@ export const PostAssignmentForm = () => {
 							{/* Tutee Location */}
 							<div className="space-y-2">
 								<Label htmlFor="address">Address</Label>
-								<Input
-									required
-									value={address}
-									onChange={(e) => setAddress(e.target.value)}
-									id="address"
-									type="text"
-								/>
+								<Input required value={address} onChange={(e) => setAddress(e.target.value)} id="address" type="text" />
 							</div>
 							{/* Tutee Location */}
 							<div className="space-y-2">
 								<Label htmlFor="postalCode">Postal Code</Label>
-								<Input
-									required
-									value={postalCode}
-									onChange={(e) =>
-										setPostalCode(e.target.value)
-									}
-									id="postalCode"
-									type="text"
-								/>
+								<Input required value={postalCode} onChange={(e) => setPostalCode(e.target.value)} id="postalCode" type="text" />
 							</div>
 							<div className="grid grid-cols-2 gap-4">
 								<div className="col-span-1 space-y-1">
-									<Label htmlFor="minRate">
-										Min Hourly Rate
-									</Label>
+									<Label htmlFor="minRate">Min Hourly Rate</Label>
 									<Input
 										required
 										value={minRate}
-										onChange={(e) =>
-											setMinRate(
-												parseFloat(e.target.value)
-											)
-										}
+										onChange={(e) => setMinRate(parseFloat(e.target.value))}
 										id="minRate"
 										type="number"
 									/>
 								</div>
 								<div className="col-span-1 space-y-1">
-									<Label htmlFor="maxRate">
-										Max Hourly Rate
-									</Label>
+									<Label htmlFor="maxRate">Max Hourly Rate</Label>
 									<Input
 										required
 										value={maxRate}
-										onChange={(e) =>
-											setMaxRate(
-												parseFloat(e.target.value)
-											)
-										}
+										onChange={(e) => setMaxRate(parseFloat(e.target.value))}
 										id="maxRate"
 										type="number"
 									/>
@@ -409,83 +316,49 @@ export const PostAssignmentForm = () => {
 							<div className="grid grid-cols-2 gap-4">
 								<div className="col-span-1 space-y-1">
 									<Label htmlFor="duration">Duration</Label>
-									<Select
-										required
-										value={duration}
-										onValueChange={(value: string) =>
-											setDuration(value)
-										}
-									>
+									<Select required value={duration} onValueChange={(value: string) => setDuration(value)}>
 										<div>
 											<SelectTrigger className="w-full">
 												<SelectValue placeholder="Select a duration" />
 											</SelectTrigger>
 										</div>
 										<SelectContent>
-											<SelectItem value="1h">
-												1h
-											</SelectItem>
-											<SelectItem value="1.5h">
-												1.5h
-											</SelectItem>
-											<SelectItem value="2h">
-												2h
-											</SelectItem>
-											<SelectItem value="2.5h">
-												2.5h
-											</SelectItem>
-											<SelectItem value="3h">
-												3h
-											</SelectItem>
+											<SelectItem value="1h">1h</SelectItem>
+											<SelectItem value="1.5h">1.5h</SelectItem>
+											<SelectItem value="2h">2h</SelectItem>
+											<SelectItem value="2.5h">2.5h</SelectItem>
+											<SelectItem value="3h">3h</SelectItem>
 										</SelectContent>
 									</Select>
 								</div>
 								<div className="col-span-1 space-y-1">
 									<Label htmlFor="maxRate">Frequency</Label>
-									<Select
-										required
-										value={frequency}
-										onValueChange={(value: string) =>
-											setFrequency(value)
-										}
-									>
+									<Select required value={frequency} onValueChange={(value: string) => setFrequency(value)}>
 										<div>
 											<SelectTrigger className="w-full">
 												<SelectValue placeholder="Select a frequency" />
 											</SelectTrigger>
 										</div>
 										<SelectContent>
-											<SelectItem value="1x a week">
-												1 Lesson/Week
-											</SelectItem>
-											<SelectItem value="2x a week">
-												2 Lesson/Week
-											</SelectItem>
-											<SelectItem value="3x a week">
-												3 Lesson/Week
-											</SelectItem>
+											<SelectItem value="1x a week">1 Lesson/Week</SelectItem>
+											<SelectItem value="2x a week">2 Lesson/Week</SelectItem>
+											<SelectItem value="3x a week">3 Lesson/Week</SelectItem>
 										</SelectContent>
 									</Select>
 								</div>
 							</div>
 							<div className="space-y-2">
-								<Label htmlFor="additionalDetails">
-									Additional Details
-								</Label>
+								<Label htmlFor="additionalDetails">Additional Details</Label>
 								<Input
 									value={additionalDetails}
-									onChange={(e) =>
-										setAdditionalDetails(e.target.value)
-									}
+									onChange={(e) => setAdditionalDetails(e.target.value)}
 									id="additionalDetails"
 									type="additionalDetails"
 									placeholder="Example: Tutor to be bilingual, patient"
 								/>
 							</div>
 							{/* Error Message */}
-							{error && (
-								<div className="text-red-500">{error}</div>
-							)}
+							{error && <div className="text-red-500">{error}</div>}
 							{/* Submit Button */}
 						</CardContent>
 						<CardFooter>
@@ -502,44 +375,28 @@ export const PostAssignmentForm = () => {
 						</CardHeader>
 						<CardContent className="space-y-2">
 							<div className="space-y-2">
-								<Label htmlFor="typeOfTutor">
-									Type of Tutor
-								</Label>
+								<Label htmlFor="typeOfTutor">Type of Tutor</Label>
 								<div className="flex items-center space-x-2">
 									<input
 										type="checkbox"
-										id="Part-Time"
-										checked={typeOfTutor.includes(
-											"Part-Time"
-										)}
-										onChange={() =>
-											handleTutorChange("Part-Time")
-										}
+										id="Part-Time Tutor"
+										checked={typeOfTutor.includes("Part-Time Tutor")}
+										onChange={() => handleTutorChange("Part-Time Tutor")}
 										className="form-checkbox h-3 w-3 text-indigo-600"
 									/>
-									<label
-										htmlFor="Part-Time"
-										style={{ fontSize: "14px" }}
-									>
+									<label htmlFor="Part-Time Tutor" style={{ fontSize: "14px" }}>
 										Part-Time tutor
 									</label>
 								</div>
 								<div className="flex items-center space-x-2">
 									<input
 										type="checkbox"
-										id="Full-Time"
-										checked={typeOfTutor.includes(
-											"Full-Time"
-										)}
-										onChange={() =>
-											handleTutorChange("Full-Time")
-										}
+										id="Full-Time Tutor"
+										checked={typeOfTutor.includes("Full-Time Tutor")}
+										onChange={() => handleTutorChange("Full-Time Tutor")}
 										className="form-checkbox h-3 w-3 text-indigo-600"
 									/>
-									<label
-										htmlFor="Full-Time"
-										style={{ fontSize: "14px" }}
-									>
+									<label htmlFor="Full-Time Tutor" style={{ fontSize: "14px" }}>
 										Full-Time Tutor
 									</label>
 								</div>
@@ -547,50 +404,27 @@ export const PostAssignmentForm = () => {
 									<input
 										type="checkbox"
 										id="Ex/Current MOE Teacher"
-										checked={typeOfTutor.includes(
-											"Ex/Current MOE Teacher"
-										)}
-										onChange={() =>
-											handleTutorChange(
-												"Ex/Current MOE Teacher"
-											)
-										}
+										checked={typeOfTutor.includes("Ex/Current MOE Teacher")}
+										onChange={() => handleTutorChange("Ex/Current MOE Teacher")}
 										className="form-checkbox h-3 w-3 text-indigo-600"
 									/>
-									<label
-										htmlFor="Ex/Current MOE Teacher"
-										style={{ fontSize: "14px" }}
-									>
+									<label htmlFor="Ex/Current MOE Teacher" style={{ fontSize: "14px" }}>
 										Ex/Current MOE Teacher
 									</label>
 								</div>
 							</div>
 							<div className="space-y-2">
-								<Label htmlFor="gender">
-									Gender Preference
-								</Label>
-								<Select
-									required
-									value={gender}
-									onValueChange={(value: string) =>
-										setGender(value)
-									}
-								>
+								<Label htmlFor="gender">Gender Preference</Label>
+								<Select required value={gender} onValueChange={(value: string) => setGender(value)}>
 									<div>
 										<SelectTrigger className="w-full">
 											<SelectValue placeholder="Select a gender" />
 										</SelectTrigger>
 									</div>
 									<SelectContent>
-										<SelectItem value="Male">
-											Male
-										</SelectItem>
-										<SelectItem value="Female">
-											Female
-										</SelectItem>
-										<SelectItem value="No Preference">
-											No Preference
-										</SelectItem>
+										<SelectItem value="Male">Male</SelectItem>
+										<SelectItem value="Female">Female</SelectItem>
+										<SelectItem value="No Preference">No Preference</SelectItem>
 									</SelectContent>
 								</Select>
 							</div>
@@ -605,10 +439,7 @@ export const PostAssignmentForm = () => {
 									onChange={() => handleRaceChange("Chinese")}
 									className="form-checkbox h-3 w-3 text-indigo-600"
 								/>
-								<label
-									htmlFor="Chinese"
-									style={{ fontSize: "14px" }}
-								>
+								<label htmlFor="Chinese" style={{ fontSize: "14px" }}>
 									Chinese
 								</label>
 							</div>
@@ -620,10 +451,7 @@ export const PostAssignmentForm = () => {
 									onChange={() => handleRaceChange("Malay")}
 									className="form-checkbox h-3 w-3 text-indigo-600"
 								/>
-								<label
-									htmlFor="Malay"
-									style={{ fontSize: "14px" }}
-								>
+								<label htmlFor="Malay" style={{ fontSize: "14px" }}>
 									Malay
 								</label>
 							</div>
@@ -635,10 +463,7 @@ export const PostAssignmentForm = () => {
 									onChange={() => handleRaceChange("Indian")}
 									className="form-checkbox h-3 w-3 text-indigo-600"
 								/>
-								<label
-									htmlFor="Indian"
-									style={{ fontSize: "14px" }}
-								>
+								<label htmlFor="Indian" style={{ fontSize: "14px" }}>
 									Indian
 								</label>
 							</div>
@@ -647,37 +472,26 @@ export const PostAssignmentForm = () => {
 									type="checkbox"
 									id="No Preference"
 									checked={race.includes("No Preference")}
-									onChange={() =>
-										handleRaceChange("No Preference")
-									}
+									onChange={() => handleRaceChange("No Preference")}
 									className="form-checkbox h-3 w-3 text-indigo-600"
 								/>
-								<label
-									htmlFor="No Preference"
-									style={{ fontSize: "14px" }}
-								>
+								<label htmlFor="No Preference" style={{ fontSize: "14px" }}>
 									No Preference
 								</label>
 							</div>
 							<div className="space-y-2">
-								<Label htmlFor="availability">
-									Availability
-								</Label>
+								<Label htmlFor="availability">Availability</Label>
 								<Input
 									required
 									value={availability}
-									onChange={(e) =>
-										setAvailability(e.target.value)
-									}
+									onChange={(e) => setAvailability(e.target.value)}
 									id="availability"
 									type="text"
 									placeholder="Example: Mon - Wed: 3pm - 5pm"
 								/>
 							</div>
 							{/* Error Message */}
-							{error && (
-								<div className="text-red-500">{error}</div>
-							)}
+							{error && <div className="text-red-500">{error}</div>}
 						</CardContent>
 						<CardFooter className="flex justify-between space-x-2">
 							<Button onClick={onBack} className="flex-1">

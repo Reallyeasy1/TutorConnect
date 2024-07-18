@@ -18,6 +18,7 @@ import {
 	MultiSelectorTrigger,
 } from "@/components/ui/multiselect";
 import Loading from "@/app/loading";
+import { Filter } from "./filter";
 
 interface Assignment {
 	id: number;
@@ -48,13 +49,13 @@ const AssignmentRow = ({ assignments, selectedAssignment }: { assignments: Assig
 	const tutorId = params.tutorId;
 
 	return (
-		<div className="grid grid-cols-3 gap-2 p-6">
+		<div className="grid grid-cols-3 gap-2 p-4">
 			{assignments.map((assignment) => (
 				<div
 					key={assignment.id}
 					className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl flex flex-col justify-between"
 					style={{
-						border: selectedAssignment == assignment ? "4px solid #5790AB" : "none",
+						border: selectedAssignment == assignment ? "4px solid #5790AB" : "1px solid #ddd",
 					}}
 				>
 					<div>
@@ -107,9 +108,8 @@ const AssignmentRow = ({ assignments, selectedAssignment }: { assignments: Assig
 
 export default function AllAssignments() {
 	const [assignments, setAssignments] = useState<Assignment[]>([]);
+	const [filteredAssignments, setFilteredAssignments] = useState<Assignment[]>([]);
 	const [error, setError] = useState<string | null>(null);
-	const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
-	const [selectedSubject, setSelectedSubject] = useState<string[]>([]);
 	const router = useRouter();
 	const params = useParams();
 	const tutorId = params.tutorId;
@@ -159,6 +159,7 @@ export default function AllAssignments() {
 					setAssignments(data);
 
 					const availableAssignments = data.filter((assignment: Assignment) => assignment.taken === false);
+					setFilteredAssignments(availableAssignments);
 
 					const markerPromises = availableAssignments.map((assignment: Assignment) => ({
 						lat: assignment.coordinates[0],
@@ -188,16 +189,6 @@ export default function AllAssignments() {
 		setZoom(15);
 	};
 
-	const filteredAssignments = assignments.filter(
-		(assignment) =>
-			(!selectedLevel || assignment.level.includes(selectedLevel)) && (!selectedSubject.length || selectedSubject.includes(assignment.subject))
-	);
-
-	const clearFilters = () => {
-		setSelectedLevel(null);
-		setSelectedSubject([]);
-	};
-
 	const filteredMarkers = markers.filter((marker) => filteredAssignments.some((assignment) => assignment.id === marker.assignment.id));
 
 	if (error) {
@@ -218,73 +209,12 @@ export default function AllAssignments() {
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
 			<NavBar />
-			<div className="p-6">
-				<div className="flex space-x-4 mb-4">
-					<div className="w-5/12 space-y-1">
-						<Label htmlFor="level">Level</Label>
-						<Select value={selectedLevel || ""} onValueChange={(value: string) => setSelectedLevel(value)}>
-							<SelectTrigger className="w-full">
-								<SelectValue placeholder="Select a Level" />
-							</SelectTrigger>
-							<SelectContent>
-								{Object.entries(levels).map(([category, levels]) => (
-									<SelectGroup key={category}>
-										<SelectLabel>{category}</SelectLabel>
-										{levels.map((level: string) => (
-											<SelectItem key={level} value={level}>
-												{level}
-											</SelectItem>
-										))}
-									</SelectGroup>
-								))}
-							</SelectContent>
-						</Select>
-					</div>
-					<div className="w-5/12 space-y-1">
-						<Label htmlFor="subject">Subject</Label>
-						<MultiSelector
-							values={selectedSubject}
-							onValuesChange={setSelectedSubject}
-							loop={false}
-							disabled={!selectedLevel || selectedLevel === "Poly" || selectedLevel === "University"}
-							className="space-y-0"
-						>
-							<MultiSelectorTrigger className="w-full">
-								<MultiSelectorInput placeholder={"Select a Subject"} style={{ fontSize: "15px" }} />
-							</MultiSelectorTrigger>
-							<MultiSelectorContent>
-								<MultiSelectorList>
-									{selectedLevel &&
-										subjectsByLevel[selectedLevel].map((subject: string) => (
-											<MultiSelectorItem key={subject} value={subject}>
-												{subject}
-											</MultiSelectorItem>
-										))}
-								</MultiSelectorList>
-							</MultiSelectorContent>
-						</MultiSelector>
-					</div>
-					<div className="w-1/6 space-y-1">
-						<Label>
-							<span>&nbsp;</span>
-						</Label>
-						<Button onClick={clearFilters} className="w-full">
-							Clear Filters
-						</Button>
-					</div>
-				</div>
-				<div className="mb-4 w-full">
-					<button
-						className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
-						onClick={() => router.push(`/tutor/${tutorId}/accepted_assignments`)}
-					>
-						View Accepted Assignments
-					</button>
-				</div>
+			<div className="flex-grow flex flex-col justify-center items-center py-6">
+				<Filter assignments={assignments} setFilteredAssignments={setFilteredAssignments} tutorId={tutorId} />
 			</div>
 			{loading && <Loading />}
 			<div className="flex-grow grid grid-cols-3 gap-8" style={{ height: "calc(100vh - 100px)" }}>
-				<div className="col-span-2 p-6 overflow-auto">
+				<div className="col-span-2 p-3 overflow-auto">
 					{groupedAssignments.length === 0 ? (
 						<p className="text-gray-500 text-center">No assignments available.</p>
 					) : (
