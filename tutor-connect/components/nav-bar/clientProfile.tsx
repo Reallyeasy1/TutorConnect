@@ -14,8 +14,8 @@ export default function ClientProfile() {
 			cName: "dropdown-link",
 		},
 		{
-			title: "Messages",
-			path: "#",
+			title: "Notifications",
+			path: `/client/${clientId}/notifications`,
 			cName: "dropdown-link",
 		},
 		{

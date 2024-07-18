@@ -5,18 +5,6 @@ import { useRouter, useParams } from "next/navigation";
 import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { levels, subjectsByLevel } from "@/utils/levelsAndSubjects";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import {
-	MultiSelector,
-	MultiSelectorContent,
-	MultiSelectorInput,
-	MultiSelectorItem,
-	MultiSelectorList,
-	MultiSelectorTrigger,
-} from "@/components/ui/multiselect";
 import Loading from "@/app/loading";
 import { Filter } from "./filter";
 

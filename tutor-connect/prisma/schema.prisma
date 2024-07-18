@@ -24,31 +24,35 @@ model Client {
   passwordResetClientToken PasswordResetClientToken[]
   image                    String?
   reviews                  Review[]                   @relation("ClientReviews")
+  ClientNotification       ClientNotification[]
+  TutorNotification        TutorNotification[]
 }
 
 model Assignment {
-  id                Int       @id @default(autoincrement())
-  subject           String
-  level             String
-  client            Client    @relation(fields: [clientId], references: [id])
-  clientId          Int
-  tutor             Tutor?    @relation(name: "PrimaryTutor", fields: [tutorId], references: [id])
-  tutorId           Int?
-  additionalDetails String?
-  postDate          DateTime
-  taken             Boolean
-  address           String
-  postalCode        Int
-  minRate           Int
-  maxRate           Int
-  duration          String
-  frequency         String
-  typeOfTutor       String[]
-  gender            String
-  race              String[]
-  availability      String
-  avail_tutors      Tutor[]   @relation(name: "AvailableTutors")
-  coordinates       Decimal[]
+  id                 Int                  @id @default(autoincrement())
+  subject            String
+  level              String
+  client             Client               @relation(fields: [clientId], references: [id])
+  clientId           Int
+  tutor              Tutor?               @relation(name: "PrimaryTutor", fields: [tutorId], references: [id])
+  tutorId            Int?
+  additionalDetails  String?
+  postDate           DateTime
+  taken              Boolean
+  address            String
+  postalCode         Int
+  minRate            Int
+  maxRate            Int
+  duration           String
+  frequency          String
+  typeOfTutor        String[]
+  gender             String
+  race               String[]
+  availability       String
+  avail_tutors       Tutor[]              @relation(name: "AvailableTutors")
+  coordinates        Decimal[]
+  ClientNotification ClientNotification[]
+  TutorNotification  TutorNotification[]
 }
 
 model Tutor {
@@ -77,6 +81,34 @@ model Tutor {
   activateTutorToken      ActivateTutorToken[]
   passwordResetTutorToken PasswordResetTutorToken[]
   reviews                 Review[]                  @relation("TutorReviews")
+  ClientNotification      ClientNotification[]
+  TutorNotification       TutorNotification[]
+}
+
+model ClientNotification {
+  id           Int         @id @default(autoincrement())
+  read         Boolean     @default(false)
+  client       Client      @relation(fields: [clientId], references: [id])
+  clientId     Int
+  date         DateTime    @default(now())
+  assignment   Assignment? @relation(fields: [assignmentId], references: [id])
+  assignmentId Int?
+  tutor        Tutor?      @relation(fields: [tutorId], references: [id])
+  tutorId      Int?
+  type        String
+}
+
+model TutorNotification {
+  id           Int         @id @default(autoincrement())
+  read         Boolean     @default(false)
+  tutor        Tutor       @relation(fields: [tutorId], references: [id])
+  tutorId      Int
+  date         DateTime    @default(now())
+  assignment   Assignment? @relation(fields: [assignmentId], references: [id])
+  assignmentId Int?
+  client       Client?     @relation(fields: [clientId], references: [id])
+  clientId     Int?
+  type        String
 }
 
 model Review {
