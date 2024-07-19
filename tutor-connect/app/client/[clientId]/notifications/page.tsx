@@ -156,6 +156,7 @@ export default function Notifications() {
 			marginRight: "20px",
 			alignItems: "center",
 			display: "flex",
+			justifyContent: "center",
 		},
 		activeButton: {
 			backgroundColor: "#5790AB",

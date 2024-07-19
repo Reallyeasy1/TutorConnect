@@ -10,6 +10,7 @@ import { useParams, useRouter } from "next/navigation";
 import { ReviewForm } from "./form";
 import { Filter } from "./filter";
 import Loading from "@/app/loading";
+import { RequestForm } from "./request";
 
 type Tutor = {
 	id: number;
@@ -92,12 +93,7 @@ export default function ViewTutorsPage() {
 	};
 
 	const viewProfile = (id: number) => {
-		const queryParams = new URLSearchParams({
-			clientName: clientName,
-			clientImage: clientImage,
-		}).toString();
-
-		return () => router.push(`/client/${clientId}/view_tutors/${id}/tutor_profile?${queryParams}`);
+		router.push(`/client/${clientId}/view_tutors/${id}/tutor_profile`);
 	};
 
 	const styles = {
@@ -232,11 +228,11 @@ export default function ViewTutorsPage() {
 								</div>
 							</div>
 							<div style={styles.buttonSection}>
-								<Button style={styles.blueButton} onClick={viewProfile(tutor.id)}>
+								<Button style={styles.blueButton} onClick={() => viewProfile(tutor.id)}>
 									View Profile
 								</Button>
 								<ReviewForm tutor={tutor} clientName={clientName} clientImage={clientImage} />
-								<Button style={styles.blueButton}>Make a Request</Button>
+								<RequestForm clientId={clientId} tutor={tutor} />
 							</div>
 						</div>
 					))}

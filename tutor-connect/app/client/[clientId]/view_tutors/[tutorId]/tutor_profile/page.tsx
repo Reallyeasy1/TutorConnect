@@ -14,6 +14,7 @@ import { ReviewForm } from "../../form";
 import Spinner from "@/components/spinner/spinner";
 import TelegramLoading from "@/components/TelegramLoading";
 import Loading from "@/app/loading";
+import { RequestForm } from "../../request";
 
 type Tutor = {
 	id: number;
@@ -53,7 +54,9 @@ type Review = {
 export default function TutorProfile() {
 	const params = useParams();
 	const tutorId = params.tutorId;
-	const [profile, setProfile] = useState<Tutor | null>(null);
+	const clientId = params.clientId;
+	const [clientProfile, setClientProfile] = useState<Client | null>(null);
+	const [tutorProfile, setTutorProfile] = useState<Tutor | null>(null);
 	const [reviews, setReviews] = useState<Review[]>([]);
 	const [sortedReviews, setSortedReviews] = useState<Review[]>([]);
 	const [averageRating, setAverageRating] = useState<number>(0);
@@ -64,7 +67,7 @@ export default function TutorProfile() {
 	const [startIndex, setStartIndex] = useState(0);
 	const [endIndex, setEndIndex] = useState(limit);
 	const [loading, setLoading] = useState<boolean>(true);
-	const searchParams = useSearchParams()
+	const searchParams = useSearchParams();
 	const clientName = searchParams.get("clientName");
 	const clientImage = searchParams.get("clientImage");
 
@@ -82,7 +85,7 @@ export default function TutorProfile() {
 				});
 				if (res.ok) {
 					const tutorData = await res.json();
-					setProfile(tutorData);
+					setTutorProfile(tutorData);
 				} else {
 					console.error("Failed to fetch tutor details");
 				}
@@ -107,12 +110,32 @@ export default function TutorProfile() {
 				}
 			} catch (error) {
 				console.error("Error fetching tutor details:", error);
+			}
+		};
+		const fetchClientDetails = async () => {
+			try {
+				const res = await fetch("/api/client/getClientDetails", {
+					method: "POST",
+					body: JSON.stringify({
+						clientId: clientId,
+					}),
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+				if (res.ok) {
+					const clientData = await res.json();
+					setClientProfile(clientData);
+				}
+			} catch (error) {
+				console.error("Error fetching client details:", error);
 			} finally {
 				setLoading(false);
 			}
 		};
 		fetchTutorDetails();
-	}, [tutorId]);
+		fetchClientDetails();
+	}, [tutorId, clientId]);
 
 	useEffect(() => {
 		let sorted;
@@ -316,22 +339,13 @@ export default function TutorProfile() {
 			fontSize: "16px",
 			fontWeight: "bold",
 		},
-		requestButton: {
-			backgroundColor: "#5790AB",
-			color: "#fff",
-			padding: "10px 20px",
-			borderRadius: "5px",
-			marginLeft: "10px",
-			cursor: "pointer",
-			fontSize: "16px",
-			fontWeight: "bold",
-		},
 		buttonSection: {
 			display: "flex",
 			justifyContent: "flex-start",
 			alignItems: "flex-end",
 			flexDirection: "row" as "row",
 			marginBottom: "15px",
+			gap: "10px",
 		},
 	};
 
@@ -339,12 +353,12 @@ export default function TutorProfile() {
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
 			<NavBar />
 			{loading && <Loading />}
-			{profile && (
+			{tutorProfile && clientProfile && (
 				<div style={styles.sectionContainer}>
 					<div style={styles.leftSide}>
 						<div style={styles.profileImage}>
 							<Image
-								src={profile.image ? profile.image : "/images/Blank Profile Photo.jpg"}
+								src={tutorProfile.image ? tutorProfile.image : "/images/Blank Profile Photo.jpg"}
 								alt="Profile Picture"
 								width={320}
 								height={320}
@@ -358,7 +372,7 @@ export default function TutorProfile() {
 						</div>
 						<div style={styles.leftTextSection}>
 							<h2 style={styles.leftHeader}>Levels And Subjects Taught</h2>
-							{Object.entries(profile.levelAndSubjects).map(([key, value]) => {
+							{Object.entries(tutorProfile.levelAndSubjects).map(([key, value]) => {
 								if (value.length > 0) {
 									return (
 										<div key={key} style={styles.leftText}>
@@ -372,11 +386,11 @@ export default function TutorProfile() {
 						<div style={styles.leftTextSection}>
 							<h2 style={styles.leftHeader}>Preferred Locations</h2>
 							<p style={styles.leftText}>
-								{Object.entries(profile.location).map((place, index) => {
+								{Object.entries(tutorProfile.location).map((place, index) => {
 									return (
 										<>
 											{place[1]}
-											{index < profile.location.length - 1 && ", "}
+											{index < tutorProfile.location.length - 1 && ", "}
 										</>
 									);
 								})}
@@ -385,24 +399,24 @@ export default function TutorProfile() {
 					</div>
 					<div style={styles.rightSide}>
 						<div style={styles.tutorDetailsSection}>
-							<h1 style={styles.name}>{profile.name}</h1>
+							<h1 style={styles.name}>{tutorProfile.name}</h1>
 							<p style={styles.info}>
-								{profile.typeOfTutor}, {profile.gender}, {profile.race}
+								{tutorProfile.typeOfTutor}, {tutorProfile.gender}, {tutorProfile.race}
 							</p>
 							<div style={{ marginBottom: "15px " }}>
 								<StarRating rating={averageRating} />
 							</div>
 							<p style={styles.detailItem}>
 								<strong>Years of Experience: </strong>
-								{profile.yearsOfExperience}
+								{tutorProfile.yearsOfExperience}
 							</p>
 							<p style={styles.detailItem}>
 								<strong>Highest Qualification: </strong>
-								{profile.highestEducationLevel}
+								{tutorProfile.highestEducationLevel}
 							</p>
 							<div style={styles.buttonSection}>
-								<ReviewForm tutor={profile} clientName={clientName ?? ""} clientImage={clientImage ?? ""} />
-								<Button style={styles.requestButton}>Make a Request</Button>
+								<ReviewForm tutor={tutorProfile} clientName={clientProfile.name} clientImage={clientProfile.image ?? undefined} />
+								<RequestForm clientId={clientId} tutor={tutorProfile} />
 							</div>
 						</div>
 						<div>
@@ -418,11 +432,15 @@ export default function TutorProfile() {
 								</TabsList>
 								<TabsContent value="about">
 									<h2 style={styles.detailHeader}>About Me</h2>
-									<p style={styles.detailText}>{profile.introduction ? profile.introduction : "Tutor has yet to update"}</p>
+									<p style={styles.detailText}>
+										{tutorProfile.introduction ? tutorProfile.introduction : "Tutor has yet to update"}
+									</p>
 									<h2 style={styles.detailHeader}>Teaching Experience & Academic Achievements</h2>
-									<p style={styles.detailText}>{profile.summary ? profile.summary : "Tutor has yet to update"}</p>
+									<p style={styles.detailText}>{tutorProfile.summary ? tutorProfile.summary : "Tutor has yet to update"}</p>
 									<h2 style={styles.detailHeader}>Past Students&apos; Results</h2>
-									<p style={styles.detailText}>{profile.studentsResults ? profile.studentsResults : "Tutor has yet to update"}</p>
+									<p style={styles.detailText}>
+										{tutorProfile.studentsResults ? tutorProfile.studentsResults : "Tutor has yet to update"}
+									</p>
 								</TabsContent>
 								<TabsContent value="reviews">
 									<div style={styles.sortSection}>

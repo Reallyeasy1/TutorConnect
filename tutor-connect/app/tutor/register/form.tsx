@@ -194,8 +194,17 @@ export const RegisterForm = () => {
 						"Content-Type": "application/json",
 					},
 				});
-
 				if (data?.id) {
+					const updateNotif = await fetch("/api/client/notifications/updateNotification", {
+						method: "POST",
+						body: JSON.stringify({
+							tutorId: data.id,
+						}),
+						headers: {
+							"Content-Type": "application/json",
+						},
+					});
+
 					const account = { token: data.id };
 					const SECRET = "this is a secret";
 					const token = jwt.sign(account, SECRET);

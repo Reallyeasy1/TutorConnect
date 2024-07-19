@@ -27,6 +27,7 @@ interface Assignment {
 		id: number;
 		name: string;
 	};
+	tutorId: number,
 }
 
 export default function AllAssignments() {
@@ -99,7 +100,7 @@ export default function AllAssignments() {
 			<NavBar />
 			<div className="container mx-auto p-6 flex flex-col items-center flex-grow">
 				<h1 className="text-4xl font-bold mb-8 text-center">
-					Available Assignments
+					My Assignments
 				</h1>
 				{assignment_filtered.length === 0 ? (
 					<p className="text-gray-500 text-center">
@@ -151,13 +152,13 @@ export default function AllAssignments() {
 								</p>
 								<p
 									className={`text-gray-700 mb-1 ${
-										assignment.taken
+										assignment.taken && assignment.tutorId
 											? "text-red-500"
 											: "text-green-500"
 									}`}
 								>
 									<strong>Status:</strong>{" "}
-									{assignment.taken ? "Taken" : "Available"}
+									{assignment.taken && assignment.tutorId ? "Taken" : "Available"}
 								</p>
 								<button
 									className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors w-full"

@@ -53,6 +53,9 @@ model Assignment {
   coordinates        Decimal[]
   ClientNotification ClientNotification[]
   TutorNotification  TutorNotification[]
+  isPaid             Boolean              @default(false)
+  startDate          String?
+  amount             Int?
 }
 
 model Tutor {
@@ -95,7 +98,7 @@ model ClientNotification {
   assignmentId Int?
   tutor        Tutor?      @relation(fields: [tutorId], references: [id])
   tutorId      Int?
-  type        String
+  type         String
 }
 
 model TutorNotification {
@@ -108,7 +111,7 @@ model TutorNotification {
   assignmentId Int?
   client       Client?     @relation(fields: [clientId], references: [id])
   clientId     Int?
-  type        String
+  type         String
 }
 
 model Review {
