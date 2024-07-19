@@ -88,7 +88,7 @@ describe('Tutor API Endpoints', () => {
       expect.stringContaining('<lowethan11@gmail.com>'),
       uniqueEmail,
       'Please Activate Your Account',
-      expect.stringContaining('Please click on the link to activate your account')
+      expect.stringContaining('Please click on the link below to activate your account:')
     );
   });
 

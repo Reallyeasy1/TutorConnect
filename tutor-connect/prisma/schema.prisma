@@ -4,10 +4,8 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  //url      = env("DATABASE_URL")
-  // Uncomment the following lines if you need to specify different URLs for pooling and direct connections
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model Client {
@@ -18,37 +16,44 @@ model Client {
   contactNumber            Int
   address                  String
   postalCode               Int
-  assignments              Assignment[]
   active                   Boolean                    @default(false)
-  activateClientToken      ActivateClientToken[]
-  passwordResetClientToken PasswordResetClientToken[]
   image                    String?
+  activateClientToken      ActivateClientToken[]
+  assignments              Assignment[]
+  ClientNotification       ClientNotification[]
+  passwordResetClientToken PasswordResetClientToken[]
   reviews                  Review[]                   @relation("ClientReviews")
+  TutorNotification        TutorNotification[]
 }
 
 model Assignment {
-  id                Int       @id @default(autoincrement())
-  subject           String
-  level             String
-  client            Client    @relation(fields: [clientId], references: [id])
-  clientId          Int
-  tutor             Tutor?    @relation(name: "PrimaryTutor", fields: [tutorId], references: [id])
-  tutorId           Int?
-  additionalDetails String?
-  postDate          DateTime
-  taken             Boolean
-  address           String
-  postalCode        Int
-  minRate           Int
-  maxRate           Int
-  duration          String
-  frequency         String
-  typeOfTutor       String[]
-  gender            String
-  race              String[]
-  availability      String
-  avail_tutors      Tutor[]   @relation(name: "AvailableTutors")
-  coordinates       Decimal[]
+  id                 Int                  @id @default(autoincrement())
+  subject            String
+  level              String
+  clientId           Int
+  tutorId            Int?
+  additionalDetails  String?
+  postDate           DateTime
+  taken              Boolean
+  address            String
+  postalCode         Int
+  minRate            Int
+  maxRate            Int
+  duration           String
+  frequency          String
+  typeOfTutor        String[]
+  gender             String
+  race               String[]
+  availability       String
+  coordinates        Decimal[]
+  client             Client               @relation(fields: [clientId], references: [id])
+  tutor              Tutor?               @relation("PrimaryTutor", fields: [tutorId], references: [id])
+  ClientNotification ClientNotification[]
+  TutorNotification  TutorNotification[]
+  avail_tutors       Tutor[]              @relation("AvailableTutors")
+  isPaid             Boolean              @default(false)
+  startDate          String?            
+  amountOffered      Int?    
 }
 
 model Tutor {
@@ -67,26 +72,29 @@ model Tutor {
   typeOfTutor             String
   yearsOfExperience       Int
   highestEducationLevel   String
-  assignmentsPrimary      Assignment[]              @relation(name: "PrimaryTutor")
-  assignmentsAvailable    Assignment[]              @relation(name: "AvailableTutors")
   active                  Boolean                   @default(false)
   image                   String?
   introduction            String?
   summary                 String?
   studentsResults         String?
   activateTutorToken      ActivateTutorToken[]
+  assignmentsPrimary      Assignment[]              @relation("PrimaryTutor")
+  ClientNotification      ClientNotification[]
   passwordResetTutorToken PasswordResetTutorToken[]
   reviews                 Review[]                  @relation("TutorReviews")
+  TutorNotification       TutorNotification[]
+  assignmentsAvailable    Assignment[]              @relation("AvailableTutors")
 }
 
 model Review {
-  id       Int    @id @default(autoincrement())
-  tutor    Tutor  @relation(fields: [tutorId], references: [id], name: "TutorReviews")
-  tutorId  Int
-  review   String
-  rating   Int
-  clientId Int
-  client   Client @relation(fields: [clientId], references: [id], name: "ClientReviews")
+  id        Int      @id @default(autoincrement())
+  tutorId   Int
+  review    String
+  rating    Int
+  clientId  Int
+  createdAt DateTime @default(now())
+  client    Client   @relation("ClientReviews", fields: [clientId], references: [id], onDelete: Cascade)
+  tutor     Tutor    @relation("TutorReviews", fields: [tutorId], references: [id], onDelete: Cascade)
 }
 
 model ActivateTutorToken {
@@ -94,8 +102,8 @@ model ActivateTutorToken {
   token       String    @unique
   createdAt   DateTime  @default(now())
   activatedAt DateTime?
-  tutor       Tutor     @relation(fields: [tutorId], references: [id])
   tutorId     Int
+  tutor       Tutor     @relation(fields: [tutorId], references: [id])
 }
 
 model PasswordResetTutorToken {
@@ -103,8 +111,8 @@ model PasswordResetTutorToken {
   token     String    @unique
   createdAt DateTime  @default(now())
   resetAt   DateTime?
-  tutor     Tutor     @relation(fields: [tutorId], references: [id])
   tutorId   Int
+  tutor     Tutor     @relation(fields: [tutorId], references: [id])
 }
 
 model ActivateClientToken {
@@ -112,8 +120,8 @@ model ActivateClientToken {
   token       String    @unique
   createdAt   DateTime  @default(now())
   activatedAt DateTime?
-  client      Client    @relation(fields: [clientId], references: [id])
   clientId    Int
+  client      Client    @relation(fields: [clientId], references: [id])
 }
 
 model PasswordResetClientToken {
@@ -121,10 +129,32 @@ model PasswordResetClientToken {
   token     String    @unique
   createdAt DateTime  @default(now())
   resetAt   DateTime?
-  client    Client    @relation(fields: [clientId], references: [id])
   clientId  Int
+  client    Client    @relation(fields: [clientId], references: [id])
 }
 
-//generator erd {
-//  provider = "prisma-erd-generator"
-//}
+model ClientNotification {
+  id           Int         @id @default(autoincrement())
+  read         Boolean     @default(false)
+  clientId     Int
+  date         DateTime    @default(now())
+  assignmentId Int?
+  tutorId      Int?
+  type         String
+  Assignment   Assignment? @relation(fields: [assignmentId], references: [id])
+  Client       Client      @relation(fields: [clientId], references: [id])
+  Tutor        Tutor?      @relation(fields: [tutorId], references: [id])
+}
+
+model TutorNotification {
+  id           Int         @id @default(autoincrement())
+  read         Boolean     @default(false)
+  tutorId      Int
+  date         DateTime    @default(now())
+  assignmentId Int?
+  clientId     Int?
+  type         String
+  Assignment   Assignment? @relation(fields: [assignmentId], references: [id])
+  Client       Client?     @relation(fields: [clientId], references: [id])
+  Tutor        Tutor       @relation(fields: [tutorId], references: [id])
+}
