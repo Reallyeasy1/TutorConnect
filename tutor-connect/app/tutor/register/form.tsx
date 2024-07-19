@@ -17,6 +17,7 @@ import jwt from "jsonwebtoken";
 import { subjectsByCategory } from "@/utils/levelsAndSubjects";
 import { locations } from "@/utils/locations";
 import { Alert } from "@/components/ui/alert";
+import TutorDropdown from "@/components/nav-bar/tutorDropdown";
 
 type CheckedSubjects = {
 	"Pre-School": string[];
@@ -183,6 +184,17 @@ export const RegisterForm = () => {
 					},
 				});
 				const data = await response.json();
+
+				const updateNotif = await fetch("/api/client/notifications/updateNotification", {
+					method: "POST",
+					body: JSON.stringify({
+						tutorId: data.id,
+					}),
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+
 				if (data?.id) {
 					const account = { token: data.id };
 					const SECRET = "this is a secret";

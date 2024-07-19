@@ -19,8 +19,8 @@ export default function TutorProfile() {
 			cName: "dropdown-link",
 		},
 		{
-			title: "Messages",
-			path: "#",
+			title: "Notifications",
+			path: `/tutor/${tutorId}/notifications`,
 			cName: "dropdown-link",
 		},
 		{

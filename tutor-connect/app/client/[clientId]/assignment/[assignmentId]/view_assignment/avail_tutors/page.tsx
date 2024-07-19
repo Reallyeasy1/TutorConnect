@@ -55,7 +55,20 @@ export default function AvailTutors() {
 				},
 			});
 
-			if (res.ok) {
+			const pickedNotification = await fetch("/api/tutor/notifications/pickedNotification", {
+				method: "POST",
+				body: JSON.stringify({
+					clientId: clientId,
+					tutorId: tutor.id,
+					assignmentId: assignmentId,
+				}),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}
+			)
+
+			if (res.ok && pickedNotification.ok) {
 				alert("Successfully accepted the tutor!");
 				router.push(`/client/${clientId}/assignment/client_assignment`);
 			} else {

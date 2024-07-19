@@ -9,10 +9,17 @@ type MatchedProps = {
 	tutor: Tutor;
 	assignment: Assignment;
 	date: string;
+	markAsRead: (notificationId: number) => void;
+	notificationId: number;
+	read: boolean;
 };
 
-export const Matched: React.FC<MatchedProps> = ({ clientId, tutor, assignment, date }) => {
+export const Matched: React.FC<MatchedProps> = ({ clientId, tutor, assignment, date, markAsRead, notificationId, read }) => {
 	const router = useRouter();
+
+    const handleClick = () => {
+		markAsRead(notificationId);
+	};
 
 	const payButton = () => {
 		router.push(`#`);
@@ -26,7 +33,7 @@ export const Matched: React.FC<MatchedProps> = ({ clientId, tutor, assignment, d
 			border: "1px solid #5790AB",
 			borderRadius: "10px",
 			padding: "10px 20px 10px 20px",
-			marginBottom: "10px",
+			marginBottom: "20px",
 			alignItems: "center",
 		},
 		circle: {
@@ -34,6 +41,13 @@ export const Matched: React.FC<MatchedProps> = ({ clientId, tutor, assignment, d
 			height: "10px",
 			borderRadius: "50%",
 			backgroundColor: "#5790AB",
+			marginRight: "20px",
+		},
+        empty: {
+			width: "10px",
+			height: "10px",
+			borderRadius: "50%",
+			backgroundColor: "#fff",
 			marginRight: "20px",
 		},
 		title: {
@@ -80,8 +94,8 @@ export const Matched: React.FC<MatchedProps> = ({ clientId, tutor, assignment, d
 	};
 
 	return (
-		<div style={styles.card}>
-			<div style={styles.circle}></div>
+		<div style={styles.card} onClick={handleClick}>
+			<div style={read ? styles.empty : styles.circle}></div>
 			<div>
 				<h1 style={styles.title}>
 					<strong>{tutor.name}</strong> has accepted your offer for assignment {assignment.id}.

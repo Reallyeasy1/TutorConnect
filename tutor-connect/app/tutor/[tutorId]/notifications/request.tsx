@@ -1,12 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Tutor, Assignment } from "@prisma/client";
+import { Assignment, Client } from "@prisma/client";
 import { useRouter } from "next/navigation";
 
-type ApplyProps = {
-	clientId: string | string[];
-	tutor: Tutor;
+type RequestProps = {
+	tutorId: string | string[];
+	client: Client;
 	assignment: Assignment;
 	date: string;
 	markAsRead: (notificationId: number) => void;
@@ -14,19 +14,15 @@ type ApplyProps = {
 	read: boolean;
 };
 
-export const Apply: React.FC<ApplyProps> = ({ clientId, tutor, assignment, date, markAsRead, notificationId, read }) => {
+export const Request: React.FC<RequestProps> = ({ tutorId, client, assignment, date, markAsRead, notificationId, read }) => {
 	const router = useRouter();
 
 	const handleClick = () => {
 		markAsRead(notificationId);
 	};
 
-	const tutorButton = () => {
-		router.push(`/client/${clientId}/view_tutors/${tutor.id}/tutor_profile`);
-	};
-
 	const assignmentButton = () => {
-		router.push(`client/${clientId}/assignment/${assignment.id}/view_assignment/`);
+		router.push(`#`);
 	};
 
 	const styles = {
@@ -46,7 +42,7 @@ export const Apply: React.FC<ApplyProps> = ({ clientId, tutor, assignment, date,
 			backgroundColor: "#5790AB",
 			marginRight: "20px",
 		},
-        empty: {
+		empty: {
 			width: "10px",
 			height: "10px",
 			borderRadius: "50%",
@@ -100,15 +96,10 @@ export const Apply: React.FC<ApplyProps> = ({ clientId, tutor, assignment, date,
 		<div style={styles.card} onClick={handleClick}>
 			<div style={read ? styles.empty : styles.circle}></div>
 			<div>
-				<h1 style={styles.title}>
-					<strong>{tutor.name}</strong> has applied for your assignment.
-				</h1>
-				<p style={styles.description}>Assignment Code: {assignment.id}</p>
+				<h1 style={styles.title}>A <strong>client</strong> is interested in your tutoring services.</h1>
+				<p style={styles.description}>Click below to view the assignment details and make your decision within 2 days.</p>
 				<div style={styles.buttonSection}>
-					<Button style={styles.blueButton} onClick={tutorButton}>
-						View Tutor
-					</Button>
-					<Button style={styles.whiteButton} onClick={assignmentButton}>
+					<Button style={styles.blueButton} onClick={assignmentButton}>
 						View Assignment
 					</Button>
 				</div>

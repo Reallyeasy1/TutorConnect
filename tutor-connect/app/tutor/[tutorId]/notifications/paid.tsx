@@ -1,12 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Tutor, Assignment } from "@prisma/client";
+import { Assignment, Client } from "@prisma/client";
 import { useRouter } from "next/navigation";
 
-type ApplyProps = {
-	clientId: string | string[];
-	tutor: Tutor;
+type PaidProps = {
+	tutorId: string | string[];
+	client: Client;
 	assignment: Assignment;
 	date: string;
 	markAsRead: (notificationId: number) => void;
@@ -14,19 +14,15 @@ type ApplyProps = {
 	read: boolean;
 };
 
-export const Apply: React.FC<ApplyProps> = ({ clientId, tutor, assignment, date, markAsRead, notificationId, read }) => {
+export const Paid: React.FC<PaidProps> = ({ tutorId, client, assignment, date, markAsRead, notificationId, read }) => {
 	const router = useRouter();
 
 	const handleClick = () => {
 		markAsRead(notificationId);
 	};
 
-	const tutorButton = () => {
-		router.push(`/client/${clientId}/view_tutors/${tutor.id}/tutor_profile`);
-	};
-
-	const assignmentButton = () => {
-		router.push(`client/${clientId}/assignment/${assignment.id}/view_assignment/`);
+	const offerButton = () => {
+		router.push(`#`);
 	};
 
 	const styles = {
@@ -101,15 +97,12 @@ export const Apply: React.FC<ApplyProps> = ({ clientId, tutor, assignment, date,
 			<div style={read ? styles.empty : styles.circle}></div>
 			<div>
 				<h1 style={styles.title}>
-					<strong>{tutor.name}</strong> has applied for your assignment.
+					<strong>Client</strong> has made payment for assignment {assignment.id}.
 				</h1>
-				<p style={styles.description}>Assignment Code: {assignment.id}</p>
+				<p style={styles.description}>You can now contact the client, {client.name}, at {client.contactNumber} to arrange the first lesson.</p>
 				<div style={styles.buttonSection}>
-					<Button style={styles.blueButton} onClick={tutorButton}>
-						View Tutor
-					</Button>
-					<Button style={styles.whiteButton} onClick={assignmentButton}>
-						View Assignment
+					<Button style={styles.blueButton} onClick={offerButton}>
+						View Offer
 					</Button>
 				</div>
 			</div>

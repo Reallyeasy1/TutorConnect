@@ -9,10 +9,17 @@ type PaymentProps = {
 	tutor: Tutor;
 	assignment: Assignment;
 	date: string;
+	markAsRead: (notificationId: number) => void;
+	notificationId: number;
+	read: boolean;
 };
 
-export const Payment: React.FC<PaymentProps> = ({ clientId, tutor, assignment, date }) => {
+export const Payment: React.FC<PaymentProps> = ({ clientId, tutor, assignment, date, markAsRead, notificationId, read }) => {
 	const router = useRouter();
+
+    const handleClick = () => {
+		markAsRead(notificationId);
+	};
 
 	const tutorButton = () => {
 		router.push(`/client/${clientId}/view_tutors/${tutor.id}/tutor_profile`);
@@ -29,7 +36,7 @@ export const Payment: React.FC<PaymentProps> = ({ clientId, tutor, assignment, d
 			border: "1px solid #5790AB",
 			borderRadius: "10px",
 			padding: "10px 20px 10px 20px",
-			marginBottom: "10px",
+			marginBottom: "20px",
 			alignItems: "center",
 		},
 		circle: {
@@ -59,6 +66,13 @@ export const Payment: React.FC<PaymentProps> = ({ clientId, tutor, assignment, d
 			fontSize: "16px",
 			width: "150px",
 		},
+        empty: {
+			width: "10px",
+			height: "10px",
+			borderRadius: "50%",
+			backgroundColor: "#fff",
+			marginRight: "20px",
+		},
 		whiteButton: {
 			backgroundColor: "#fff",
 			color: "#5790AB",
@@ -83,8 +97,8 @@ export const Payment: React.FC<PaymentProps> = ({ clientId, tutor, assignment, d
 	};
 
 	return (
-		<div style={styles.card}>
-			<div style={styles.circle}></div>
+		<div style={styles.card} onClick={handleClick}>
+			<div style={read ? styles.empty : styles.circle}></div>
 			<div>
 				<h1 style={styles.title}>
 					<strong>Payment received</strong> for assignment {assignment.id}.

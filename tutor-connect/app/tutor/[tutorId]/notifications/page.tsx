@@ -8,11 +8,12 @@ import { Assignment, Client, Tutor } from "@prisma/client";
 import { useParams } from "next/navigation";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import Loading from "@/app/loading";
-import { Apply } from "./apply";
-import { Payment } from "./payment";
-import { Matched } from "./matched";
+import { Picked } from "./picked";
+import { Update } from "./update";
+import { Request } from "./request";
+import { Paid } from "./paid";
 
-type ClientNotification = {
+type TutorNotification = {
 	id: number;
 	assignment: Assignment;
 	client: Client;
@@ -23,8 +24,8 @@ type ClientNotification = {
 };
 
 export default function Notifications() {
-	const [notifications, setNotifications] = useState<ClientNotification[]>([]);
-	const [sortedNotifications, setSortedNotifications] = useState<ClientNotification[]>([]);
+	const [notifications, setNotifications] = useState<TutorNotification[]>([]);
+	const [sortedNotifications, setSortedNotifications] = useState<TutorNotification[]>([]);
 	const [sortBy, setSortBy] = useState<"unread" | "newest">("newest");
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
@@ -33,15 +34,15 @@ export default function Notifications() {
 	const [endIndex, setEndIndex] = useState(limit);
 	const [loading, setLoading] = useState<boolean>(true);
 	const params = useParams();
-	const clientId = params.clientId;
+	const tutorId = params.tutorId;
 
 	useEffect(() => {
 		const fetchReviews = async () => {
 			try {
-				const notifications = await fetch("/api/client/notifications/getNotifications", {
+				const notifications = await fetch("/api/tutor/notifications/getNotifications", {
 					method: "POST",
 					body: JSON.stringify({
-						clientId: clientId,
+						tutorId: tutorId,
 					}),
 					headers: {
 						"Content-Type": "application/json",
@@ -56,13 +57,13 @@ export default function Notifications() {
 					console.error("Failed to fetch notifications");
 				}
 			} catch (error) {
-				console.error("Error fetching client details:", error);
+				console.error("Error fetching tutor details:", error);
 			} finally {
 				setLoading(false);
 			}
 		};
 		fetchReviews();
-	}, [clientId]);
+	}, [tutorId]);
 
 	useEffect(() => {
 		let sorted;
@@ -78,7 +79,7 @@ export default function Notifications() {
 
 	const markNotificationAsRead = async (notificationId: number) => {
 		try {
-			const response = await fetch("/api/client/notifications/markAsRead", {
+			const response = await fetch("/api/tutor/notifications/markAsRead", {
 				method: "PUT",
 				body: JSON.stringify({
 					notificationId,
@@ -208,27 +209,34 @@ export default function Notifications() {
 					{loading && <Loading />}
 					{sortedNotifications.map((notif) => (
 						<div key={notif.id} style={{ marginTop: "10px", width: "100%" }}>
-							<Apply
-								clientId={clientId}
-								tutor={notif.tutor}
+							<Picked
+								tutorId={tutorId}
+								client={notif.client}
 								assignment={notif.assignment}
 								date={notif.date}
 								markAsRead={markNotificationAsRead}
 								notificationId={notif.id}
 								read={notif.read}
 							/>
-							<Matched
-								clientId={clientId}
-								tutor={notif.tutor}
+							<Request
+								tutorId={tutorId}
+								client={notif.client}
 								assignment={notif.assignment}
 								date={notif.date}
 								markAsRead={markNotificationAsRead}
 								notificationId={notif.id}
 								read={notif.read}
 							/>
-							<Payment
-								clientId={clientId}
-								tutor={notif.tutor}
+							<Update
+								tutorId={tutorId}
+								date={notif.date}
+								markAsRead={markNotificationAsRead}
+								notificationId={notif.id}
+								read={notif.read}
+							/>
+							<Paid
+								tutorId={tutorId}
+								client={notif.client}
 								assignment={notif.assignment}
 								date={notif.date}
 								markAsRead={markNotificationAsRead}

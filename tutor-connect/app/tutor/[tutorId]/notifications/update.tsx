@@ -1,32 +1,26 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Tutor, Assignment } from "@prisma/client";
+import { Client, Assignment } from "@prisma/client";
 import { useRouter } from "next/navigation";
 
-type ApplyProps = {
-	clientId: string | string[];
-	tutor: Tutor;
-	assignment: Assignment;
+type UpdateProps = {
+	tutorId: string | string[];
 	date: string;
 	markAsRead: (notificationId: number) => void;
 	notificationId: number;
 	read: boolean;
 };
 
-export const Apply: React.FC<ApplyProps> = ({ clientId, tutor, assignment, date, markAsRead, notificationId, read }) => {
+export const Update: React.FC<UpdateProps> = ({ tutorId, date, markAsRead, notificationId, read }) => {
 	const router = useRouter();
 
 	const handleClick = () => {
 		markAsRead(notificationId);
 	};
 
-	const tutorButton = () => {
-		router.push(`/client/${clientId}/view_tutors/${tutor.id}/tutor_profile`);
-	};
-
-	const assignmentButton = () => {
-		router.push(`client/${clientId}/assignment/${assignment.id}/view_assignment/`);
+	const updateButton = () => {
+		router.push(`/tutor/${tutorId}/settings/profile`);
 	};
 
 	const styles = {
@@ -44,13 +38,6 @@ export const Apply: React.FC<ApplyProps> = ({ clientId, tutor, assignment, date,
 			height: "10px",
 			borderRadius: "50%",
 			backgroundColor: "#5790AB",
-			marginRight: "20px",
-		},
-        empty: {
-			width: "10px",
-			height: "10px",
-			borderRadius: "50%",
-			backgroundColor: "#fff",
 			marginRight: "20px",
 		},
 		title: {
@@ -73,14 +60,12 @@ export const Apply: React.FC<ApplyProps> = ({ clientId, tutor, assignment, date,
 			fontSize: "16px",
 			width: "150px",
 		},
-		whiteButton: {
+		empty: {
+			width: "10px",
+			height: "10px",
+			borderRadius: "50%",
 			backgroundColor: "#fff",
-			color: "#5790AB",
-			font: "Poppins",
-			fontWeight: "bold",
-			fontSize: "16px",
-			border: "1px solid #5790AB",
-			width: "150px",
+			marginRight: "20px",
 		},
 		buttonSection: {
 			display: "flex",
@@ -101,15 +86,12 @@ export const Apply: React.FC<ApplyProps> = ({ clientId, tutor, assignment, date,
 			<div style={read ? styles.empty : styles.circle}></div>
 			<div>
 				<h1 style={styles.title}>
-					<strong>{tutor.name}</strong> has applied for your assignment.
+					<strong>Update your profile</strong> now!
 				</h1>
-				<p style={styles.description}>Assignment Code: {assignment.id}</p>
+				<p style={styles.description}>Showcase your skills to stand out and increase your chances of getting selected by clients.</p>
 				<div style={styles.buttonSection}>
-					<Button style={styles.blueButton} onClick={tutorButton}>
-						View Tutor
-					</Button>
-					<Button style={styles.whiteButton} onClick={assignmentButton}>
-						View Assignment
+					<Button style={styles.blueButton} onClick={updateButton}>
+						Update Profile
 					</Button>
 				</div>
 			</div>
