@@ -12,6 +12,7 @@ import { Picked } from "./picked";
 import { Update } from "./update";
 import { Request } from "./request";
 import { Paid } from "./paid";
+import Image from "next/image";
 
 type TutorNotification = {
 	id: number;
@@ -203,7 +204,7 @@ export default function Notifications() {
 							Unread
 						</Button>
 						<Button style={styles.settingsButton} onClick={() => console.log("Settings clicked")}>
-							<img src="/images/settings.png" style={styles.icon} />
+							<Image src="/images/settings.png" alt="Settings" width={20} height={20} style={styles.icon} />
 						</Button>
 					</div>
 					{loading && <Loading />}

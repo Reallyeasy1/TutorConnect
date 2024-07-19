@@ -99,7 +99,7 @@ export const Picked: React.FC<PickedProps> = ({ tutorId, client, assignment, dat
 				<h1 style={styles.title}>
 					<strong>You</strong> have been picked for assignment {assignment.id}.
 				</h1>
-				<p style={styles.description}>Please review the client's offer and kindly make your decision within 2 days.</p>
+				<p style={styles.description}>Please review the client&apos;s offer and kindly make your decision within 2 days.</p>
 				<div style={styles.buttonSection}>
 					<Button style={styles.blueButton} onClick={offerButton}>
 						View Offer
