@@ -85,6 +85,7 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 	const onNext = () => {
 		const tabs = ["lessonDetails", "tutorDetails"];
 		const currentIndex = tabs.indexOf(currentTab);
+		console.log(address)
 		if (currentIndex < tabs.length - 1) {
 			setCurrentTab(tabs[currentIndex + 1]);
 		}
@@ -157,7 +158,7 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 					race: tutor.race,
 					availability,
 					postDate,
-					location,
+					location: location,
 					taken: true,
 					amount,
 					startDate: availability,
