@@ -7,11 +7,13 @@ import CheckoutPage from "./checkout_page";
 import convertToSubcurrency from "@/lib/convertToSubcurrency";
 
 export default function Payment() {
-	if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY === undefined) {
+  const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+
+	if (stripePublishableKey === undefined) {
 		throw new Error("NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is not defined");
 	}
 
-	const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+	const stripePromise = loadStripe(stripePublishableKey);
 	const amount = 1;
 
 	return (
