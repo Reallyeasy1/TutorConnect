@@ -235,7 +235,7 @@ const NavBar = () => {
 				</div>
 				<div>
 					<a
-						href="#"
+						href="/contact_us"
 						style={hoverText(4)}
 						onMouseEnter={() => handleMouseEnter(4)}
 						onMouseLeave={handleMouseLeave}

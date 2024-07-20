@@ -7,7 +7,6 @@ import BlueBackground from "./BlueBackground";
 import { ContactUsForm } from "./form";
 import Footer from "@/components/footer/footer";
 
-//TODO: Do backend/API
 export default function RegisterPage() {
   return (
     <div className="relative min-h-screen flex flex-col bg-cover bg-center">

@@ -1,27 +1,39 @@
-'use client'
-import { useEffect } from 'react';
+"use client";
+import { useEffect } from "react";
 
-const PaymentButton = () => {
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://js.stripe.com/v3/buy-button.js';
-    script.async = true;
-    document.body.appendChild(script);
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import CheckoutPage from "./checkout_page";
+import convertToSubcurrency from "@/lib/convertToSubcurrency";
 
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
+export default function Payment() {
+	if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY === undefined) {
+		throw new Error("NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is not defined");
+	}
 
-  return (
-    <div>
+	const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+	const amount = 1;
 
-      <stripe-buy-button
-        buy-button-id="buy_btn_1PeL6rK3VZfDZK6MJLmV7oQU"
-        publishable-key="pk_live_51PeHexK3VZfDZK6MCsZ3cZxNY4MyizsY91JsRZWhyvnkC1GUcIi0af8gUm5nUQKEQiDIVDPGyWr0ffrkTIZURhol00QyC0S3aU"
-      ></stripe-buy-button>
+	return (
+		<div className="max-w-6xl mx-auto p-10 text-white text-center border m-10 rounded-md bg-gradient-to-tr from-blue-500 to-purple-500">
+      <div className="mb-10">
+        <h1 className="text-4xl font-extrabold mb-2">TutorConnect</h1>
+        <h2 className="text-2xl">
+          Matchmaking Fee: 
+          <span className="font-bold"> ${amount}</span>
+        </h2>
+      </div>
+
+      <Elements
+        stripe={stripePromise}
+        options={{
+          mode: "payment",
+          amount: convertToSubcurrency(amount),
+          currency: "sgd",
+        }}
+      >
+        <CheckoutPage amount={amount} />
+      </Elements>
     </div>
-  );
-};
-
-export default PaymentButton;
+	);
+}
