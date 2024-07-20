@@ -1,116 +1,173 @@
-// Test/Assignment_API.test.ts
-import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { GET } from '@/app/api/assignments/route';
-import { describe, it, expect, jest } from '@jest/globals';
-import { levels, subjectsByLevel } from '@/utils/levelsAndSubjects';
+import { prismaMock, resetPrismaMock } from "@/lib/prismaMock";
+import { POST as postAssignment } from "@/app/api/client/postAssignments/route"; // Import your assignment route
+import Decimal from "decimal.js";
 
-export interface Assignment {
-  id: number;
-  subject: string;
-  level: string;
-  clientId: number;
-  tutorId: number;
-  client: { name: string };
-  tutor: { name: string };
-  additionalDetails: string;
-  postDate: Date;
-  taken: boolean;
-  address: string;
-  postalCode: number;
-  minRate: number;
-  maxRate: number;
-  duration: string;
-  frequency: string;
-  typeOfTutor: string[];
-  gender: string;
-  race: string[];
-  availability: string;
-}
+describe('Assignment API Endpoints', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    resetPrismaMock();
+  });
 
-jest.mock('@/lib/prisma');
-
-describe('GET /api/assignments', () => {
-  it('should return all assignments', async () => {
-    // Arrange
-    const assignments: Assignment[] = [
-      {
-        id: 1,
-        subject: subjectsByLevel['Primary 1'][0],
-        level: levels.Primary[0],
-        clientId: 1,
-        tutorId: 1,
-        client: { name: 'Client 1' },
-        tutor: { name: 'Tutor 1' },
-        additionalDetails: 'Details',
-        postDate: new Date(),
-        taken: false,
-        address: 'Address 1',
-        postalCode: 12345,
-        minRate: 20,
-        maxRate: 50,
+  it('should create an assignment', async () => {
+    const clientId = 50;
+    const req = {
+      json: jest.fn().mockResolvedValue({
+        clientId: clientId.toString(),
+        level: 'Primary',
+        subject: 'Math',
+        address: '123 Test St',
+        postalCode: '123456',
+        minRate: '20',  // Mock data as string
+        maxRate: '50',  // Mock data as string
         duration: '1 hour',
         frequency: 'Weekly',
-        typeOfTutor: ['Certified'],
+        additionalDetails: 'None',
+        typeOfTutor: ['Private Tutor'], // Updated to array format
         gender: 'Any',
-        race: ['Any'],
-        availability: 'Weekdays',
-      },
-      {
-        id: 2,
-        subject: subjectsByLevel['Primary 2'][1],
-        level: levels.Primary[1],
-        clientId: 2,
-        tutorId: 2,
-        client: { name: 'Client 2' },
-        tutor: { name: 'Tutor 2' },
-        additionalDetails: 'Details',
-        postDate: new Date(),
-        taken: false,
-        address: 'Address 2',
-        postalCode: 67890,
-        minRate: 30,
-        maxRate: 60,
-        duration: '2 hours',
-        frequency: 'Bi-weekly',
-        typeOfTutor: ['Experienced'],
-        gender: 'Any',
-        race: ['Any'],
+        race: ['Any'], // Updated to array format
         availability: 'Weekends',
-      },
-    ];
+        postDate: '2024-07-01T00:00:00Z',
+        location: '1.3521, 103.8198', // Coordinates as string
+      }),
+    };
 
-    (prisma.assignment.findMany as jest.Mock<() =>Promise<Assignment[]>>).mockResolvedValueOnce(assignments);
+    const client = {
+      id: clientId,
+      email: 'test@example.com',
+      password: 'hashedpassword',
+      name: 'Test Client',
+      contactNumber: 12345678,
+      address: '123 Test St',
+      postalCode: 123456,
+      active: true,
+      image: null,
+    };
 
-    // Act
-    const result = await GET({} as Request);
+    const assignment = {
+      id: Date.now(),
+      clientId: clientId,
+      level: 'Primary',
+      subject: 'Math',
+      address: '123 Test St',
+      postalCode: 123456,
+      minRate: 20,
+      maxRate: 50,
+      duration: '1 hour',
+      frequency: 'Weekly',
+      additionalDetails: 'None',
+      typeOfTutor: ['Private Tutor'],  // Array format
+      gender: 'Any',
+      race: ['Any'],  // Array format
+      availability: 'Weekends',
+      postDate: new Date('2024-07-01T00:00:00Z'),
+      taken: false,
+      tutorId: null,
+      coordinates: [new Decimal(1.3521), new Decimal(103.8198)],
+    };
 
-    // Assert
-    expect(result).toBeInstanceOf(NextResponse);
-    expect(result.status).toBe(200);
-    expect(result.headers.get('Content-Type')).toBe('application/json');
+    prismaMock.client.findUnique.mockResolvedValue(client);
+    prismaMock.assignment.create.mockResolvedValue(assignment);
 
-    const bodyText = await result.text();
-    expect(JSON.parse(bodyText)).toEqual(assignments);
+    const response = await postAssignment(req as any);
+
+    console.log('Mock calls:', {
+      clientFindUniqueCalls: prismaMock.client.findUnique.mock.calls,
+      assignmentCreateCalls: prismaMock.assignment.create.mock.calls,
+    });
+
+    expect(response.status).toBe(201);
+    const jsonResponse = await response.json();
+    // Adjust expected response to match expected format
+    let expectedAssignment = { ...assignment};
+    expectedAssignment.id = jsonResponse.assignment.id;
+    console.log("expectedAssignment:", expectedAssignment)
+    let jsonAssignment = jsonResponse.assignment;
+    jsonAssignment.postDate = new Date(jsonAssignment.postDate);
+    jsonAssignment.coordinates = expectedAssignment.coordinates;
+    expect(jsonAssignment).toEqual(expectedAssignment);
   });
 
-  it('should return error response on error', async () => {
-    // Arrange
-    const errorMessage = 'Some error message';
+  it('should return error for invalid minRate and maxRate', async () => {
+    const req = {
+      json: jest.fn().mockResolvedValue({
+        clientId: '1',
+        level: 'Primary',
+        subject: 'Math',
+        address: '123 Test St',
+        postalCode: '123456',
+        minRate: '60', // minRate greater than maxRate
+        maxRate: '50',
+        duration: '1 hour',
+        frequency: 'Weekly',
+        additionalDetails: 'None',
+        typeOfTutor: ['Private Tutor'], // Updated to array format
+        gender: 'Any',
+        race: ['Any'], // Updated to array format
+        availability: 'Weekends',
+        postDate: '2024-07-01T00:00:00Z',
+      }),
+    };
 
-    (prisma.assignment.findMany as jest.Mock<() => Promise<Assignment[]>>).mockRejectedValueOnce(new Error(errorMessage));
+    const response = await postAssignment(req as any);
 
-    // Act
-    const result = await GET({} as Request);
+    expect(response.status).toBe(400);
+    const jsonResponse = await response.json();
+    expect(jsonResponse).toEqual({ error: 'Invalid minRate or maxRate' });
+  });
 
-    // Assert
-    expect(result).toBeInstanceOf(NextResponse);
-    expect(result.status).toBe(500);
-    expect(result.headers.get('Content-Type')).toBe('application/json');
+  it('should return error for missing required fields', async () => {
+    const req = {
+      json: jest.fn().mockResolvedValue({
+        clientId: '50',
+        level: 'Primary',
+        subject: 'Math',
+        address: '123 Test St',
+        postalCode: '123456',
+        duration: '1 hour',
+        frequency: 'Weekly',
+        additionalDetails: 'None',
+        typeOfTutor: ['Private Tutor'], // Updated to array format
+        gender: 'Any',
+        race: ['Any'], // Updated to array format
+        availability: 'Weekends',
+        postDate: '2024-07-01T00:00:00Z',
+      }),
+    };
 
-    const bodyText = await result.text();
-    expect(JSON.parse(bodyText).error).toBe(errorMessage);
+    const response = await postAssignment(req as any);
+
+    expect(response.status).toBe(500);
+    const jsonResponse = await response.json();
+    expect(jsonResponse).toEqual({ error: 'Missing required fields' });
+  });
+
+  it('should return error for non-existent client', async () => {
+    const req = {
+      json: jest.fn().mockResolvedValue({
+        clientId: '999', // Non-existent client ID
+        level: 'Primary',
+        subject: 'Math',
+        address: '123 Test St',
+        postalCode: '123456',
+        minRate: '20',
+        maxRate: '50',
+        duration: '1 hour',
+        frequency: 'Weekly',
+        additionalDetails: 'None',
+        typeOfTutor: ['Private Tutor'], // Updated to array format
+        gender: 'Any',
+        race: ['Any'], // Updated to array format
+        availability: 'Weekends',
+        postDate: '2024-07-01T00:00:00Z',
+      }),
+    };
+
+    prismaMock.client.findUnique.mockResolvedValue(null);
+
+    const response = await postAssignment(req as any);
+
+    expect(response.status).toBe(404);
+    const jsonResponse = await response.json();
+    expect(jsonResponse).toEqual({ error: 'Client not found' });
   });
 });
-
-//TODO: Learn Jest for Typescript nextjs
