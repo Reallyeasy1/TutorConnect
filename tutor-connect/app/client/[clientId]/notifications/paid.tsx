@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Tutor, Assignment } from "@prisma/client";
 import { useRouter } from "next/navigation";
 
-type PaymentProps = {
+type PaidProps = {
 	clientId: string | string[];
 	tutor: Tutor;
 	assignment: Assignment;
@@ -14,7 +14,7 @@ type PaymentProps = {
 	read: boolean;
 };
 
-export const Payment: React.FC<PaymentProps> = ({ clientId, tutor, assignment, date, markAsRead, notificationId, read }) => {
+export const Paid: React.FC<PaidProps> = ({ clientId, tutor, assignment, date, markAsRead, notificationId, read }) => {
 	const router = useRouter();
 
     const handleClick = () => {

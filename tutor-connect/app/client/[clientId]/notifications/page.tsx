@@ -9,7 +9,7 @@ import { useParams } from "next/navigation";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import Loading from "@/app/loading";
 import { Apply } from "./apply";
-import { Payment } from "./payment";
+import { Paid } from "./paid";
 import { Matched } from "./matched";
 import Image from "next/image";
 
@@ -228,7 +228,7 @@ export default function Notifications() {
 								notificationId={notif.id}
 								read={notif.read}
 							/>
-							<Payment
+							<Paid
 								clientId={clientId}
 								tutor={notif.tutor}
 								assignment={notif.assignment}

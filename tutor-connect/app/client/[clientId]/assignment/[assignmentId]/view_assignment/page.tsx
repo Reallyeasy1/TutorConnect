@@ -139,7 +139,7 @@ export default function ViewAssignment() {
 									</h2>
 									<p className="text-gray-700 mb-1">
 										<strong>Address:</strong>{" "}
-										{assignment.address} Singapore{" "}
+										{assignment.address} Singapore{" "}	
 										{assignment.postalCode}
 									</p>
 									<p className="text-gray-700 mb-1">
@@ -147,6 +147,7 @@ export default function ViewAssignment() {
 										{assignment.duration},{" "}
 										{assignment.frequency}
 									</p>
+									{/* Do Boolean check to see if the tutor is matched */}
 									<p className="text-gray-700 mb-1">
 										<strong>Rate:</strong> $
 										{assignment.minRate} - $
