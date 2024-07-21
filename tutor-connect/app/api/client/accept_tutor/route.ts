@@ -19,10 +19,7 @@ interface Tutor {
 
 export async function PUT(req: Request) {
 	try {
-		const body = await req.json();
-		console.log(body);
-
-		const { clientId, AssignmentId, tutor } = body;
+		const { clientId, assignmentId, tutor, startDate, amount } = await req.json();
 
 		// Validate required fields
 		if (!tutor) {
@@ -50,7 +47,7 @@ export async function PUT(req: Request) {
 		}
 
 		// Validate assignmentId is a number
-		const assignmentIdNumber = parseInt(AssignmentId);
+		const assignmentIdNumber = parseInt(assignmentId);
 		if (isNaN(assignmentIdNumber)) {
 			return new NextResponse(
 				JSON.stringify({
@@ -58,22 +55,6 @@ export async function PUT(req: Request) {
 				}),
 				{
 					status: 400,
-				}
-			);
-		}
-
-		// Find the client
-		const client = await prisma.client.findUnique({
-			where: { id: clientIdNumber },
-		});
-
-		if (!client) {
-			return new NextResponse(
-				JSON.stringify({
-					error: "Client not found",
-				}),
-				{
-					status: 404,
 				}
 			);
 		}
