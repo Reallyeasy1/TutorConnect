@@ -1,12 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { parse } from "path";
 
 // TODO: Validate data here
 export async function POST(req: Request) {
 	try {
 		const body = await req.json();
-		console.log(body);
 
 		const {
 			clientId,
@@ -25,9 +23,9 @@ export async function POST(req: Request) {
 			availability,
 			postDate,
 			location,
-            taken,
-            amount,
-            startDate,
+			amount,
+			startDate,
+			tutorId,
 		} = body;
 
 		// Validate required fields
@@ -73,7 +71,7 @@ export async function POST(req: Request) {
 			);
 		}
 
-		const coordinates = location.split(",").map((part: string) => parseFloat(part.trim()))
+		const coordinates = location.split(",").map((part: string) => parseFloat(part.trim()));
 
 		const assignment = await prisma.assignment.create({
 			data: {
@@ -92,13 +90,14 @@ export async function POST(req: Request) {
 				race: [race],
 				availability,
 				postDate: new Date(postDate),
-				taken,
+				taken: false,
 				avail_tutors: {
 					create: [],
 				},
 				coordinates: coordinates,
-                amount,
-                startDate,
+				amount,
+				startDate,
+				tutor: { connect: { id: parseInt(tutorId) } },
 			},
 		});
 

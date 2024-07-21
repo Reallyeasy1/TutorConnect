@@ -30,6 +30,7 @@ interface Assignment {
 		name: string;
 	};
 	coordinates: number[];
+	tutorId: number | null;
 }
 
 const AssignmentRow = ({ assignments, selectedAssignment }: { assignments: Assignment[]; selectedAssignment: Assignment | null }) => {
@@ -146,7 +147,7 @@ export default function AllAssignments() {
 					const data = await res.json();
 					setAssignments(data);
 
-					const availableAssignments = data.filter((assignment: Assignment) => assignment.taken === false);
+					const availableAssignments = data.filter((assignment: Assignment) => assignment.taken === false && !assignment.tutorId);
 					setFilteredAssignments(availableAssignments);
 
 					const markerPromises = availableAssignments.map((assignment: Assignment) => ({

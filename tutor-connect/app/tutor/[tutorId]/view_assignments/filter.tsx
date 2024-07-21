@@ -39,6 +39,7 @@ interface Assignment {
 		name: string;
 	};
 	coordinates: number[];
+	tutorId: number | null;
 }
 
 type FilterProps = {

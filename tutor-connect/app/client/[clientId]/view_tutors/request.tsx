@@ -85,7 +85,6 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 	const onNext = () => {
 		const tabs = ["lessonDetails", "tutorDetails"];
 		const currentIndex = tabs.indexOf(currentTab);
-		console.log(address)
 		if (currentIndex < tabs.length - 1) {
 			setCurrentTab(tabs[currentIndex + 1]);
 		}
@@ -100,11 +99,10 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 			const { lat, lng } = data.results[0].geometry.location;
 			const locationString = `${lat},${lng}`;
 			setLocation(locationString);
-			console.log(location);
-			return;
+			return locationString;
 		} else {
 			setError("Invalid address, please enter a valid address");
-			return;
+			return null;
 		}
 	};
 
@@ -130,8 +128,14 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 			newLevel = level;
 		}
 
+		let locationString = null;
 		if (address) {
-			await geocodeAddress(address);
+			locationString = await geocodeAddress(address);
+			if (!locationString) {
+				// If geocoding fails, exit early
+				setError("Invalid address, please enter a valid address");
+				return;
+			}
 		}
 
 		if (availability === "") {
@@ -158,10 +162,10 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 					race: tutor.race,
 					availability,
 					postDate,
-					location: location,
-					taken: true,
+					location: locationString,
 					amount,
 					startDate: availability,
+					tutorId: tutor.id,
 				}),
 				headers: {
 					"Content-Type": "application/json",
