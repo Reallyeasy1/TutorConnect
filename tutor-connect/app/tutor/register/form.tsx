@@ -17,7 +17,7 @@ import jwt from "jsonwebtoken";
 import { subjectsByCategory } from "@/utils/levelsAndSubjects";
 import { locations } from "@/utils/locations";
 import { Alert } from "@/components/ui/alert";
-import TutorDropdown from "@/components/nav-bar/tutorDropdown";
+import {TutorDropdown} from "@/components/nav-bar/tutorDropdown";
 
 type CheckedSubjects = {
 	"Pre-School": string[];

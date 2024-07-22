@@ -1,133 +1,238 @@
-'use client';
-import React from 'react';
-import * as Tabs from '@radix-ui/react-tabs';
-import * as Accordion from '@radix-ui/react-accordion';
-import styles from './faq.module.css';
-import NavBar from '@/components/nav-bar/navBar';
-import Footer from '@/components/footer/footer';
-import '../globals.css'; // Import global styles
+"use client";
 
-type FAQProps = {
-  faqs: { question: string; answer: string }[];
-};
+import React from "react";
+import NavBar from "@/components/nav-bar/navBar";
+import Footer from "@/components/footer/footer";
+import "../globals.css"; // Import global styles
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/customTabs";
 
-const ClientFAQ: React.FC<FAQProps> = ({ faqs }) => (
-  <div className={styles.accordionContainer}>
-    <h2 className="text-2xl font-bold mb-2">Client FAQ</h2>
-    <Accordion.Root type="single" collapsible>
-      {faqs.map((faq, index) => (
-        <Accordion.Item value={`item-${index}`} key={index}>
-          <Accordion.Header>
-            <Accordion.Trigger className={styles.accordionTrigger}>
-              {faq.question}
-            </Accordion.Trigger>
-          </Accordion.Header>
-          <Accordion.Content className={styles.accordionContent}>
-            {faq.answer}
-          </Accordion.Content>
-        </Accordion.Item>
-      ))}
-    </Accordion.Root>
-  </div>
-);
-
-const TutorFAQ: React.FC<FAQProps> = ({ faqs }) => (
-  <div className={styles.accordionContainer}>
-    <h2 className="text-2xl font-bold mb-2">Tutor FAQ</h2>
-    <Accordion.Root type="single" collapsible>
-      {faqs.map((faq, index) => (
-        <Accordion.Item value={`item-${index}`} key={index}>
-          <Accordion.Header>
-            <Accordion.Trigger className={styles.accordionTrigger}>
-              {faq.question}
-            </Accordion.Trigger>
-          </Accordion.Header>
-          <Accordion.Content className={styles.accordionContent}>
-            {faq.answer}
-          </Accordion.Content>
-        </Accordion.Item>
-      ))}
-    </Accordion.Root>
-  </div>
-);
-
-const FAQPage: React.FC = () => {
+export default function FAQPage() {
   const clientFAQs = [
     {
-      question: 'How Do I Register For A Tuition Teacher?',
-      answer: 'You may register for a tuition teacher by taking 1-2 minutes to fill up our simple form here. Or alternatively, you may contact us at +65 84829619 or skibidiToilet@gmail.com.'
+      question: "How Do I Register For A Tuition Teacher?",
+      answer:
+        "You may register for a tuition teacher by taking 1-2 minutes to fill up our simple form here. Or alternatively, you may contact us at +65 84829619 or skibidiToilet@gmail.com.",
     },
     {
-      question: 'Do I Have To Pay Any Extra Fees?',
-      answer: 'No, there are no extra fees.'
+      question: "Do I Have To Pay Any Extra Fees?",
+      answer: "No, there are no extra fees.",
     },
     {
-      question: 'What Are The Types of Tutors Available?',
-      answer: 'We offer a wide range of tutors, including those who specialize in different subjects, levels, and student needs. Contact us to find the right tutor for you.'
+      question: "What Are The Types of Tutors Available?",
+      answer:
+        "We offer a wide range of tutors, including those who specialize in different subjects, levels, and student needs. Contact us to find the right tutor for you.",
     },
     {
-      question: 'Do You Provide Trial Lessons?',
-      answer: 'Yes, we do provide trial lessons. Please contact us to schedule a trial lesson with your selected tutor.'
+      question: "Do You Provide Trial Lessons?",
+      answer: "Yes, we do provide trial lessons. Please contact us to schedule a trial lesson with your selected tutor.",
     },
     {
-      question: 'What If The Tutor Is Not Suitable?',
-      answer: 'If the tutor is not suitable, you can request a change of tutor. We will work with you to find a better match for your needs.'
+      question: "What If The Tutor Is Not Suitable?",
+      answer: "If the tutor is not suitable, you can request a change of tutor. We will work with you to find a better match for your needs.",
     },
     {
-      question: 'How Is Payment Made?',
-      answer: 'Payment can be made via bank transfer, credit card, or PayPal. Details will be provided upon confirmation of the tutoring arrangement.'
+      question: "How Is Payment Made?",
+      answer:
+        "Payment can be made via bank transfer, credit card, or PayPal. Details will be provided upon confirmation of the tutoring arrangement.",
     },
     // Add more FAQs as needed
   ];
 
   const tutorFAQs = [
     {
-      question: 'How Do I Sign Up As A Tutor?',
-      answer: 'Sign up by filling our registration form here.'
+      question: "How Do I Sign Up As A Tutor?",
+      answer: "Sign up by filling our registration form here.",
     },
     {
-      question: 'What Are The Requirements To Be A Tutor?',
-      answer: 'The requirements are listed in our guidelines here.'
+      question: "What Are The Requirements To Be A Tutor?",
+      answer: "The requirements are listed in our guidelines here.",
     },
     {
-      question: 'How Do I Get Matched With Students?',
-      answer: 'Once you have registered as a tutor, we will match you with students based on your qualifications, experience, and the subjects you teach.'
+      question: "How Do I Get Matched With Students?",
+      answer:
+        "Once you have registered as a tutor, we will match you with students based on your qualifications, experience, and the subjects you teach.",
     },
     {
-      question: 'How Do I Schedule Lessons With Students?',
-      answer: 'You can schedule lessons with students through our platform. Both tutors and students have the flexibility to arrange lesson times that are convenient for both parties.'
+      question: "How Do I Schedule Lessons With Students?",
+      answer:
+        "You can schedule lessons with students through our platform. Both tutors and students have the flexibility to arrange lesson times that are convenient for both parties.",
     },
     {
-      question: 'How Is Payment Processed?',
-      answer: 'Payment is processed through our platform. Tutors will receive payment directly into their bank accounts after each lesson or on a monthly basis, depending on the arrangement.'
+      question: "How Is Payment Processed?",
+      answer:
+        "Payment is processed through our platform. Tutors will receive payment directly into their bank accounts after each lesson or on a monthly basis, depending on the arrangement.",
     },
     {
-      question: 'What If I Have A Problem With A Student?',
-      answer: 'If you encounter any problems with a student, please contact our support team immediately. We are here to help resolve any issues you may have.'
+      question: "What If I Have A Problem With A Student?",
+      answer:
+        "If you encounter any problems with a student, please contact our support team immediately. We are here to help resolve any issues you may have.",
     },
-    // Add more FAQs as needed
+    // Add way more FAQs as needed 
   ];
 
+  const styles = {
+    title: {
+      font: "Poppins",
+      fontSize: "32px",
+      textAlign: "center" as "center",
+      fontWeight: "bold",
+      padding: "20px",
+    },
+    container: {
+      display: "flex",
+      flexDirection: "column" as "column",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: "20px",
+      width: "70%",
+    },
+    main: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "flex-start",
+      flex: "1",
+      border: "1px solid #5790AB",
+    },
+    noOffer: {
+      fontSize: "24px",
+      fontWeight: "normal" as "normal",
+      font: "Poppins",
+      color: "#909090",
+      padding: "20px",
+    },
+    blueButton: {
+      backgroundColor: "#5790AB",
+      color: "#fff",
+      padding: "10px 20px",
+      borderRadius: "5px",
+      fontSize: "16px",
+      marginRight: "10px",
+      fontWeight: "bold",
+    },
+    whiteButton: {
+      backgroundColor: "#fff",
+      color: "#5790AB",
+      padding: "10px 20px",
+      borderRadius: "5px",
+      border: "1px solid #5790AB",
+      fontSize: "16px",
+      marginRight: "10px",
+      fontWeight: "bold",
+    },
+    rejectButton: {
+      backgroundColor: "#FF0000",
+      color: "#fff",
+      padding: "10px 20px",
+      borderRadius: "5px",
+      border: "1px solid #FF0000",
+      fontSize: "16px",
+      fontWeight: "bold",
+    },
+    assignmentContainer: {
+      display: "flex",
+      flexDirection: "column" as "column",
+      padding: "10px 20px 10px 20px",
+      width: "100%",
+      borderRadius: "10px",
+      marginBottom: "20px",
+      border: "1px solid #5790AB",
+    },
+    assignmentTitle: {
+      fontSize: "24px",
+      fontWeight: "bold" as "bold",
+      font: "Poppins",
+    },
+    assignmentNum: {
+      fontSize: "16px",
+      fontWeight: "normal" as "normal",
+      font: "Poppins",
+      color: "#909090",
+    },
+    text: {
+      fontSize: "16px",
+      fontWeight: "normal" as "normal",
+      font: "Poppins",
+      color: "#000",
+      textAlign: "justify" as "justify",
+    },
+    buttons: {
+      marginLeft: "auto",
+    },
+    emptySection: {
+      display: "flex",
+      flexDirection: "column" as "column",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: "20px",
+      width: "100%",
+    },
+    arrowIcon: {
+      marginLeft: "10px",
+      width: "24px",
+      height: "24px",
+      fill: "white",
+      transform: "rotate(180deg)",
+    },
+    confirmed: {
+      color: "#00cc00",
+    },
+    pending: {
+      color: "#FFA500",
+    },
+  };
+
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <NavBar />
-      <div className={`${styles.container} mx-auto p-4`}>
-        <Tabs.Root defaultValue="client">
-          <Tabs.List className={styles.tabsList}>
-            <Tabs.Trigger value="client" className={styles.tabsTrigger}>Client</Tabs.Trigger>
-            <Tabs.Trigger value="tutor" className={styles.tabsTrigger}>Tutor</Tabs.Trigger>
-          </Tabs.List>
-          <Tabs.Content value="client">
-            <ClientFAQ faqs={clientFAQs} />
-          </Tabs.Content>
-          <Tabs.Content value="tutor">
-            <TutorFAQ faqs={tutorFAQs} />
-          </Tabs.Content>
-        </Tabs.Root>
+      <div style={styles.main}>
+        <div style={styles.container}>
+          {/* Check to see if current is at client or tutor */}
+          <h1 style={styles.title}>FAQ</h1>
+          <div style={{ width: "100%" }}>
+            <Tabs defaultValue="Client">
+              <TabsList
+                className="grid w-full grid-cols-2"
+                style={{
+                  marginBottom: "20px",
+                  backgroundColor: "#eff8fa",
+                  color: "#5790AB",
+                }}
+              >
+                <TabsTrigger value="Client" className="font-xl">
+                  Client
+                </TabsTrigger>
+                <TabsTrigger value="Tutor">Tutor</TabsTrigger>
+              </TabsList>
+              <TabsContent value="Client">
+                <div style={{ padding: "0 20px 0 20px" }}>
+                  {clientFAQs.map((question) => (
+                    <Accordion type="single" collapsible className="w-full" key={question.question}>
+                      <AccordionItem value="item-1">
+                        <AccordionTrigger>{question.question}</AccordionTrigger>
+                        <AccordionContent>{question.answer}</AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  ))}
+                </div>
+              </TabsContent>
+              <TabsContent value="Tutor">
+                <div style={{ padding: "0 20px 0 20px" }}>
+                  {tutorFAQs.map((question) => (
+                    <Accordion type="single" collapsible className="w-full" key={question.question}>
+                      <AccordionItem value="item-1">
+                        <AccordionTrigger>{question.question}</AccordionTrigger>
+                        <AccordionContent>{question.answer}</AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  ))}
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
+        </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
-};
-
-export default FAQPage;
+}

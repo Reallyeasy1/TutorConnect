@@ -16,13 +16,13 @@ model Client {
   contactNumber            Int
   address                  String
   postalCode               Int
-  assignments              Assignment[]
   active                   Boolean                    @default(false)
-  activateClientToken      ActivateClientToken[]
-  passwordResetClientToken PasswordResetClientToken[]
   image                    String?
-  reviews                  Review[]                   @relation("ClientReviews")
+  activateClientToken      ActivateClientToken[]
+  assignments              Assignment[]
   ClientNotification       ClientNotification[]
+  passwordResetClientToken PasswordResetClientToken[]
+  reviews                  Review[]                   @relation("ClientReviews")
   TutorNotification        TutorNotification[]
 }
 
@@ -30,9 +30,7 @@ model Assignment {
   id                 Int                  @id @default(autoincrement())
   subject            String
   level              String
-  client             Client               @relation(fields: [clientId], references: [id])
   clientId           Int
-  tutor              Tutor?               @relation(name: "PrimaryTutor", fields: [tutorId], references: [id])
   tutorId            Int?
   additionalDetails  String?
   postDate           DateTime
@@ -47,14 +45,16 @@ model Assignment {
   gender             String
   race               String[]
   availability       String
-  avail_tutors       Tutor[]              @relation(name: "AvailableTutors")
   coordinates        Decimal[]
-  ClientNotification ClientNotification[]
-  TutorNotification  TutorNotification[]
   isPaid             Boolean              @default(false)
   startDate          String?
   amount             Int?
   isRequest          Boolean              @default(false)
+  client             Client               @relation(fields: [clientId], references: [id])
+  tutor              Tutor?               @relation("PrimaryTutor", fields: [tutorId], references: [id])
+  ClientNotification ClientNotification[]
+  TutorNotification  TutorNotification[]
+  avail_tutors       Tutor[]              @relation("AvailableTutors")
 }
 
 model Tutor {
@@ -73,55 +73,55 @@ model Tutor {
   typeOfTutor             String
   yearsOfExperience       Int
   highestEducationLevel   String
-  assignmentsPrimary      Assignment[]              @relation(name: "PrimaryTutor")
-  assignmentsAvailable    Assignment[]              @relation(name: "AvailableTutors")
   active                  Boolean                   @default(false)
   image                   String?
   introduction            String?
   summary                 String?
   studentsResults         String?
   activateTutorToken      ActivateTutorToken[]
+  assignmentsPrimary      Assignment[]              @relation("PrimaryTutor")
+  ClientNotification      ClientNotification[]
   passwordResetTutorToken PasswordResetTutorToken[]
   reviews                 Review[]                  @relation("TutorReviews")
-  ClientNotification      ClientNotification[]
   TutorNotification       TutorNotification[]
+  assignmentsAvailable    Assignment[]              @relation("AvailableTutors")
 }
 
 model ClientNotification {
   id           Int         @id @default(autoincrement())
   read         Boolean     @default(false)
-  client       Client      @relation(fields: [clientId], references: [id])
   clientId     Int
   date         DateTime    @default(now())
-  assignment   Assignment? @relation(fields: [assignmentId], references: [id])
   assignmentId Int?
-  tutor        Tutor?      @relation(fields: [tutorId], references: [id])
   tutorId      Int?
   type         String
+  assignment   Assignment? @relation(fields: [assignmentId], references: [id])
+  client       Client      @relation(fields: [clientId], references: [id])
+  tutor        Tutor?      @relation(fields: [tutorId], references: [id])
 }
 
 model TutorNotification {
   id           Int         @id @default(autoincrement())
   read         Boolean     @default(false)
-  tutor        Tutor       @relation(fields: [tutorId], references: [id])
   tutorId      Int
   date         DateTime    @default(now())
-  assignment   Assignment? @relation(fields: [assignmentId], references: [id])
   assignmentId Int?
-  client       Client?     @relation(fields: [clientId], references: [id])
   clientId     Int?
   type         String
+  assignment   Assignment? @relation(fields: [assignmentId], references: [id])
+  client       Client?     @relation(fields: [clientId], references: [id])
+  tutor        Tutor       @relation(fields: [tutorId], references: [id])
 }
 
 model Review {
   id        Int      @id @default(autoincrement())
-  tutor     Tutor    @relation(fields: [tutorId], references: [id], name: "TutorReviews", onDelete: Cascade)
   tutorId   Int
   review    String
   rating    Int
   clientId  Int
-  client    Client   @relation(fields: [clientId], references: [id], name: "ClientReviews", onDelete: Cascade)
   createdAt DateTime @default(now())
+  client    Client   @relation("ClientReviews", fields: [clientId], references: [id], onDelete: Cascade)
+  tutor     Tutor    @relation("TutorReviews", fields: [tutorId], references: [id], onDelete: Cascade)
 }
 
 model ActivateTutorToken {
@@ -129,8 +129,8 @@ model ActivateTutorToken {
   token       String    @unique
   createdAt   DateTime  @default(now())
   activatedAt DateTime?
-  tutor       Tutor     @relation(fields: [tutorId], references: [id])
   tutorId     Int
+  tutor       Tutor     @relation(fields: [tutorId], references: [id])
 }
 
 model PasswordResetTutorToken {
@@ -138,8 +138,8 @@ model PasswordResetTutorToken {
   token     String    @unique
   createdAt DateTime  @default(now())
   resetAt   DateTime?
-  tutor     Tutor     @relation(fields: [tutorId], references: [id])
   tutorId   Int
+  tutor     Tutor     @relation(fields: [tutorId], references: [id])
 }
 
 model ActivateClientToken {
@@ -147,8 +147,8 @@ model ActivateClientToken {
   token       String    @unique
   createdAt   DateTime  @default(now())
   activatedAt DateTime?
-  client      Client    @relation(fields: [clientId], references: [id])
   clientId    Int
+  client      Client    @relation(fields: [clientId], references: [id])
 }
 
 model PasswordResetClientToken {
@@ -156,10 +156,6 @@ model PasswordResetClientToken {
   token     String    @unique
   createdAt DateTime  @default(now())
   resetAt   DateTime?
-  client    Client    @relation(fields: [clientId], references: [id])
   clientId  Int
+  client    Client    @relation(fields: [clientId], references: [id])
 }
-
-//generator erd {
-//  provider = "prisma-erd-generator"
-//}

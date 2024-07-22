@@ -66,6 +66,7 @@ describe('Assignment API Endpoints', () => {
       isPaid: false,
       startDate: null,
       amount: null,
+      isRequest: false,
     };
 
     prismaMock.client.findUnique.mockResolvedValue(client);
