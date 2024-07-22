@@ -442,36 +442,32 @@ export default function MyReviews() {
 								{appliedAssignments.length > 0 && !loading && (
 									<div>
 										{appliedAssignments.map((assignment: Assignment) => (
-											<div>
-												{offeredAssignments.map((assignment: Assignment) => (
-													<div key={assignment.id} style={styles.assignmentContainer}>
-														<h2 style={styles.assignmentTitle}>
-															{assignment.level} {assignment.subject}
-														</h2>
-														<p style={styles.assignmentNum}>Assignment #{assignment.id}</p>
-														<p style={styles.text}>
-															<strong>Address: </strong>
-															{assignment.address}, Singapore {assignment.postalCode}
-														</p>
-														<p style={styles.text}>
-															<strong>Rate: </strong>${assignment.minRate} - {assignment.maxRate}/h
-														</p>
-														<p style={styles.text}>
-															<strong>Duration and Frequency: </strong>
-															{assignment.duration}, {assignment.frequency}
-														</p>
-														<p style={styles.text}>
-															<strong>Availability: </strong>
-															{assignment.availability}
-														</p>
-														{assignment.additionalDetails && (
-															<p style={styles.text}>
-																<strong>Additional Details: </strong>
-																{assignment.additionalDetails}
-															</p>
-														)}
-													</div>
-												))}
+											<div key={assignment.id} style={styles.assignmentContainer}>
+												<h2 style={styles.assignmentTitle}>
+													{assignment.level} {assignment.subject}
+												</h2>
+												<p style={styles.assignmentNum}>Assignment #{assignment.id}</p>
+												<p style={styles.text}>
+													<strong>Address: </strong>
+													{assignment.address}, Singapore {assignment.postalCode}
+												</p>
+												<p style={styles.text}>
+													<strong>Rate: </strong>${assignment.minRate} - {assignment.maxRate}/h
+												</p>
+												<p style={styles.text}>
+													<strong>Duration and Frequency: </strong>
+													{assignment.duration}, {assignment.frequency}
+												</p>
+												<p style={styles.text}>
+													<strong>Availability: </strong>
+													{assignment.availability}
+												</p>
+												{assignment.additionalDetails && (
+													<p style={styles.text}>
+														<strong>Additional Details: </strong>
+														{assignment.additionalDetails}
+													</p>
+												)}
 											</div>
 										))}
 									</div>

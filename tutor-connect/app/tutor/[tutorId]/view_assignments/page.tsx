@@ -75,9 +75,6 @@ const AssignmentRow = ({ assignments, selectedAssignment }: { assignments: Assig
 						<p className="text-gray-700 mb-1">
 							<strong>Post Date:</strong> {new Date(assignment.postDate).toLocaleDateString()}
 						</p>
-						<p className="text-gray-700 mb-1">
-							<strong>Client:</strong> {assignment.client.name}
-						</p>
 						<p className={`text-gray-700 mb-1 ${assignment.taken ? "text-red-500" : "text-green-500"}`}>
 							<strong>Status:</strong> {assignment.taken ? "Taken" : "Available"}
 						</p>
