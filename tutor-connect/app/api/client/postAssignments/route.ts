@@ -29,6 +29,18 @@ export async function POST(req: Request) {
 
 		// Validate required fields
 
+
+		if (!subject || !level || !clientId || (minRate == null) || (maxRate == null) || !postDate) {
+			return new NextResponse(
+				JSON.stringify({
+					error: "Missing required fields",
+				}),
+				{
+					status: 500,
+				}
+			);
+		}
+
 		if (minRate > maxRate || minRate < 0 || maxRate < 0) {
 			return new NextResponse(
 				JSON.stringify({

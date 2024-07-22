@@ -20,8 +20,7 @@ interface Tutor {
 export async function PUT(req: Request) {
   try {
     const { clientId, assignmentId, tutor, startDate, amount } = await req.json();
-	try {
-		const { clientId, assignmentId, tutor, startDate, amount } = await req.json();
+	
 
     // Validate required fields
     if (!tutor) {
@@ -48,18 +47,6 @@ export async function PUT(req: Request) {
       );
     }
 
-    // Validate assignmentId is a number
-    const assignmentIdNumber = parseInt(assignmentId);
-    if (isNaN(assignmentIdNumber)) {
-      return new NextResponse(
-        JSON.stringify({
-          error: "Invalid assignment ID",
-        }),
-        {
-          status: 400,
-        }
-      );
-    }
 
     // Validate amount is a number
     const amountNumber = parseInt(amount);
@@ -115,3 +102,5 @@ export async function PUT(req: Request) {
     );
   }
 }
+
+
