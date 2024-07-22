@@ -7,8 +7,8 @@ import Logo from "./logo";
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import "@fontsource/poppins";
-import ClientDropdown from "./clientDropdown";
-import TutorDropdown from "./tutorDropdown";
+import { ClientDropdown } from "./clientDropdown";
+import { TutorDropdown } from "./tutorDropdown";
 import RegisterDropdown from "./registerDropdown";
 import LoginDropdown from "./loginDropdown";
 import Image from "next/image";
@@ -31,6 +31,7 @@ const NavBar = () => {
 	const clientProfileRef = useRef<HTMLDivElement>(null);
 	const tutorProfileRef = useRef<HTMLDivElement>(null);
 	const [userImage, setUserImage] = useState<string | null>(null);
+	const [userId, setUserId] = useState<number>(-1);
 
 	const { data: session } = useSession();
 
@@ -95,6 +96,7 @@ const NavBar = () => {
 					if (res.ok) {
 						const userData = await res.json();
 						setUserImage(userData.image);
+						setUserId(userData.id);
 					} else {
 						console.error("Failed to fetch client details");
 					}
@@ -185,7 +187,7 @@ const NavBar = () => {
 							For Clients
 							<Image src="/images/arrowdown.png" alt="Arrow down" width={20} height={20} />
 						</button>
-						{clientsDropdown && <ClientDropdown />}
+						{clientsDropdown && <ClientDropdown id={userId}/>}
 					</div>
 				)}
 				{(session?.user?.randomKey == "tutor" || !session) && (
@@ -202,7 +204,7 @@ const NavBar = () => {
 							For Tutors
 							<Image src="/images/arrowdown.png" alt="Arrow down" width={20} height={20} />
 						</button>
-						{tutorsDropdown && <TutorDropdown />}
+						{tutorsDropdown && <TutorDropdown id={userId} />}
 					</div>
 				)}
 				<div>

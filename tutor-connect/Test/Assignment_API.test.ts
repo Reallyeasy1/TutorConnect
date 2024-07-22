@@ -63,6 +63,10 @@ describe('Assignment API Endpoints', () => {
       taken: false,
       tutorId: null,
       coordinates: [new Decimal(1.3521), new Decimal(103.8198)],
+      isPaid: false,
+      startDate: null,
+      amount: null,
+      isRequest: false,
     };
 
     prismaMock.client.findUnique.mockResolvedValue(client);

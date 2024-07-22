@@ -14,7 +14,7 @@ export default function RegisterPage() {
       <ContactUsHeader />
       <div className="flex-grow flex flex-col items-center w-full py-6 mt-[-3%]">
 {/* Make the below component  */}
-        <div className="relative w-full flex justify-center mt-6">
+        <div className="relative w-full flex justify-center">
           <BlueBackground />
           <div className="relative w-full max-w-lg bg-white p-8 rounded-xl shadow-lg z-10">
             <ContactUsForm />
