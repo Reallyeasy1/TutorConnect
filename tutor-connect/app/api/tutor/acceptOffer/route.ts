@@ -4,8 +4,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
 	try {
 		const { tutorId, assignmentId } = await req.json();
-		
-		// Validate tutorId is a number
+
 		const tutorIdNumber = parseInt(tutorId);
 		if (isNaN(tutorIdNumber)) {
 			return new NextResponse(
@@ -18,7 +17,6 @@ export async function POST(req: Request) {
 			);
 		}
 
-		// Find the tutor
 		const tutor = await prisma.tutor.findUnique({
 			where: { id: tutorIdNumber },
 		});
@@ -34,7 +32,6 @@ export async function POST(req: Request) {
 			);
 		}
 
-		// Find the assignment with available tutors included
 		const assignment_found = await prisma.assignment.findUnique({
 			where: { id: parseInt(assignmentId) },
 		});
@@ -53,7 +50,7 @@ export async function POST(req: Request) {
 		await prisma.assignment.update({
 			where: { id: assignmentId },
 			data: {
-                taken: true,
+				taken: true,
 			},
 		});
 

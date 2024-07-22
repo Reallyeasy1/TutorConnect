@@ -15,6 +15,7 @@ export default function MyReviews() {
 	const [error, setError] = useState<string | null>(null);
 	const [offeredAssignments, setOfferedAssignments] = useState<Assignment[]>([]);
 	const [appliedAssignments, setAppliedAssignments] = useState<Assignment[]>([]);
+	const [acceptedAssignments, setAcceptedAssignments] = useState<Assignment[]>([]);
 	const params = useParams();
 	const tutorId = params.tutorId;
 	const router = useRouter();
@@ -55,8 +56,10 @@ export default function MyReviews() {
 				const appliedData = await applied.json();
 				const offeredAssignments = offeredData.assignments.filter((assignment: Assignment) => !assignment.isPaid && !assignment.taken);
 				const appliedAssignments = appliedData.assignments.filter((assignment: Assignment) => !assignment.taken);
+				const acceptedAssignments = offeredData.assignments.filter((assignment: Assignment) => assignment.taken);
 				setOfferedAssignments(offeredAssignments);
 				setAppliedAssignments(appliedAssignments);
+				setAcceptedAssignments(acceptedAssignments);
 			} catch (error) {
 				console.error("Error fetching assignments:", error);
 			} finally {
@@ -104,7 +107,7 @@ export default function MyReviews() {
 		} catch (error) {
 			console.error("Error accepting assignment:", error);
 		}
-	}
+	};
 
 	const rejectButton = async (assignment: Assignment) => {
 		try {
@@ -144,7 +147,7 @@ export default function MyReviews() {
 		} catch (error) {
 			console.error("Error rejecting assignment:", error);
 		}
-	}
+	};
 
 	const styles = {
 		title: {
@@ -249,6 +252,12 @@ export default function MyReviews() {
 			fill: "white",
 			transform: "rotate(180deg)",
 		},
+		confirmed: {
+			color: "#00cc00",
+		},
+		pending: {
+			color: "#FFA500",
+		},
 	};
 	return (
 		<div className="flex flex-col min-h-screen">
@@ -259,14 +268,83 @@ export default function MyReviews() {
 					<div style={{ width: "100%" }}>
 						<Tabs defaultValue="offers">
 							<TabsList
-								className="grid w-full grid-cols-2"
+								className="grid w-full grid-cols-3"
 								style={{ marginBottom: "20px", backgroundColor: "#eff8fa", color: "#5790AB" }}
 							>
+								<TabsTrigger value="accepted" className="font-xl">
+									Accepted
+								</TabsTrigger>
 								<TabsTrigger value="offers" className="font-xl">
 									Offers
 								</TabsTrigger>
 								<TabsTrigger value="applied">Applied</TabsTrigger>
 							</TabsList>
+							<TabsContent value="accepted">
+								{loading && <Loading />}
+								{acceptedAssignments.length === 0 && !loading && (
+									<div style={styles.emptySection}>
+										<Image
+											src="/images/Assignment.png"
+											alt="Assignment"
+											width={150}
+											height={150}
+											quality={100}
+											style={{
+												width: "150px",
+												height: "150px",
+											}}
+										/>
+										<p style={styles.noOffer}>No accepted assignments yet.</p>
+										<Button style={styles.blueButton} onClick={findAssignments}>
+											Find Assignments{" "}
+											<svg style={styles.arrowIcon} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path d="M12 2l1.41 1.41L5.83 11H22v2H5.83l7.58 7.59L12 22 2 12 12 2z" />
+											</svg>
+										</Button>
+									</div>
+								)}
+								{acceptedAssignments.length > 0 && !loading && (
+									<div>
+										{acceptedAssignments.map((assignment: Assignment) => (
+											<div key={assignment.id} style={styles.assignmentContainer}>
+												<div style={{ display: "flex" }}>
+													<div>
+														<h2 style={styles.assignmentTitle}>
+															{assignment.level} {assignment.subject}
+														</h2>
+													</div>
+												</div>
+												<p style={styles.assignmentNum}>Assignment #{assignment.id}</p>
+												<p style={styles.text}>
+													<strong>Address: </strong>
+													{assignment.address}, Singapore {assignment.postalCode}
+												</p>
+												<p style={styles.text}>
+													<strong>Rate: </strong>${assignment.amount}/h
+												</p>
+												<p style={styles.text}>
+													<strong>Duration and Frequency: </strong>
+													{assignment.duration}, {assignment.frequency}
+												</p>
+												<p style={styles.text}>
+													<strong>Earliest Start: </strong>
+													{assignment.startDate}
+												</p>
+												{assignment.additionalDetails && (
+													<p style={styles.text}>
+														<strong>Additional Details: </strong>
+														{assignment.additionalDetails}
+													</p>
+												)}
+												<p style={{ ...styles.text, ...(assignment.isPaid ? styles.confirmed : styles.pending) }}>
+													<strong>Status: </strong>
+													{assignment.isPaid ? "Confirmed" : "Pending Client's payment"}
+												</p>
+											</div>
+										))}
+									</div>
+								)}
+							</TabsContent>
 							<TabsContent value="offers">
 								{loading && <Loading />}
 								{offeredAssignments.length === 0 && !loading && (
@@ -302,8 +380,12 @@ export default function MyReviews() {
 														</h2>
 													</div>
 													<div style={styles.buttons}>
-														<Button style={styles.whiteButton} onClick={() => acceptButton(assignment)}>Accept</Button>
-														<Button style={styles.rejectButton} onClick={() => rejectButton(assignment)}>Reject</Button>
+														<Button style={styles.whiteButton} onClick={() => acceptButton(assignment)}>
+															Accept
+														</Button>
+														<Button style={styles.rejectButton} onClick={() => rejectButton(assignment)}>
+															Reject
+														</Button>
 													</div>
 												</div>
 												<p style={styles.assignmentNum}>Assignment #{assignment.id}</p>
@@ -312,8 +394,7 @@ export default function MyReviews() {
 													{assignment.address}, Singapore {assignment.postalCode}
 												</p>
 												<p style={styles.text}>
-													<strong>Rate: </strong>
-													${assignment.amount}/h
+													<strong>Rate: </strong>${assignment.amount}/h
 												</p>
 												<p style={styles.text}>
 													<strong>Duration and Frequency: </strong>
@@ -373,8 +454,7 @@ export default function MyReviews() {
 															{assignment.address}, Singapore {assignment.postalCode}
 														</p>
 														<p style={styles.text}>
-															<strong>Rate: </strong>
-															${assignment.minRate} - {assignment.maxRate}/h
+															<strong>Rate: </strong>${assignment.minRate} - {assignment.maxRate}/h
 														</p>
 														<p style={styles.text}>
 															<strong>Duration and Frequency: </strong>

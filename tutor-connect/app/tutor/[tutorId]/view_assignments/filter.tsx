@@ -289,8 +289,8 @@ export const Filter: React.FC<FilterProps> = ({ assignments, setFilteredAssignme
 			</div>
 			<div className="grid grid-cols-2 gap-4" style={{ padding: "7px" }}>
 				<div className="col-span-2 space-y-1">
-					<Link className="hover:underline" style={styles.link} href={`/tutor/${tutorId}/accepted_assignments`}>
-						Click here to View Accepted Assignments
+					<Link className="hover:underline" style={styles.link} href={`/tutor/${tutorId}/my_assignments`}>
+						Go to My Assignments
 					</Link>
 				</div>
 			</div>
