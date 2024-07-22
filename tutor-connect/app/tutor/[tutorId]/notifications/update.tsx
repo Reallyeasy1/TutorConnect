@@ -58,7 +58,7 @@ export const Update: React.FC<UpdateProps> = ({ tutorId, date, markAsRead, notif
 			font: "Poppins",
 			fontWeight: "bold",
 			fontSize: "16px",
-			width: "150px",
+			width: "200px",
 		},
 		empty: {
 			width: "10px",

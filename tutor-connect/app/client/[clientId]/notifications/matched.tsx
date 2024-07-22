@@ -98,7 +98,7 @@ export const Matched: React.FC<MatchedProps> = ({ clientId, tutor, assignment, d
 			<div style={read ? styles.empty : styles.circle}></div>
 			<div>
 				<h1 style={styles.title}>
-					<strong>{tutor.name}</strong> has accepted your offer for assignment {assignment.id}.
+					<strong>{tutor.name}</strong> has accepted your offer for Assignment #{assignment.id}.
 				</h1>
 				<p style={styles.description}>Please proceed to make payment for the one-time matchmaking fee.</p>
 				<div style={styles.buttonSection}>

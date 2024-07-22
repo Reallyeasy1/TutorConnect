@@ -77,8 +77,8 @@ export default function Payment() {
 		container: {
 			display: "flex",
 			flexDirection: "row" as "row",
-			border: "1px solid #d3e2f4",
-			borderRadius: "5px",
+			border: "1px solid #5790AB",
+			borderRadius: "20px",
 			maxWidth: "800px",
 			margin: "20px auto",
 			width: "55%",
@@ -86,9 +86,9 @@ export default function Payment() {
 		details: {
 			flex: 1,
 			padding: "30px",
-			borderRight: "1px solid #d3e2f4",
+			borderRight: "1px solid #5790AB",
 			backgroundColor: "#eff8fa",
-			borderRadius: "5px 0 0 5px",
+			borderRadius: "20px 0 0 20px",
 		},
 		payment: {
 			flex: 1,

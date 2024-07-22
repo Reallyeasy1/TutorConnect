@@ -13,8 +13,8 @@ export default function TutorDropdown() {
             cName: "dropdown-link"
         },
         {
-            title: "View Recommended Assignments",
-            path: "#",
+            title: "My Assignments",
+            path: `/tutor/${tutorId}/my_assignments`,
             cName: "dropdown-link"
         },
         {

@@ -22,6 +22,7 @@ type TutorNotification = {
 	date: string;
 	message: string;
 	read: boolean;
+	type: string;
 };
 
 export default function Notifications() {
@@ -210,7 +211,7 @@ export default function Notifications() {
 					{loading && <Loading />}
 					{sortedNotifications.map((notif) => (
 						<div key={notif.id} style={{ marginTop: "10px", width: "100%" }}>
-							<Picked
+							{notif.type === "picked" && (<Picked
 								tutorId={tutorId}
 								client={notif.client}
 								assignment={notif.assignment}
@@ -218,8 +219,8 @@ export default function Notifications() {
 								markAsRead={markNotificationAsRead}
 								notificationId={notif.id}
 								read={notif.read}
-							/>
-							<Request
+							/>)}
+							{notif.type === "request" && (<Request
 								tutorId={tutorId}
 								client={notif.client}
 								assignment={notif.assignment}
@@ -227,15 +228,15 @@ export default function Notifications() {
 								markAsRead={markNotificationAsRead}
 								notificationId={notif.id}
 								read={notif.read}
-							/>
-							<Update
+							/>)}
+							{notif.type === "update" && (<Update
 								tutorId={tutorId}
 								date={notif.date}
 								markAsRead={markNotificationAsRead}
 								notificationId={notif.id}
 								read={notif.read}
-							/>
-							<Paid
+							/>)}
+							{notif.type === "paid" && (<Paid
 								tutorId={tutorId}
 								client={notif.client}
 								assignment={notif.assignment}
@@ -243,7 +244,7 @@ export default function Notifications() {
 								markAsRead={markNotificationAsRead}
 								notificationId={notif.id}
 								read={notif.read}
-							/>
+							/>)}
 						</div>
 					))}
 					<Pagination style={{ padding: "10px", fontSize: "16px" }}>

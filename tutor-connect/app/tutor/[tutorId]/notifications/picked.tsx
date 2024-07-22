@@ -22,7 +22,7 @@ export const Picked: React.FC<PickedProps> = ({ tutorId, client, assignment, dat
 	};
 
 	const offerButton = () => {
-		router.push(`#`);
+		router.push(`/tutor/${tutorId}/my_assignments`);
 	};
 
 	const styles = {
@@ -67,7 +67,7 @@ export const Picked: React.FC<PickedProps> = ({ tutorId, client, assignment, dat
 			font: "Poppins",
 			fontWeight: "bold",
 			fontSize: "16px",
-			width: "150px",
+			width: "200px",
 		},
 		whiteButton: {
 			backgroundColor: "#fff",
@@ -76,7 +76,7 @@ export const Picked: React.FC<PickedProps> = ({ tutorId, client, assignment, dat
 			fontWeight: "bold",
 			fontSize: "16px",
 			border: "1px solid #5790AB",
-			width: "150px",
+			width: "200px",
 		},
 		buttonSection: {
 			display: "flex",
@@ -97,7 +97,7 @@ export const Picked: React.FC<PickedProps> = ({ tutorId, client, assignment, dat
 			<div style={read ? styles.empty : styles.circle}></div>
 			<div>
 				<h1 style={styles.title}>
-					<strong>You</strong> have been picked for assignment {assignment.id}.
+					<strong>You</strong> have been picked for Assignment #{assignment.id}.
 				</h1>
 				<p style={styles.description}>Please review the client&apos;s offer and kindly make your decision within 2 days.</p>
 				<div style={styles.buttonSection}>

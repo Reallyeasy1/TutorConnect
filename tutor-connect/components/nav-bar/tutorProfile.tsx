@@ -14,13 +14,13 @@ export default function TutorProfile() {
 			cName: "dropdown-link",
 		},
 		{
-			title: "Settings",
-			path: `/tutor/${tutorId}/settings/profile`,
-			cName: "dropdown-link",
-		},
-		{
 			title: "Notifications",
 			path: `/tutor/${tutorId}/notifications`,
+			cName: "dropdown-link",
+		},
+				{
+			title: "Settings",
+			path: `/tutor/${tutorId}/settings/profile`,
 			cName: "dropdown-link",
 		},
 		{

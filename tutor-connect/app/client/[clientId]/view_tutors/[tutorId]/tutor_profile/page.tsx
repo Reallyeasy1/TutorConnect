@@ -11,8 +11,6 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { Button } from "@/components/ui/button";
 import { Client } from "@prisma/client";
 import { ReviewForm } from "../../form";
-import Spinner from "@/components/spinner/spinner";
-import TelegramLoading from "@/components/TelegramLoading";
 import Loading from "@/app/loading";
 import { RequestForm } from "../../request";
 
