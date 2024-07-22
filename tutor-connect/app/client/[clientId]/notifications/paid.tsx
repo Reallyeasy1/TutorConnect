@@ -101,7 +101,7 @@ export const Paid: React.FC<PaidProps> = ({ clientId, tutor, assignment, date, m
 			<div style={read ? styles.empty : styles.circle}></div>
 			<div>
 				<h1 style={styles.title}>
-					<strong>Payment received</strong> for assignment {assignment.id}.
+					<strong>Payment received</strong> for Assignment #{assignment.id}.
 				</h1>
 				<p style={styles.description}>You can now contact the tutor, {tutor.name}, at {tutor.contactNumber} to arrange the first lesson.</p>
 				<div style={styles.buttonSection}>

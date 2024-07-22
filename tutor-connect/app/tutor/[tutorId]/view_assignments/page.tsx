@@ -7,6 +7,7 @@ import Footer from "@/components/footer/footer";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import Loading from "@/app/loading";
 import { Filter } from "./filter";
+import Image from "next/image";
 
 interface Assignment {
 	id: number;
@@ -61,7 +62,7 @@ const AssignmentRow = ({ assignments, selectedAssignment }: { assignments: Assig
 							<strong>Frequency:</strong> {assignment.duration}, {assignment.frequency}
 						</p>
 						<p className="text-gray-700 mb-1">
-							<strong>Rate:</strong> ${assignment.minRate} - ${assignment.maxRate}
+							<strong>Hourly Rate:</strong> ${assignment.minRate} - ${assignment.maxRate}
 						</p>
 						{assignment.additionalDetails && (
 							<p className="text-gray-700 mb-1">
@@ -73,9 +74,6 @@ const AssignmentRow = ({ assignments, selectedAssignment }: { assignments: Assig
 						</p>
 						<p className="text-gray-700 mb-1">
 							<strong>Post Date:</strong> {new Date(assignment.postDate).toLocaleDateString()}
-						</p>
-						<p className="text-gray-700 mb-1">
-							<strong>Client:</strong> {assignment.client.name}
 						</p>
 						<p className={`text-gray-700 mb-1 ${assignment.taken ? "text-red-500" : "text-green-500"}`}>
 							<strong>Status:</strong> {assignment.taken ? "Taken" : "Available"}
@@ -195,6 +193,24 @@ export default function AllAssignments() {
 		groupedAssignments.push(assignmentFiltered.slice(i, i + 3));
 	}
 
+	const styles = {
+		emptySection: {
+			display: "flex",
+			flexDirection: "column" as "column",
+			justifyContent: "center",
+			alignItems: "center",
+			padding: "20px",
+			width: "100%",
+		},
+		nothing: {
+			fontSize: "24px",
+			fontWeight: "normal" as "normal",
+			font: "Poppins",
+			color: "#909090",
+			padding: "20px",
+		},
+	};
+
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
 			<NavBar />
@@ -205,7 +221,20 @@ export default function AllAssignments() {
 			<div className="flex-grow grid grid-cols-3 gap-8" style={{ height: "calc(100vh - 100px)" }}>
 				<div className="col-span-2 p-3 overflow-auto">
 					{groupedAssignments.length === 0 ? (
-						<p className="text-gray-500 text-center">No assignments available.</p>
+						<div style={styles.emptySection}>
+							<Image
+								src="/images/Offer.png"
+								alt="Offer"
+								width={150}
+								height={150}
+								quality={100}
+								style={{
+									width: "150px",
+									height: "150px",
+								}}
+							/>
+							<p style={styles.nothing}>No assignments available.</p>
+						</div>
 					) : (
 						groupedAssignments.map((group, index) => (
 							<AssignmentRow key={index} assignments={group} selectedAssignment={selectedAssignment} />

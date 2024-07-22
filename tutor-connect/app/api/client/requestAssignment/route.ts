@@ -95,9 +95,10 @@ export async function POST(req: Request) {
 					create: [],
 				},
 				coordinates: coordinates,
-				amount,
+				amount: parseFloat(amount),
 				startDate,
 				tutor: { connect: { id: parseInt(tutorId) } },
+				isRequest: true,
 			},
 		});
 

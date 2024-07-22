@@ -1,12 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Assignment, Client } from "@prisma/client";
+import { Tutor, Assignment } from "@prisma/client";
 import { useRouter } from "next/navigation";
 
-type PaidProps = {
-	tutorId: string | string[];
-	client: Client;
+type MatchedProps = {
+	clientId: string | string[];
+	tutor: Tutor;
 	assignment: Assignment;
 	date: string;
 	markAsRead: (notificationId: number) => void;
@@ -14,16 +14,17 @@ type PaidProps = {
 	read: boolean;
 };
 
-export const Paid: React.FC<PaidProps> = ({ tutorId, client, assignment, date, markAsRead, notificationId, read }) => {
+export const Matched: React.FC<MatchedProps> = ({ clientId, tutor, assignment, date, markAsRead, notificationId, read }) => {
 	const router = useRouter();
 
-	const handleClick = () => {
+    const handleClick = () => {
 		markAsRead(notificationId);
 	};
 
-	const offerButton = () => {
-		router.push(`#`);
+	const tutorsButton = () => {
+		router.push(`/client/${clientId}/assignment/${assignment.id}/view_assignment/avail_tutors`);
 	};
+
 
 	const styles = {
 		card: {
@@ -67,7 +68,16 @@ export const Paid: React.FC<PaidProps> = ({ tutorId, client, assignment, date, m
 			font: "Poppins",
 			fontWeight: "bold",
 			fontSize: "16px",
-			width: "200px",
+			width: "150px",
+		},
+		whiteButton: {
+			backgroundColor: "#fff",
+			color: "#5790AB",
+			font: "Poppins",
+			fontWeight: "bold",
+			fontSize: "16px",
+			border: "1px solid #5790AB",
+			width: "150px",
 		},
 		buttonSection: {
 			display: "flex",
@@ -88,12 +98,12 @@ export const Paid: React.FC<PaidProps> = ({ tutorId, client, assignment, date, m
 			<div style={read ? styles.empty : styles.circle}></div>
 			<div>
 				<h1 style={styles.title}>
-					<strong>Client</strong> has made payment for Assignment #{assignment.id}.
+					<strong>{tutor.name}</strong> has rejected your offer for Assignment #{assignment.id}.
 				</h1>
-				<p style={styles.description}>You can now contact the client, {client.name}, at {client.contactNumber} to arrange the first lesson.</p>
+				<p style={styles.description}>Please select another tutor.</p>
 				<div style={styles.buttonSection}>
-					<Button style={styles.blueButton} onClick={offerButton}>
-						View Accepted Offer
+					<Button style={styles.blueButton} onClick={tutorsButton}>
+						View Tutors
 					</Button>
 				</div>
 			</div>

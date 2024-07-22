@@ -54,6 +54,7 @@ model Assignment {
   isPaid             Boolean              @default(false)
   startDate          String?
   amount             Int?
+  isRequest          Boolean              @default(false)
 }
 
 model Tutor {

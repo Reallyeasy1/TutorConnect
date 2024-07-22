@@ -19,7 +19,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { levels, subjectsByLevel } from "@/utils/levelsAndSubjects";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 
 type Tutor = {
@@ -44,7 +44,7 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 	const [additionalDetails, setAdditionalDetails] = useState("");
 	const [address, setAddress] = useState("");
 	const [postalCode, setPostalCode] = useState("");
-	const [amount, setAmount] = useState<number>(0);
+	const [amount, setAmount] = useState<string>("0");
 	const [duration, setDuration] = useState("");
 	const [frequency, setFrequency] = useState("");
 	const [currentTab, setCurrentTab] = useState("lessonDetails");
@@ -103,6 +103,24 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 		} else {
 			setError("Invalid address, please enter a valid address");
 			return null;
+		}
+	};
+
+	const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value;
+		if (!isNaN(Number(value)) || value === "") {
+			if (Number(value) < 0) {
+				setError("Amount must be greater than 0");
+				return;
+			}
+			if (Number(value) > 500) {
+				setError("Offered amount is too high");
+				return;
+			}
+			setAmount(value);
+		} else {
+			setError("Please enter a valid number");
+			return;
 		}
 	};
 
@@ -174,7 +192,7 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 
 			if (res.ok) {
 				const data = await res.json();
-				console.log(data)
+				console.log(data);
 				const notif = await fetch("/api/tutor/notifications/pickedNotification", {
 					method: "POST",
 					body: JSON.stringify({
@@ -336,13 +354,7 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 										</div>
 										<div className="col-span-1 space-y-1">
 											<Label htmlFor="minRate">Offered Rate</Label>
-											<Input
-												required
-												value={amount}
-												onChange={(e) => setAmount(parseFloat(e.target.value))}
-												id="amount"
-												type="amount"
-											/>
+											<Input required value={amount} onChange={handleAmountChange} id="amount" type="amount" />
 										</div>
 									</div>
 									{/* Error Message */}
@@ -360,7 +372,9 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 							<Card style={{ minWidth: "500px" }}>
 								<CardHeader>
 									<CardTitle>Lesson Arrangement</CardTitle>
-									<CardDescription>The first lesson can be scheduled after the tutor accepts and the matchmaking fee is paid.</CardDescription>
+									<CardDescription>
+										The first lesson can be scheduled after the tutor accepts and the matchmaking fee is paid.
+									</CardDescription>
 								</CardHeader>
 								<CardContent className="space-y-2">
 									<div className="grid grid-cols-2 gap-4">
@@ -405,7 +419,7 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 											onChange={(e) => setAvailability(e.target.value)}
 											id="availability"
 											type="text"
-											placeholder="Example: Start next week/month, flexible"
+											placeholder="Example: Start next week/month, flexible, Mon - Fri: after 3pm"
 										/>
 									</div>
 									<div className="space-y-2">

@@ -22,7 +22,7 @@ export const Request: React.FC<RequestProps> = ({ tutorId, client, assignment, d
 	};
 
 	const assignmentButton = () => {
-		router.push(`#`);
+		router.push(`/tutor/${tutorId}/my_assignments`);
 	};
 
 	const styles = {
@@ -67,7 +67,7 @@ export const Request: React.FC<RequestProps> = ({ tutorId, client, assignment, d
 			font: "Poppins",
 			fontWeight: "bold",
 			fontSize: "16px",
-			width: "150px",
+			width: "200px",
 		},
 		whiteButton: {
 			backgroundColor: "#fff",
@@ -76,7 +76,7 @@ export const Request: React.FC<RequestProps> = ({ tutorId, client, assignment, d
 			fontWeight: "bold",
 			fontSize: "16px",
 			border: "1px solid #5790AB",
-			width: "150px",
+			width: "200px",
 		},
 		buttonSection: {
 			display: "flex",
