@@ -12,6 +12,8 @@ import { Apply } from "./apply";
 import { Paid } from "./paid";
 import { Matched } from "./matched";
 import Image from "next/image";
+import { RequestRejected } from "./requestRejected";
+import { OfferRejected } from "./offerRejected";
 
 type ClientNotification = {
 	id: number;
@@ -21,6 +23,7 @@ type ClientNotification = {
 	date: string;
 	message: string;
 	read: boolean;
+	type: string;
 };
 
 export default function Notifications() {
@@ -194,7 +197,7 @@ export default function Notifications() {
 			<NavBar />
 			<div style={styles.main}>
 				<div style={styles.container}>
-					<h1 style={styles.title}>My Notifications ({sortedNotifications.length})</h1>
+					<h1 style={styles.title}>My Notifications ({sortedNotifications.filter((notif) => !notif.read).length})</h1>
 					<div style={styles.sortSection}>
 						<p style={styles.sortText}>Sort by:</p>
 						<Button style={sortBy == "newest" ? styles.activeButton : styles.inactiveButton} onClick={() => setSortBy("newest")}>
@@ -210,33 +213,61 @@ export default function Notifications() {
 					{loading && <Loading />}
 					{sortedNotifications.map((notif) => (
 						<div key={notif.id} style={{ marginTop: "10px", width: "100%" }}>
-							<Apply
-								clientId={clientId}
-								tutor={notif.tutor}
-								assignment={notif.assignment}
-								date={notif.date}
-								markAsRead={markNotificationAsRead}
-								notificationId={notif.id}
-								read={notif.read}
-							/>
-							<Matched
-								clientId={clientId}
-								tutor={notif.tutor}
-								assignment={notif.assignment}
-								date={notif.date}
-								markAsRead={markNotificationAsRead}
-								notificationId={notif.id}
-								read={notif.read}
-							/>
-							<Paid
-								clientId={clientId}
-								tutor={notif.tutor}
-								assignment={notif.assignment}
-								date={notif.date}
-								markAsRead={markNotificationAsRead}
-								notificationId={notif.id}
-								read={notif.read}
-							/>
+							{notif.type === "apply" && (
+								<Apply
+									clientId={clientId}
+									tutor={notif.tutor}
+									assignment={notif.assignment}
+									date={notif.date}
+									markAsRead={markNotificationAsRead}
+									notificationId={notif.id}
+									read={notif.read}
+								/>
+							)}
+							{notif.type === "matched" && (
+								<Matched
+									clientId={clientId}
+									tutor={notif.tutor}
+									assignment={notif.assignment}
+									date={notif.date}
+									markAsRead={markNotificationAsRead}
+									notificationId={notif.id}
+									read={notif.read}
+								/>
+							)}
+							{notif.type === "paid" && (
+								<Paid
+									clientId={clientId}
+									tutor={notif.tutor}
+									assignment={notif.assignment}
+									date={notif.date}
+									markAsRead={markNotificationAsRead}
+									notificationId={notif.id}
+									read={notif.read}
+								/>
+							)}
+							{notif.type === "requestRejected" && (
+								<RequestRejected
+									clientId={clientId}
+									tutor={notif.tutor}
+									assignment={notif.assignment}
+									date={notif.date}
+									markAsRead={markNotificationAsRead}
+									notificationId={notif.id}
+									read={notif.read}
+								/>
+							)}
+							{notif.type === "offerRejected" && (
+								<OfferRejected
+									clientId={clientId}
+									tutor={notif.tutor}
+									assignment={notif.assignment}
+									date={notif.date}
+									markAsRead={markNotificationAsRead}
+									notificationId={notif.id}
+									read={notif.read}
+								/>
+							)}
 						</div>
 					))}
 					<Pagination style={{ padding: "10px", fontSize: "16px" }}>

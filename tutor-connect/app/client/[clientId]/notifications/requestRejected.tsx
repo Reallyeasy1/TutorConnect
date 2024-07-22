@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Tutor, Assignment } from "@prisma/client";
 import { useRouter } from "next/navigation";
 
-type MatchedProps = {
+type RequestRejectedProps = {
 	clientId: string | string[];
 	tutor: Tutor;
 	assignment: Assignment;
@@ -14,7 +14,7 @@ type MatchedProps = {
 	read: boolean;
 };
 
-export const Matched: React.FC<MatchedProps> = ({ clientId, tutor, assignment, date, markAsRead, notificationId, read }) => {
+export const RequestRejected: React.FC<RequestRejectedProps> = ({ clientId, tutor, assignment, date, markAsRead, notificationId, read }) => {
 	const router = useRouter();
 
     const handleClick = () => {
