@@ -17,11 +17,6 @@ export default function TutorDropdown() {
             path: `/tutor/${tutorId}/my_assignments`,
             cName: "dropdown-link"
         },
-        {
-            title: "Accepted Assignments",
-            path: `/tutor/${tutorId}/accepted_assignments`,
-            cName: "dropdown-link"
-        },
     ]
 
     return (
