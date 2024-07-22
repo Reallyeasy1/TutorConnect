@@ -72,11 +72,21 @@ export default function ViewAssignment() {
 					},
 				});
 
-				if (res.ok) {
-					//TODO: Change to main page
-					// router.push("/assignments"); // Use relative path
+				const notif = await fetch("/api/client/notifications/createApplyNotification", {
+					method: "POST",
+					body: JSON.stringify({
+						assignmentId: assignment.id,
+						clientId: assignment.client.id,
+						tutorId: tutorId,
+					}),
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+
+				if (res.ok && notif.ok) {
 					alert("Successfully sent offer to client!");
-					router.push(`/tutor/${tutorId}/view_assignments`); // Use relative path
+					router.push(`/tutor/${tutorId}/view_assignments`);
 				} else {
 					setError((await res.json()).error);
 				}

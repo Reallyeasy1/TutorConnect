@@ -1,13 +1,12 @@
-import TelegramLoading from '@/components/TelegramLoading'
-import React from 'react'
+import TelegramLoading from "@/components/TelegramLoading";
+import React from "react";
 
-function loading() {
-    return (
-      <div className="min-h-screen w-full flex justify-center items-center">
-          <TelegramLoading/>  
-      </div>
-    
-  )
+function Loading() {
+	return (
+		<div className="min-h-screen w-full flex justify-center items-center">
+			<TelegramLoading />
+		</div>
+	);
 }
 
-export default loading
+export default Loading;

@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import Footer from "@/components/footer/footer";
 
-export default function AllAssignments() {
+export default function HomePage() {
 	const styles = {
 		body: {
 			fontFamily: "Poppins, sans-serif",

@@ -24,9 +24,19 @@ export async function POST(req: Request) {
 			race,
 			availability,
 			postDate,
+			location,
 		} = body;
 
-		// Validate required fields
+		if (!subject || !level || !clientId || (minRate == null) || (maxRate == null) || !postDate) {
+			return new NextResponse(
+				JSON.stringify({
+					error: "Missing required fields",
+				}),
+				{
+					status: 500,
+				}
+			);
+		}
 
 		if (minRate > maxRate || minRate < 0 || maxRate < 0) {
 			return new NextResponse(
@@ -69,6 +79,8 @@ export async function POST(req: Request) {
 			);
 		}
 
+		const coordinates = location.split(",").map((part: string) => parseFloat(part.trim()))
+
 		const assignment = await prisma.assignment.create({
 			data: {
 				client: { connect: { id: clientIdNumber } },
@@ -90,6 +102,7 @@ export async function POST(req: Request) {
 				avail_tutors: {
 					create: [],
 				},
+				coordinates: coordinates,
 			},
 		});
 

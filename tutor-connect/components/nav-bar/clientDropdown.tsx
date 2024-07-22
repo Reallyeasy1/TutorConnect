@@ -1,10 +1,14 @@
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
-export default function ClientDropdown() {
+type ClientDropdownProps = {
+  id: number;
+};
+
+export const ClientDropdown: React.FC<ClientDropdownProps> = ({ id }) => {
     const [hoveredIndex, setHoveredIndex] = useState(-1);
     const params = useParams();
-    const clientId = params.clientId;
+    const clientId = params.clientId || id;
     
     const clientItems = [
         {
@@ -19,7 +23,7 @@ export default function ClientDropdown() {
         },
         {
             title: "View Tutors",
-            path: "#",
+            path: `/client/${clientId}/view_tutors`,
             cName: "dropdown-link"
         },
     ]

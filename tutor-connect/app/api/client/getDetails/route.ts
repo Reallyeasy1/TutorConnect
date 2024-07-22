@@ -26,6 +26,7 @@ export async function GET(req: Request) {
         name: user.name,
         address: user.address,
         postalCode: user.postalCode,
+        image: user.image,
       });
     }
   } catch (err: any) {

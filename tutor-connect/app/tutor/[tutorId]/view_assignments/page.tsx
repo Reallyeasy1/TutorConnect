@@ -5,26 +5,9 @@ import { useRouter, useParams } from "next/navigation";
 import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectLabel,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
-import { levels, subjectsByLevel } from "@/utils/levelsAndSubjects";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import {
-	MultiSelector,
-	MultiSelectorContent,
-	MultiSelectorInput,
-	MultiSelectorItem,
-	MultiSelectorList,
-	MultiSelectorTrigger,
-} from "@/components/ui/multiselect";
+import Loading from "@/app/loading";
+import { Filter } from "./filter";
+import Image from "next/image";
 
 interface Assignment {
 	id: number;
@@ -47,81 +30,59 @@ interface Assignment {
 		id: number;
 		name: string;
 	};
+	coordinates: number[];
+	tutorId: number | null;
 }
 
-const AssignmentRow = ({
-	assignments,
-	selectedAssignment,
-}: {
-	assignments: Assignment[];
-	selectedAssignment: Assignment | null;
-}) => {
+const AssignmentRow = ({ assignments, selectedAssignment }: { assignments: Assignment[]; selectedAssignment: Assignment | null }) => {
 	const params = useParams();
 	const tutorId = params.tutorId;
 
 	return (
-		<div className="grid grid-cols-3 gap-2 p-6">
+		<div className="grid grid-cols-3 gap-2 p-4">
 			{assignments.map((assignment) => (
 				<div
 					key={assignment.id}
 					className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl flex flex-col justify-between"
 					style={{
-						border:
-							selectedAssignment == assignment
-								? "4px solid #5790AB"
-								: "none",
+						border: selectedAssignment == assignment ? "4px solid #5790AB" : "1px solid #ddd",
 					}}
 				>
 					<div>
 						<h2 className="text-2xl font-semibold mb-2">
-							{assignment.level.includes("Poly") || assignment.level.includes("University") ? assignment.level.substring(assignment.level.indexOf(" ") + 1) : assignment.level} {assignment.subject}
+							{assignment.level.includes("Poly") || assignment.level.includes("University")
+								? assignment.level.substring(assignment.level.indexOf(" ") + 1)
+								: assignment.level}{" "}
+							{assignment.subject}
 						</h2>
 						<p className="text-gray-700 mb-1">
-							<strong>Address:</strong> {assignment.address}{" "}
-							Singapore {assignment.postalCode}
+							<strong>Address:</strong> {assignment.address} Singapore {assignment.postalCode}
 						</p>
 						<p className="text-gray-700 mb-1">
-							<strong>Frequency:</strong> {assignment.duration},{" "}
-							{assignment.frequency}
+							<strong>Frequency:</strong> {assignment.duration}, {assignment.frequency}
 						</p>
 						<p className="text-gray-700 mb-1">
-							<strong>Rate:</strong> ${assignment.minRate} - $
-							{assignment.maxRate}
+							<strong>Hourly Rate:</strong> ${assignment.minRate} - ${assignment.maxRate}
 						</p>
 						{assignment.additionalDetails && (
 							<p className="text-gray-700 mb-1">
-								<strong>Additional Details:</strong>{" "}
-								{assignment.additionalDetails}
+								<strong>Additional Details:</strong> {assignment.additionalDetails}
 							</p>
 						)}
 						<p className="text-gray-700 mb-1">
-							<strong>Available on:</strong>{" "}
-							{assignment.availability}
+							<strong>Available on:</strong> {assignment.availability}
 						</p>
 						<p className="text-gray-700 mb-1">
-							<strong>Post Date:</strong>{" "}
-							{new Date(assignment.postDate).toLocaleDateString()}
+							<strong>Post Date:</strong> {new Date(assignment.postDate).toLocaleDateString()}
 						</p>
-						<p className="text-gray-700 mb-1">
-							<strong>Client:</strong> {assignment.client.name}
-						</p>
-						<p
-							className={`text-gray-700 mb-1 ${
-								assignment.taken
-									? "text-red-500"
-									: "text-green-500"
-							}`}
-						>
-							<strong>Status:</strong>{" "}
-							{assignment.taken ? "Taken" : "Available"}
+						<p className={`text-gray-700 mb-1 ${assignment.taken ? "text-red-500" : "text-green-500"}`}>
+							<strong>Status:</strong> {assignment.taken ? "Taken" : "Available"}
 						</p>
 					</div>
 					<div className="mt-4">
 						<button
 							className="w-full bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors"
-							onClick={() =>
-								(window.location.href = `/tutor/${tutorId}/view_assignment/${assignment.id}`)
-							}
+							onClick={() => (window.location.href = `/tutor/${tutorId}/view_assignment/${assignment.id}`)}
 						>
 							View Assignment
 						</button>
@@ -134,40 +95,22 @@ const AssignmentRow = ({
 
 export default function AllAssignments() {
 	const [assignments, setAssignments] = useState<Assignment[]>([]);
+	const [filteredAssignments, setFilteredAssignments] = useState<Assignment[]>([]);
 	const [error, setError] = useState<string | null>(null);
-	const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
-	const [selectedSubject, setSelectedSubject] = useState<string[]>([]);
 	const router = useRouter();
 	const params = useParams();
 	const tutorId = params.tutorId;
 	const [center, setCenter] = useState({ lat: 1.287953, lng: 103.851784 });
 	const [map, setMap] = useState<google.maps.Map | null>(null);
-	const [markers, setMarkers] = useState<
-		{ lat: number; lng: number; price: string; assignment: Assignment }[]
-	>([]);
-	const [selectedAssignment, setSelectedAssignment] =
-		useState<Assignment | null>(null);
+	const [zoom, setZoom] = useState(11);
+	const [markers, setMarkers] = useState<{ lat: number; lng: number; price: string; assignment: Assignment }[]>([]);
+	const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null);
+	const [loading, setLoading] = useState<boolean>(true);
 
 	const { isLoaded, loadError } = useJsApiLoader({
 		googleMapsApiKey: process.env.MAPS_API_KEY!,
 		libraries: ["places"],
 	});
-
-	const geocodeAddress = async (address: string) => {
-		const response = await fetch(
-			`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-				address
-			)}&key=${process.env.MAPS_API_KEY}`
-		);
-		const data = await response.json();
-		if (data.status === "OK") {
-			const { lat, lng } = data.results[0].geometry.location;
-			return { lat, lng };
-		} else {
-			console.error(`Geocoding error: ${data.status}`);
-			return null;
-		}
-	};
 
 	const createMarkerIcon = (price: string): google.maps.Symbol => ({
 		path: "M 0,0 h 25 a 5,5 0 0 1 5,5 v 18 a 5,5 0 0 1 -5,5 h -25 a 5,5 0 0 1 -5,-5 v -18 a 5,5 0 0 1 5,-5 z",
@@ -202,60 +145,38 @@ export default function AllAssignments() {
 					const data = await res.json();
 					setAssignments(data);
 
-					const availableAssignments = data.filter(
-						(assignment: Assignment) => assignment.taken === false
-					);
+					const availableAssignments = data.filter((assignment: Assignment) => assignment.taken === false && !assignment.tutorId);
+					setFilteredAssignments(availableAssignments);
 
-					const markerPromises = availableAssignments.map(
-						(assignment: Assignment) =>
-							geocodeAddress(assignment.address).then(
-								(coords) => ({
-									...coords,
-									price: `$${assignment.minRate}`,
-									assignment: assignment,
-								})
-							)
-					);
+					const markerPromises = availableAssignments.map((assignment: Assignment) => ({
+						lat: assignment.coordinates[0],
+						lng: assignment.coordinates[1],
+						price: `$${assignment.minRate}`,
+						assignment: assignment,
+					}));
 					const markerResults = await Promise.all(markerPromises);
-					const validMarkers = markerResults.filter(
-						(result) => result !== null
-					);
+					const validMarkers = markerResults.filter((result) => result !== null);
 					setMarkers(validMarkers);
 				} else {
 					setError("Unexpected content type: " + contentType);
 				}
 			} catch (err: any) {
 				setError(err.message);
+			} finally {
+				setLoading(false);
 			}
 		}
 
 		fetchAssignments();
 	}, []);
 
-	const handleMarkerClick = (
-		assignment: Assignment,
-		markerLat: number,
-		markerLng: number
-	) => {
+	const handleMarkerClick = (assignment: Assignment, markerLat: number, markerLng: number) => {
 		setSelectedAssignment(assignment);
 		setCenter({ lat: markerLat, lng: markerLng });
+		setZoom(15);
 	};
 
-	const filteredAssignments = assignments.filter(
-		(assignment) =>
-			(!selectedLevel || assignment.level.includes(selectedLevel)) &&
-			(!selectedSubject.length ||
-				selectedSubject.includes(assignment.subject))
-	);
-
-	const clearFilters = () => {
-		setSelectedLevel(null);
-		setSelectedSubject([]);
-	};
-
-	const filteredMarkers = markers.filter((marker) =>
-		filteredAssignments.some((assignment) => assignment.id === marker.assignment.id)
-	);
+	const filteredMarkers = markers.filter((marker) => filteredAssignments.some((assignment) => assignment.id === marker.assignment.id));
 
 	if (error) {
 		return <div className="text-red-500">Error: {error}</div>;
@@ -265,119 +186,58 @@ export default function AllAssignments() {
 		return <div className="text-red-500">Error loading map</div>;
 	}
 
-	const assignmentFiltered = filteredAssignments.filter(
-		(assignment) => !assignment.taken
-	);
+	const assignmentFiltered = filteredAssignments.filter((assignment) => !assignment.taken);
 
 	const groupedAssignments = [];
 	for (let i = 0; i < assignmentFiltered.length; i += 3) {
 		groupedAssignments.push(assignmentFiltered.slice(i, i + 3));
 	}
 
+	const styles = {
+		emptySection: {
+			display: "flex",
+			flexDirection: "column" as "column",
+			justifyContent: "center",
+			alignItems: "center",
+			padding: "20px",
+			width: "100%",
+		},
+		nothing: {
+			fontSize: "24px",
+			fontWeight: "normal" as "normal",
+			font: "Poppins",
+			color: "#909090",
+			padding: "20px",
+		},
+	};
+
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
 			<NavBar />
-			<div className="p-6">
-				<div className="flex space-x-4 mb-4">
-					<div className="w-5/12 space-y-1">
-						<Label htmlFor="level">Level</Label>
-						<Select
-							value={selectedLevel || ""}
-							onValueChange={(value: string) =>
-								setSelectedLevel(value)
-							}
-						>
-							<SelectTrigger className="w-full">
-								<SelectValue placeholder="Select a Level" />
-							</SelectTrigger>
-							<SelectContent>
-								{Object.entries(levels).map(
-									([category, levels]) => (
-										<SelectGroup key={category}>
-											<SelectLabel>
-												{category}
-											</SelectLabel>
-											{levels.map((level: string) => (
-												<SelectItem
-													key={level}
-													value={level}
-												>
-													{level}
-												</SelectItem>
-											))}
-										</SelectGroup>
-									)
-								)}
-							</SelectContent>
-						</Select>
-					</div>
-					<div className="w-5/12 space-y-1">
-						<Label htmlFor="subject">Subject</Label>
-						<MultiSelector
-							values={selectedSubject}
-							onValuesChange={setSelectedSubject}
-							loop={false}
-							disabled={!selectedLevel || selectedLevel === "Poly" || selectedLevel === "University"}
-							className="space-y-0"
-						>
-							<MultiSelectorTrigger className="w-full">
-								<MultiSelectorInput placeholder={"Select a Subject"} style={{ fontSize: "15px" }}/>
-							</MultiSelectorTrigger>
-							<MultiSelectorContent>
-								<MultiSelectorList>
-									{selectedLevel &&
-										subjectsByLevel[selectedLevel].map(
-											(subject: string) => (
-												<MultiSelectorItem
-													key={subject}
-													value={subject}
-												>
-													{subject}
-												</MultiSelectorItem>
-											)
-										)}
-								</MultiSelectorList>
-							</MultiSelectorContent>
-						</MultiSelector>
-					</div>
-					<div className="w-1/6 space-y-1">
-						<Label>
-							<span>&nbsp;</span>
-						</Label>
-						<Button onClick={clearFilters} className="w-full">
-							Clear Filters
-						</Button>
-					</div>
-				</div>
-				<div className="mb-4 w-full">
-					<button
-						className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
-						onClick={() =>
-							router.push(
-								`/tutor/${tutorId}/accepted_assignments`
-							)
-						}
-					>
-						View Accepted Assignments
-					</button>
-				</div>
+			<div className="flex-grow flex flex-col justify-center items-center py-6">
+				<Filter assignments={assignments} setFilteredAssignments={setFilteredAssignments} tutorId={tutorId} />
 			</div>
-			<div
-				className="flex-grow grid grid-cols-3 gap-8"
-				style={{ height: "calc(100vh - 100px)" }}
-			>
-				<div className="col-span-2 p-6 overflow-auto">
+			{loading && <Loading />}
+			<div className="flex-grow grid grid-cols-3 gap-8" style={{ height: "calc(100vh - 100px)" }}>
+				<div className="col-span-2 p-3 overflow-auto">
 					{groupedAssignments.length === 0 ? (
-						<p className="text-gray-500 text-center">
-							No assignments available.
-						</p>
+						<div style={styles.emptySection}>
+							<Image
+								src="/images/Offer.png"
+								alt="Offer"
+								width={150}
+								height={150}
+								quality={100}
+								style={{
+									width: "150px",
+									height: "150px",
+								}}
+							/>
+							<p style={styles.nothing}>No assignments available.</p>
+						</div>
 					) : (
 						groupedAssignments.map((group, index) => (
-							<AssignmentRow
-								key={index}
-								assignments={group}
-								selectedAssignment={selectedAssignment}
-							/>
+							<AssignmentRow key={index} assignments={group} selectedAssignment={selectedAssignment} />
 						))
 					)}
 				</div>
@@ -386,7 +246,7 @@ export default function AllAssignments() {
 						{isLoaded && (
 							<GoogleMap
 								center={center}
-								zoom={11}
+								zoom={zoom}
 								mapContainerStyle={{
 									width: "100%",
 									height: "100%",
@@ -402,19 +262,10 @@ export default function AllAssignments() {
 								{filteredMarkers.map((marker, index) => (
 									<Marker
 										key={index}
-										position={{
-											lat: marker.lat,
-											lng: marker.lng,
-										}}
+										position={new google.maps.LatLng(marker.lat, marker.lng)}
 										icon={createMarkerIcon(marker.price)}
 										label={createMarkerLabel(marker.price)}
-										onClick={() =>
-											handleMarkerClick(
-												marker.assignment,
-												marker.lat,
-												marker.lng
-											)
-										}
+										onClick={() => handleMarkerClick(marker.assignment, marker.lat, marker.lng)}
 									/>
 								))}
 							</GoogleMap>

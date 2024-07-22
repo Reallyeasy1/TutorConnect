@@ -9,13 +9,18 @@ export default function TutorProfile() {
 
 	const tutorItems = [
 		{
-			title: "Settings",
-			path: `/tutor/${tutorId}/settings/profile`,
+			title: "My Profile",
+			path: `/tutor/${tutorId}/my_profile`,
 			cName: "dropdown-link",
 		},
 		{
-			title: "Messages",
-			path: "#",
+			title: "Notifications",
+			path: `/tutor/${tutorId}/notifications`,
+			cName: "dropdown-link",
+		},
+				{
+			title: "Settings",
+			path: `/tutor/${tutorId}/settings/profile`,
 			cName: "dropdown-link",
 		},
 		{
@@ -28,7 +33,7 @@ export default function TutorProfile() {
 
 	return (
 		<div className="relative inline-block" style={{zIndex:50}}>
-			<ul className="absolute right-2 top-8 w-fit bg-white border border-gray-300 rounded shadow-lg">
+			<ul className="absolute right-5 top-8 bg-white border border-gray-300 rounded shadow-lg" style={{width: "110px"}}>
 				{tutorItems.map((item, index) => (
 					<li
 						key={index}

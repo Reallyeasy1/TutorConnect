@@ -7,32 +7,24 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { PutBlobResult } from "@vercel/blob";
+import { subjectsByCategory } from "@/utils/levelsAndSubjects";
+import { locations } from "@/utils/locations";
 
 type CheckedSubjects = {
-	preschool: string[];
-	primary: string[];
-	secondary: string[];
-	jc: string[];
-	ib: string[];
-	diplomaOrDegree: string[];
+	"Pre-School": string[];
+	"Primary School": string[];
+	"Secondary School": string[];
+	"Junior College": string[];
+	"IB/IGCSE": string[];
+	"Diploma/Degree": string[];
 };
 
 export default function ProfilePage() {
@@ -56,200 +48,27 @@ export default function ProfilePage() {
 	const [image, setImage] = useState("");
 	const [newImage, setNewImage] = useState<File | null>(null);
 	const [preview, setPreview] = useState<string | null>(null);
-	const [imageUpload, setImageUpload] = useState<string | null>(null);
 	const [showSubjects, setShowSubjects] = useState({
-		preschool: false,
-		primary: false,
-		secondary: false,
-		jc: false,
-		ib: false,
-		diplomaOrDegree: false,
+		"Pre-School": false,
+		"Primary School": false,
+		"Secondary School": false,
+		"Junior College": false,
+		"IB/IGCSE": false,
+		"Diploma/Degree": false,
 	});
 	const [checkedSubjects, setCheckedSubjects] = useState<CheckedSubjects>({
-		preschool: [],
-		primary: [],
-		secondary: [],
-		jc: [],
-		ib: [],
-		diplomaOrDegree: [],
+		"Pre-School": [],
+		"Primary School": [],
+		"Secondary School": [],
+		"Junior College": [],
+		"IB/IGCSE": [],
+		"Diploma/Degree": [],
 	});
 	const [location, setLocation] = useState<string[]>([]);
 	const maxWords = 100;
 	const [introduction, setIntroduction] = useState("");
 	const [summary, setSummary] = useState("");
 	const [studentsResults, setStudentsResults] = useState("");
-
-	const preschoolSubjects = [
-		"English",
-		"Math",
-		"Chinese",
-		"Tamil",
-		"Malay",
-		"Phonics",
-		"Creative Writing",
-	];
-
-	const primarySchoolSubjects = [
-		"English",
-		"Math",
-		"Science",
-		"Chinese",
-		"Higher Chinese",
-		"Tamil",
-		"Higher Tamil",
-		"Malay",
-		"Higher Malay",
-		"Hindi",
-		"Art",
-		"Creative Writing",
-		"GEP",
-		"Math Olympiad",
-		"Science Olympiad",
-	];
-
-	const secondarySchoolSubjects = [
-		"English",
-		"L. Sec Math",
-		"L. Sec Science",
-		"A Math",
-		"E Math",
-		"Physics",
-		"Chemistry",
-		"Biology",
-		"Physics/Chemistry",
-		"Biology/Chemistry",
-		"Biology/Physics",
-		"Geography",
-		"History",
-		"Literature",
-		"Principle of Accounting (POA)",
-		"Social Studies",
-		"Chinese",
-		"Higher Chinese",
-		"Malay",
-		"Higher Malay",
-		"Tamil",
-		"Higer Tamil",
-		"Hindi",
-		"Music",
-		"Art",
-		"Design and Technology",
-		"Food and Nutrition",
-	];
-
-	const jcSubjects = [
-		"General Paper",
-		"Math",
-		"Chemistry",
-		"Physics",
-		"Biology",
-		"Computing",
-		"Economics",
-		"History",
-		"Geography",
-		"Literature",
-		"Chinese",
-		"Chinese Studies",
-		"Malay",
-		"Malay Studies",
-		"Tamil",
-		"Tamil Studies",
-		"Knowledge & Inquiry",
-		"Art",
-		"H3 Math",
-		"H3 Physics",
-		"H3 Chemistry",
-		"H3 Biology",
-		"H3 Economics",
-		"H3 History",
-		"H3 Geography",
-		"H3 English Literature",
-		"H3 Chinese Language & Literature",
-		"H3 Art",
-	];
-
-	const ibSubjects = [
-		"English",
-		"English Literature",
-		"Chinese",
-		"Malay",
-		"Tamil",
-		"Business Management",
-		"Economics",
-		"Geography",
-		"History",
-		"Biology",
-		"Chemistry",
-		"Physics",
-		"Computer Science",
-		"Math",
-		"Art",
-	];
-
-	const diplomaOrDegreeSubjects = [
-		"Business Admin",
-		"Accounting",
-		"Finance",
-		"Marketing",
-		"Human Resource",
-		"Mass Communication",
-		"Engineering",
-		"Computer Science",
-		"Information Technology",
-		"Law",
-		"Psychology",
-		"Math",
-		"Applied Math",
-		"Statistics",
-		"Physics",
-		"Chemistry",
-		"Biology",
-		"Geography",
-		"History",
-		"Literature",
-		"Economics",
-		"Architecture",
-		"Real Estate",
-		"Sociology",
-		"Medicine",
-		"Biological Science",
-		"Chemical Engineering",
-		"Electrical Engineering",
-		"Mechanical Engineering",
-		"Life Science",
-		"Communication Studies",
-	];
-
-	const locations = [
-		[
-			"North",
-			"Kranji, Marsiling, Woodlands, Admiralty, Sembawang, Yishun, Khatib, Yio Chu Kang, Ang Mo Kio",
-		],
-		[
-			"South",
-			"Harbourfront, Telok Blangah, Pasir Panjang, Labrador Park, Mount Faber, West Coast, Sentosa Cove, Tiong Bahru, Bukit Merah",
-		],
-		[
-			"East",
-			"Pasir Ris, Tampines, Simei, Tanah Merah, Bedok, Kembangan, Eunos, Paya Lebar, Aljunied, Kallang, Geylang, Katong, Joo Chiat, Marine Parade, Siglap, Bedok, Chai Chee, East Coast, Kaki Bukit, Ubi, Dakota",
-		],
-		[
-			"West",
-			"Boon Lay, Jurong, Clementi, Dover, Buona Vista, Commonwealth, Queenstown, Redhill, Alexandra, Kent Ridge, Farrer Rd, Holland, Ghim Moh",
-		],
-		[
-			"Central",
-			"Bishan, Braddell, Toa Payoh, Balestier, Novena, Newton, Orchard, Chinatown, Stevens, Bendemeer, Bartley, Macpherson, Lorong Chuan, Bartley, Tai Seng, Tanjong Rhu, Bugis, Lavender, Boon Keng, Farrer Park, Little India, Marymount, Jalan Besar, Caldecott, Botanic Gardens, Farrer Road, Holland Village, Thomson Road, Bukit Timah Road, Stevens Road, River Valley, Marina Bay, City Hall, Raffles Place, Shenton Way, Outram, Clarke Quay",
-		],
-		[
-			"NorthWest",
-			"Bukit Batok, Bukit Gombak, Hillview, Bukit Panjang, Choa Chu Kang, Yew Tee, Cashew, Beauty World",
-		],
-		[
-			"NorthEast",
-			"Punggol, Sengkang, Buangkok, Hougang, Kovan, Potong Pasir, Woodleigh, Serangoon, Seletar",
-		],
-	];
 
 	useEffect(() => {
 		const fetchTutorDetails = async () => {
@@ -278,15 +97,11 @@ export default function ProfilePage() {
 							setRace(tutorData.race);
 							setYearsOfExperience(tutorData.yearsOfExperience);
 							setTypeofTutor(tutorData.typeOfTutor);
-							setHighestEducationLevel(
-								tutorData.highestEducationLevel
-							);
+							setHighestEducationLevel(tutorData.highestEducationLevel);
 							setLocation(tutorData.location);
 							setCheckedSubjects(tutorData.levelAndSubjects);
 							for (const level in tutorData.levelAndSubjects) {
-								if (
-									tutorData.levelAndSubjects[level].length > 0
-								) {
+								if (tutorData.levelAndSubjects[level].length > 0) {
 									setShowSubjects((prevShowSubjects) => ({
 										...prevShowSubjects,
 										[level]: true,
@@ -327,10 +142,7 @@ export default function ProfilePage() {
 		router.push("/tutor/forgot_password");
 	};
 
-	const handleTextChange = (
-		event: React.ChangeEvent<HTMLTextAreaElement>,
-		setState: React.Dispatch<React.SetStateAction<string>>
-	) => {
+	const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>, setState: React.Dispatch<React.SetStateAction<string>>) => {
 		const text = event.target.value;
 		const words = text.trim().split(/\s+/);
 		if (words.length <= maxWords) {
@@ -363,9 +175,7 @@ export default function ProfilePage() {
 		console.log(showSubjects);
 	};
 
-	const handleSubjectChange = (
-		event: React.ChangeEvent<HTMLInputElement>
-	) => {
+	const handleSubjectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { id, value, checked } = event.target;
 		const level = id as keyof typeof checkedSubjects;
 
@@ -379,12 +189,9 @@ export default function ProfilePage() {
 		} else {
 			setCheckedSubjects({
 				...checkedSubjects,
-				[id]: checkedSubjects[level].filter(
-					(subject) => subject !== value
-				),
+				[id]: checkedSubjects[level].filter((subject) => subject !== value),
 			});
 		}
-		console.log(checkedSubjects);
 	};
 
 	const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -395,6 +202,8 @@ export default function ProfilePage() {
 		} else {
 			setLocation(location.filter((loc) => loc !== value));
 		}
+		console.log(showSubjects);
+		console.log(checkedSubjects);
 	};
 
 	const savePersonalInformation = async (e: React.FormEvent) => {
@@ -417,31 +226,25 @@ export default function ProfilePage() {
 
 			if (newImage) {
 				if (image) {
-					const deleteRes = await fetch(
-						`/api/tutor/profile/image_upload`,
-						{
-							method: "DELETE",
-							headers: {
-								"Content-Type": "application/json",
-							},
-							body: JSON.stringify({ image }),
-						}
-					);
+					const deleteRes = await fetch(`/api/tutor/profile/image_upload`, {
+						method: "DELETE",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({ image }),
+					});
 
 					if (!deleteRes.ok) {
 						alert("Failed to delete old image");
 						return;
 					}
 				}
-				
-				const imageRes = await fetch(
-					`/api/tutor/profile/image_upload?filename=${newImage.name}`,
-					{
-						method: "POST",
-						body: newImage,
-					}
-				);
-				
+
+				const imageRes = await fetch(`/api/tutor/profile/image_upload?filename=${newImage.name}`, {
+					method: "POST",
+					body: newImage,
+				});
+
 				if (imageRes.ok) {
 					const imageBlob: PutBlobResult = await imageRes.json();
 					formData.append("image", imageBlob.url);
@@ -470,6 +273,21 @@ export default function ProfilePage() {
 		e.preventDefault();
 		const levelAndSubjects = checkedSubjects;
 
+		if (introduction.trim().split(/\s+/).length > 100) {
+			setError2("Max word limit exceeded for Short Introduction of yourself.");
+			return;
+		}
+
+		if (summary.trim().split(/\s+/).length > 100) {
+			setError2("Max word limit exceeded for Summary of Teaching Experiences and Academic Achievements.");
+			return;
+		}
+
+		if (studentsResults.trim().split(/\s+/).length > 100) {
+			setError2("Max word limit exceeded for Past Students' Results.");
+			return;
+		}
+
 		try {
 			const res = await fetch("/api/tutor/profile/preferences", {
 				method: "POST",
@@ -487,6 +305,7 @@ export default function ProfilePage() {
 			});
 			if (res.ok) {
 				alert("Changes saved successfully");
+				router.refresh();
 			} else {
 				alert("Failed to save changes");
 			}
@@ -499,31 +318,26 @@ export default function ProfilePage() {
 		e.preventDefault();
 
 		try {
-			const res = await fetch(
-				"/api/tutor/profile/academic_qualifications",
-				{
-					method: "POST",
-					body: JSON.stringify({
-						email,
-						yearsOfExperience,
-						typeOfTutor,
-						highestEducationLevel,
-					}),
-					headers: {
-						"Content-Type": "application/json",
-					},
-				}
-			);
+			const res = await fetch("/api/tutor/profile/academic_qualifications", {
+				method: "POST",
+				body: JSON.stringify({
+					email,
+					yearsOfExperience,
+					typeOfTutor,
+					highestEducationLevel,
+				}),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
 			if (res.ok) {
 				alert("Changes saved successfully");
+				router.refresh();
 			} else {
 				alert("Failed to save changes");
 			}
 		} catch (error) {
-			console.error(
-				"Error updating tutor academic qualifications:",
-				error
-			);
+			console.error("Error updating tutor academic qualifications:", error);
 		}
 	};
 
@@ -742,21 +556,13 @@ export default function ProfilePage() {
 									Profile
 								</a>
 							</li>
-							<li
-								style={hoverText(0)}
-								onMouseEnter={() => handleMouseEnter(0)}
-								onMouseLeave={handleMouseLeave}
-							>
+							<li style={hoverText(0)} onMouseEnter={() => handleMouseEnter(0)} onMouseLeave={handleMouseLeave}>
 								<a href="#" style={sidebar.navLink}>
 									<span style={sidebar.icon}>🔔</span>
 									Notifications
 								</a>
 							</li>
-							<li
-								style={hoverText(1)}
-								onMouseEnter={() => handleMouseEnter(1)}
-								onMouseLeave={handleMouseLeave}
-							>
+							<li style={hoverText(1)} onMouseEnter={() => handleMouseEnter(1)} onMouseLeave={handleMouseLeave}>
 								<a href="#" style={sidebar.navLink}>
 									<span style={sidebar.icon}>❓</span>
 									Help
@@ -773,13 +579,7 @@ export default function ProfilePage() {
 								<form onSubmit={savePersonalInformation}>
 									<div style={profileCard.profileImage}>
 										<Image
-											src={
-												preview
-													? preview
-													: image
-													? image
-													: "/images/Blank Profile Photo.jpg"
-											}
+											src={preview ? preview : image ? image : "/images/Blank Profile Photo.jpg"}
 											alt="Profile Picture"
 											width={100}
 											height={100}
@@ -799,90 +599,52 @@ export default function ProfilePage() {
 										<button
 											type="button"
 											style={profileCard.editIcon}
-											onClick={() =>
-												document
-													.getElementById("fileInput")
-													?.click()
-											}
+											onClick={() => document.getElementById("fileInput")?.click()}
 										>
 											✏️
 										</button>
 									</div>
-									<h2 style={profileCard.tutorName}>
-										{name}
-									</h2>
+									<h2 style={profileCard.tutorName}>{name}</h2>
 									<div className="space-y-2">
 										<div className="space-y-1">
-											<Label htmlFor="email">
-												Email (Cannot be changed)
-											</Label>
-											<Input
-												type="email"
-												name="email"
-												value={email}
-												readOnly
-											/>
+											<Label htmlFor="email">Email (Cannot be changed)</Label>
+											<Input type="email" name="email" value={email} readOnly />
 										</div>
 										<div className="grid grid-cols-2 gap-4">
 											<div className="col-span-1 space-y-1">
-												<Label htmlFor="contactNumber">
-													Contact Number
-												</Label>
+												<Label htmlFor="contactNumber">Contact Number</Label>
 												<Input
 													type="contactNumber"
 													name="contactNumber"
 													value={contactNumber}
-													onChange={(e) =>
-														setContactNumber(
-															e.target.value
-														)
-													}
+													onChange={(e) => setContactNumber(e.target.value)}
 													required
 												/>
 											</div>
 											<div className="col-span-1 space-y-1">
-												<Label htmlFor="dateOfBirth">
-													Date Of Birth (MM-DD-YYYY)
-												</Label>
+												<Label htmlFor="dateOfBirth">Date Of Birth</Label>
 												<Popover>
 													<PopoverTrigger asChild>
 														<div>
 															<Button
 																type="button"
-																variant={
-																	"outline"
-																}
+																variant={"outline"}
 																className={cn(
 																	"w-full justify-start text-left font-normal",
-																	!dateOfBirth &&
-																		"text-muted-foreground"
+																	!dateOfBirth && "text-muted-foreground"
 																)}
 															>
 																<CalendarIcon className="mr-2 h-4 w-4" />
-																{dateOfBirth ? (
-																	dateOfBirth.toLocaleDateString()
-																) : (
-																	<span>
-																		Pick a
-																		date
-																	</span>
-																)}
+																{dateOfBirth ? dateOfBirth.toLocaleDateString("en-GB") : <span>Pick a date</span>}
 															</Button>
 														</div>
 													</PopoverTrigger>
-													<PopoverContent
-														align="start"
-														className=" w-auto p-0"
-													>
+													<PopoverContent align="start" className=" w-auto p-0">
 														<Calendar
 															mode="single"
 															captionLayout="dropdown-buttons"
-															selected={
-																dateOfBirth
-															}
-															onSelect={
-																setDateOfBirth
-															}
+															selected={dateOfBirth}
+															onSelect={setDateOfBirth}
 															fromYear={1960}
 															toYear={2030}
 														/>
@@ -893,636 +655,191 @@ export default function ProfilePage() {
 										<div className="grid grid-cols-2 gap-4">
 											<div className="col-span-1 space-y-1">
 												<Label htmlFor="age">Age</Label>
-												<Input
-													required
-													value={age}
-													onChange={(e) =>
-														setAge(e.target.value)
-													}
-													id="age"
-													type="age"
-												/>
+												<Input required value={age} onChange={(e) => setAge(e.target.value)} id="age" type="age" />
 											</div>
 											<div className="col-span-1 space-y-1">
-												<Label htmlFor="gender">
-													Gender
-												</Label>
-												<Select
-													required
-													value={gender}
-													onValueChange={(
-														value: string
-													) => setGender(value)}
-												>
+												<Label htmlFor="gender">Gender</Label>
+												<Select required value={gender} onValueChange={(value: string) => setGender(value)}>
 													<div>
 														<SelectTrigger className="w-full">
-															<SelectValue
-																placeholder={
-																	gender
-																}
-															/>
+															<SelectValue placeholder={gender} />
 														</SelectTrigger>
 													</div>
 													<SelectContent>
-														<SelectItem value="Male">
-															Male
-														</SelectItem>
-														<SelectItem value="Female">
-															Female
-														</SelectItem>
+														<SelectItem value="Male">Male</SelectItem>
+														<SelectItem value="Female">Female</SelectItem>
 													</SelectContent>
 												</Select>
 											</div>
 										</div>
 										<div className="grid grid-cols-2 gap-4">
 											<div className="col-span-1 space-y-1">
-												<Label htmlFor="nationality">
-													Nationality
-												</Label>
-												<Select
-													required
-													value={nationality}
-													onValueChange={(
-														value: string
-													) => setNationality(value)}
-												>
+												<Label htmlFor="nationality">Nationality</Label>
+												<Select required value={nationality} onValueChange={(value: string) => setNationality(value)}>
 													<div>
 														<SelectTrigger className="w-full">
-															<SelectValue
-																placeholder={
-																	nationality
-																}
-															/>
+															<SelectValue placeholder={nationality} />
 														</SelectTrigger>
 													</div>
 													<SelectContent>
-														<SelectItem value="Singaporean">
-															Singaporean
-														</SelectItem>
-														<SelectItem value="Singapore PR">
-															Singapore PR
-														</SelectItem>
-														<SelectItem value="Others">
-															Others
-														</SelectItem>
+														<SelectItem value="Singaporean">Singaporean</SelectItem>
+														<SelectItem value="Singapore PR">Singapore PR</SelectItem>
+														<SelectItem value="Others">Others</SelectItem>
 													</SelectContent>
 												</Select>
 											</div>
 											<div className="col-span-1 space-y-1">
-												<Label htmlFor="race">
-													Race
-												</Label>
-												<Select
-													required
-													value={race}
-													onValueChange={(
-														value: string
-													) => setRace(value)}
-												>
+												<Label htmlFor="race">Race</Label>
+												<Select required value={race} onValueChange={(value: string) => setRace(value)}>
 													<div>
 														<SelectTrigger className="w-full">
-															<SelectValue
-																placeholder={
-																	race
-																}
-															/>
+															<SelectValue placeholder={race} />
 														</SelectTrigger>
 													</div>
 													<SelectContent>
-														<SelectItem value="Chinese">
-															Chinese
-														</SelectItem>
-														<SelectItem value="Malay">
-															Malay
-														</SelectItem>
-														<SelectItem value="Indian">
-															Indian
-														</SelectItem>
-														<SelectItem value="Others">
-															Others
-														</SelectItem>
+														<SelectItem value="Chinese">Chinese</SelectItem>
+														<SelectItem value="Malay">Malay</SelectItem>
+														<SelectItem value="Indian">Indian</SelectItem>
+														<SelectItem value="Others">Others</SelectItem>
 													</SelectContent>
 												</Select>
 											</div>
 										</div>
 									</div>
 									<div style={profileCard.buttonContainer}>
-										<button
-											type="button"
-											style={
-												profileCard.resetPasswordButton
-											}
-											onClick={handleResetPassword}
-										>
+										<button type="button" style={profileCard.resetPasswordButton} onClick={handleResetPassword}>
 											Reset Password
 										</button>
-										<button
-											type="submit"
-											style={profileCard.saveButton}
-										>
+										<button type="submit" style={profileCard.saveButton}>
 											Save Changes
 										</button>
 									</div>
-									{error1 && (
-										<p style={{ color: "red" }}>{error1}</p>
-									)}
+									{error1 && <p style={{ color: "red" }}>{error1}</p>}
 								</form>
 							</div>
 						</div>
 					</div>
 					<div style={profileCard.container}>
 						<div style={sidebar.container}>
-							<h2 style={sidebar.title}>
-								Tutor Preferences & Experience
-							</h2>
+							<h2 style={sidebar.title}>Tutor Preferences & Experience</h2>
 							<form onSubmit={saveTutorPreferences}>
 								<div style={profileCard.card}>
 									<div className="space-y-3">
 										<div className="space-y-1">
-											<Label
-												htmlFor="levelsAndSubjects"
-												style={{ fontSize: "20px" }}
-											>
+											<Label htmlFor="levelsAndSubjects" style={{ fontSize: "20px" }}>
 												Levels and Subjects
 											</Label>
-											<div style={{ marginTop: "10px" }}>
-												<label>
-													<input
-														type="checkbox"
-														id="preschool"
-														onChange={
-															handleLevelChange
-														}
-														style={{
-															marginRight: "10px",
-														}}
-														checked={
-															showSubjects.preschool
-														}
-													/>
-													Pre-School
-												</label>
-											</div>
-											{showSubjects.preschool && (
+											{Object.entries(subjectsByCategory).map(([category, subjects]) => (
 												<div
-													style={
-														subjectStyle.container
-													}
+													key={category}
+													style={{
+														marginTop: "10px",
+													}}
 												>
-													{preschoolSubjects.map(
-														(subject) => (
-															<label
-																key={subject}
-															>
-																<input
-																	type="checkbox"
-																	id="preschool"
-																	value={
-																		subject
-																	}
-																	onChange={
-																		handleSubjectChange
-																	}
-																	style={
-																		subjectStyle.checkboxes
-																	}
-																	checked={checkedSubjects.preschool.includes(
-																		subject
-																	)}
-																/>
-																{subject}
-															</label>
-														)
+													<label key={category}>
+														<input
+															type="checkbox"
+															id={category}
+															onChange={handleLevelChange}
+															style={subjectStyle.checkboxes}
+															checked={showSubjects[category as keyof CheckedSubjects]}
+														/>
+														{category}
+													</label>
+													{showSubjects[category as keyof CheckedSubjects] && (
+														<div style={subjectStyle.container}>
+															{subjects.map((subject) => (
+																<label key={subject}>
+																	<input
+																		type="checkbox"
+																		id={category}
+																		value={subject}
+																		onChange={handleSubjectChange}
+																		style={subjectStyle.checkboxes}
+																		checked={checkedSubjects[category as keyof CheckedSubjects].includes(subject)}
+																	/>
+																	{subject}
+																</label>
+															))}
+														</div>
 													)}
 												</div>
-											)}
-											<div>
-												<label>
-													<input
-														type="checkbox"
-														id="primary"
-														onChange={
-															handleLevelChange
-														}
-														style={
-															subjectStyle.checkboxes
-														}
-														checked={
-															showSubjects.primary
-														}
-													/>
-													Primary School
-												</label>
-											</div>
-											{showSubjects.primary && (
-												<div
-													style={
-														subjectStyle.container
-													}
-												>
-													{primarySchoolSubjects.map(
-														(subject) => (
-															<label
-																key={subject}
-															>
-																<input
-																	type="checkbox"
-																	id="primary"
-																	value={
-																		subject
-																	}
-																	onChange={
-																		handleSubjectChange
-																	}
-																	style={
-																		subjectStyle.checkboxes
-																	}
-																	checked={checkedSubjects.primary.includes(
-																		subject
-																	)}
-																/>
-																{subject}
-															</label>
-														)
-													)}
-												</div>
-											)}
-											<div>
-												<label>
-													<input
-														type="checkbox"
-														id="secondary"
-														onChange={
-															handleLevelChange
-														}
-														style={
-															subjectStyle.checkboxes
-														}
-														checked={
-															showSubjects.secondary
-														}
-													/>
-													Secondary School
-												</label>
-											</div>
-											{showSubjects.secondary && (
-												<div
-													style={
-														subjectStyle.container
-													}
-												>
-													{secondarySchoolSubjects.map(
-														(subject) => (
-															<label
-																key={subject}
-															>
-																<input
-																	type="checkbox"
-																	id="secondary"
-																	value={
-																		subject
-																	}
-																	onChange={
-																		handleSubjectChange
-																	}
-																	style={
-																		subjectStyle.checkboxes
-																	}
-																	checked={checkedSubjects.secondary.includes(
-																		subject
-																	)}
-																/>
-																{subject}
-															</label>
-														)
-													)}
-												</div>
-											)}
-											<div>
-												<label>
-													<input
-														type="checkbox"
-														id="jc"
-														onChange={
-															handleLevelChange
-														}
-														style={
-															subjectStyle.checkboxes
-														}
-														checked={
-															showSubjects.jc
-														}
-													/>
-													Junior College
-												</label>
-											</div>
-											{showSubjects.jc && (
-												<div
-													style={
-														subjectStyle.container
-													}
-												>
-													{jcSubjects.map(
-														(subject) => (
-															<label
-																key={subject}
-															>
-																<input
-																	type="checkbox"
-																	id="jc"
-																	value={
-																		subject
-																	}
-																	onChange={
-																		handleSubjectChange
-																	}
-																	style={
-																		subjectStyle.checkboxes
-																	}
-																	checked={checkedSubjects.jc.includes(
-																		subject
-																	)}
-																/>
-																{subject}
-															</label>
-														)
-													)}
-												</div>
-											)}
-											<div>
-												<label>
-													<input
-														type="checkbox"
-														id="ib"
-														onChange={
-															handleLevelChange
-														}
-														style={
-															subjectStyle.checkboxes
-														}
-														checked={
-															showSubjects.ib
-														}
-													/>
-													IB/IGCSE
-												</label>
-											</div>
-											{showSubjects.ib && (
-												<div
-													style={
-														subjectStyle.container
-													}
-												>
-													{ibSubjects.map(
-														(subject) => (
-															<label
-																key={subject}
-															>
-																<input
-																	type="checkbox"
-																	id="ib"
-																	value={
-																		subject
-																	}
-																	onChange={
-																		handleSubjectChange
-																	}
-																	style={
-																		subjectStyle.checkboxes
-																	}
-																	checked={checkedSubjects.ib.includes(
-																		subject
-																	)}
-																/>
-																{subject}
-															</label>
-														)
-													)}
-												</div>
-											)}
-											<div>
-												<label>
-													<input
-														type="checkbox"
-														id="diplomaOrDegree"
-														onChange={
-															handleLevelChange
-														}
-														style={
-															subjectStyle.checkboxes
-														}
-														checked={
-															showSubjects.diplomaOrDegree
-														}
-													/>
-													Diploma/Degree
-												</label>
-											</div>
-											{showSubjects.diplomaOrDegree && (
-												<div
-													style={
-														subjectStyle.container
-													}
-												>
-													{diplomaOrDegreeSubjects.map(
-														(subject) => (
-															<label
-																key={subject}
-															>
-																<input
-																	type="checkbox"
-																	id="diplomaOrDegree"
-																	value={
-																		subject
-																	}
-																	onChange={
-																		handleSubjectChange
-																	}
-																	style={
-																		subjectStyle.checkboxes
-																	}
-																	checked={checkedSubjects.diplomaOrDegree.includes(
-																		subject
-																	)}
-																/>
-																{subject}
-															</label>
-														)
-													)}
-												</div>
-											)}
+											))}
 										</div>
 										<div className="space-y-1">
-											<Label
-												htmlFor="location"
-												style={{ fontSize: "20px" }}
-											>
+											<Label htmlFor="location" style={{ fontSize: "20px" }}>
 												Locations
 											</Label>
-											<div
-												style={locationStyle.container}
-											>
+											<div style={locationStyle.container}>
 												{locations.map((loc) => (
 													<div key={loc[0]}>
 														<label key={loc[0]}>
 															<input
 																type="checkbox"
 																value={loc[0]}
-																onChange={
-																	handleLocationChange
-																}
-																style={
-																	locationStyle.checkboxes
-																}
-																checked={location.includes(
-																	loc[0]
-																)}
+																onChange={handleLocationChange}
+																style={locationStyle.checkboxes}
+																checked={location.includes(loc[0])}
 															/>
 															{loc[0]}
-															<span
-																style={
-																	locationStyle.places
-																}
-															>
-																{loc[1]}
-															</span>
+															<span style={locationStyle.places}>{loc[1]}</span>
 														</label>
 													</div>
 												))}
 											</div>
 										</div>
 										<div className="space-y-1">
-											<Label
-												htmlFor="experiences"
-												style={{ fontSize: "20px" }}
-											>
+											<Label htmlFor="experiences" style={{ fontSize: "20px" }}>
 												Experiences
 											</Label>
 											<div className="space-y-1">
-												<Label
-													htmlFor="yearsOfExperience"
-													style={questionStyle.title}
-												>
-													Short introduction of
-													yourself
+												<Label htmlFor="yearsOfExperience" style={questionStyle.title}>
+													Short introduction of yourself
 												</Label>
-												<span
-													style={
-														questionStyle.subtitle
-													}
-												>
-													Personal Qualities, Teaching
-													Style etc.
-												</span>
+												<span style={questionStyle.subtitle}>Personal Qualities, Teaching Style etc.</span>
 												<textarea
 													value={introduction}
-													onChange={(e) =>
-														handleTextChange(
-															e,
-															setIntroduction
-														)
-													}
-													style={
-														questionStyle.inputArea
-													}
-													placeholder={
-														introduction
-															? introduction
-															: `Enter your introduction (maximum ${maxWords} words)`
-													}
+													onChange={(e) => handleTextChange(e, setIntroduction)}
+													style={questionStyle.inputArea}
+													placeholder={introduction ? introduction : `Enter your introduction (maximum ${maxWords} words)`}
 													rows={5}
 												/>
-												<div
-													style={questionStyle.count}
-												>
-													{!introduction ||
-													introduction.trim() === ""
-														? 0
-														: introduction
-																.trim()
-																.split(/\s+/)
-																.length}
-													/{maxWords} words
+												<div style={questionStyle.count}>
+													{!introduction || introduction.trim() === "" ? 0 : introduction.trim().split(/\s+/).length}/
+													{maxWords} words
 												</div>
 											</div>
 											<div className="space-y-1">
-												<Label
-													htmlFor="summary"
-													style={questionStyle.title}
-												>
-													Summary of Teaching
-													Experiences and Academic
-													Achievements
+												<Label htmlFor="summary" style={questionStyle.title}>
+													Summary of Teaching Experiences and Academic Achievements
 												</Label>
-												<span
-													style={
-														questionStyle.subtitle
-													}
-												>
-													Schools or number of
-													students taught, grades
-													achieved by students etc.
+												<span style={questionStyle.subtitle}>
+													Schools or number of students taught, grades achieved by students etc.
 													<br />
-													Academic results, awards,
-													scholarships etc.
+													Academic results, awards, scholarships etc.
 												</span>
 												<textarea
 													value={summary}
-													onChange={(e) =>
-														handleTextChange(
-															e,
-															setSummary
-														)
-													}
-													style={
-														questionStyle.inputArea
-													}
+													onChange={(e) => handleTextChange(e, setSummary)}
+													style={questionStyle.inputArea}
 													placeholder={
-														summary
-															? summary
-															: `Enter your experiences and achievements (maximum ${maxWords} words)`
+														summary ? summary : `Enter your experiences and achievements (maximum ${maxWords} words)`
 													}
 													rows={5}
 												/>
-												<div
-													style={questionStyle.count}
-												>
-													{!summary ||
-													summary.trim() === ""
-														? 0
-														: summary
-																.trim()
-																.split(/\s+/)
-																.length}
-													/{maxWords} words
+												<div style={questionStyle.count}>
+													{!summary || summary.trim() === "" ? 0 : summary.trim().split(/\s+/).length}/{maxWords} words
 												</div>
 											</div>
 											<div className="space-y-1">
-												<Label
-													htmlFor="studentsRecord"
-													style={questionStyle.title}
-												>
+												<Label htmlFor="studentsRecord" style={questionStyle.title}>
 													Past Students&apos; Results
 												</Label>
-												<span
-													style={
-														questionStyle.subtitle
-													}
-												>
-													Past students&apos; results,
-													grades, improvements etc.
-												</span>
+												<span style={questionStyle.subtitle}>Past students&apos; results, grades, improvements etc.</span>
 												<textarea
 													value={studentsResults}
-													onChange={(e) =>
-														handleTextChange(
-															e,
-															setStudentsResults
-														)
-													}
-													style={
-														questionStyle.inputArea
-													}
+													onChange={(e) => handleTextChange(e, setStudentsResults)}
+													style={questionStyle.inputArea}
 													placeholder={
 														studentsResults
 															? studentsResults
@@ -1530,170 +847,87 @@ export default function ProfilePage() {
 													}
 													rows={5}
 												/>
-												<div
-													style={questionStyle.count}
-												>
-													{!studentsResults ||
-													studentsResults.trim() ===
-														""
+												<div style={questionStyle.count}>
+													{!studentsResults || studentsResults.trim() === ""
 														? 0
-														: studentsResults
-																.trim()
-																.split(/\s+/)
-																.length}
+														: studentsResults.trim().split(/\s+/).length}
 													/{maxWords} words
 												</div>
 											</div>
 										</div>
 									</div>
 									<div style={profileCard.buttonContainer}>
-										<button
-											type="submit"
-											style={profileCard.buttonFull}
-										>
+										<button type="submit" style={profileCard.buttonFull}>
 											Save Changes
 										</button>
 									</div>
-									{error2 && (
-										<p style={{ color: "red" }}>{error2}</p>
-									)}
+									{error2 && <p style={{ color: "red" }}>{error2}</p>}
 								</div>
 							</form>
 						</div>
 					</div>
 					<div style={profileCard.container}>
 						<div style={sidebar.container}>
-							<h2 style={sidebar.title}>
-								Academic Qualifications
-							</h2>
+							<h2 style={sidebar.title}>Academic Qualifications</h2>
 							<form onSubmit={savecademicQualificationsChanges}>
 								<div style={profileCard.card}>
 									<div className="space-y-2">
 										<div className="space-y-1">
-											<Label htmlFor="yearsOfExperience">
-												Years of Teaching Experience
-											</Label>
+											<Label htmlFor="yearsOfExperience">Years of Teaching Experience</Label>
 											<Input
 												required
 												value={yearsOfExperience}
-												onChange={(e) =>
-													setYearsOfExperience(
-														e.target.value
-													)
-												}
+												onChange={(e) => setYearsOfExperience(e.target.value)}
 												id="yearsOfExperience"
 												type="yearsOfExperience"
 											/>
 										</div>
 										<div className="space-y-1">
-											<Label htmlFor="typeOfTutor">
-												Type of Tutor
-											</Label>
-											<Select
-												required
-												value={typeOfTutor}
-												onValueChange={(
-													value: string
-												) => setTypeofTutor(value)}
-											>
+											<Label htmlFor="typeOfTutor">Type of Tutor</Label>
+											<Select required value={typeOfTutor} onValueChange={(value: string) => setTypeofTutor(value)}>
 												<div>
 													<SelectTrigger className="w-full">
-														<SelectValue
-															placeholder={
-																typeOfTutor
-															}
-														/>
+														<SelectValue placeholder={typeOfTutor} />
 													</SelectTrigger>
 												</div>
 												<SelectContent>
-													<SelectItem value="Poly/A level">
-														Poly / A Level student
-													</SelectItem>
-													<SelectItem value="Undergraduate">
-														Undergraduate
-													</SelectItem>
-													<SelectItem value="Part-Time">
-														Part-Time Tutor
-													</SelectItem>
-													<SelectItem value="Full-Time">
-														Full-Time Tutor
-													</SelectItem>
-													<SelectItem value="NIE Trainee">
-														NIE Trainee
-													</SelectItem>
-													<SelectItem value="Ex-MOE">
-														Ex-MOE Teacher
-													</SelectItem>
-													<SelectItem value="Current MOE">
-														Current MOE Teacher
-													</SelectItem>
+													<SelectItem value="Part-Time Tutor">Part-Time Tutor</SelectItem>
+													<SelectItem value="Full-Time Tutor">Full-Time Tutor</SelectItem>
+													<SelectItem value="Ex/Current MOE Teacher">Ex/Current MOE Teacher</SelectItem>
 												</SelectContent>
 											</Select>
 										</div>
 										<div className="space-y-1">
-											<Label htmlFor="highestEducationLevel">
-												Highest Education Level
-											</Label>
+											<Label htmlFor="highestEducationLevel">Highest Education Level</Label>
 											<Select
 												required
 												value={highestEducationLevel}
-												onValueChange={(
-													value: string
-												) =>
-													setHighestEducationLevel(
-														value
-													)
-												}
+												onValueChange={(value: string) => setHighestEducationLevel(value)}
 											>
 												<div>
 													<SelectTrigger className="w-full">
-														<SelectValue
-															placeholder={
-																highestEducationLevel
-															}
-														/>
+														<SelectValue placeholder={highestEducationLevel} />
 													</SelectTrigger>
 												</div>
 												<SelectContent>
-													<SelectItem value="Diploma">
-														Poly Diploma
-													</SelectItem>
-													<SelectItem value="A levels">
-														A Levels
-													</SelectItem>
-													<SelectItem value="Undergraduate">
-														Undergraduate
-													</SelectItem>
-													<SelectItem value="Bachelor Degree">
-														Bachelor Degree
-													</SelectItem>
-													<SelectItem value="Post-Graduate Diploma">
-														Post-Graduate Diploma
-													</SelectItem>
-													<SelectItem value="Masters Degree">
-														Masters Degree
-													</SelectItem>
-													<SelectItem value="PHD">
-														PHD
-													</SelectItem>
-													<SelectItem value="Others">
-														Others
-													</SelectItem>
+													<SelectItem value="Diploma">Poly Diploma</SelectItem>
+													<SelectItem value="A levels">A Levels</SelectItem>
+													<SelectItem value="Undergraduate">Undergraduate</SelectItem>
+													<SelectItem value="Bachelor Degree">Bachelor Degree</SelectItem>
+													<SelectItem value="Post-Graduate Diploma">Post-Graduate Diploma</SelectItem>
+													<SelectItem value="Masters Degree">Masters Degree</SelectItem>
+													<SelectItem value="PHD">PHD</SelectItem>
+													<SelectItem value="Others">Others</SelectItem>
 												</SelectContent>
 											</Select>
 										</div>
 									</div>
 									<div style={profileCard.buttonContainer}>
-										<button
-											type="submit"
-											style={profileCard.buttonFull}
-										>
+										<button type="submit" style={profileCard.buttonFull}>
 											Save Changes
 										</button>
 									</div>
-									{error3 && (
-										<p style={{ color: "red" }}>{error3}</p>
-									)}
+									{error3 && <p style={{ color: "red" }}>{error3}</p>}
 								</div>
 							</form>
 						</div>

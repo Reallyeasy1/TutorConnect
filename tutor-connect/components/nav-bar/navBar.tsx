@@ -7,12 +7,12 @@ import Logo from "./logo";
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import "@fontsource/poppins";
-import ClientDropdown from "./clientDropdown";
-import TutorDropdown from "./tutorDropdown";
+import { ClientDropdown } from "./clientDropdown";
+import { TutorDropdown } from "./tutorDropdown";
 import RegisterDropdown from "./registerDropdown";
 import LoginDropdown from "./loginDropdown";
 import Image from "next/image";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import ClientProfile from "./clientProfile";
 import TutorProfile from "./tutorProfile";
 
@@ -31,6 +31,7 @@ const NavBar = () => {
 	const clientProfileRef = useRef<HTMLDivElement>(null);
 	const tutorProfileRef = useRef<HTMLDivElement>(null);
 	const [userImage, setUserImage] = useState<string | null>(null);
+	const [userId, setUserId] = useState<number>(-1);
 
 	const { data: session } = useSession();
 
@@ -44,40 +45,22 @@ const NavBar = () => {
 
 	useEffect(() => {
 		let handler = (e: MouseEvent) => {
-			if (
-				clientDropdownRef.current &&
-				!clientDropdownRef.current.contains(e.target as Node)
-			) {
+			if (clientDropdownRef.current && !clientDropdownRef.current.contains(e.target as Node)) {
 				setClientsDropdown(false);
 			}
-			if (
-				tutorDropdownRef.current &&
-				!tutorDropdownRef.current.contains(e.target as Node)
-			) {
+			if (tutorDropdownRef.current && !tutorDropdownRef.current.contains(e.target as Node)) {
 				setTutorsDropdown(false);
 			}
-			if (
-				registerRef.current &&
-				!registerRef.current.contains(e.target as Node)
-			) {
+			if (registerRef.current && !registerRef.current.contains(e.target as Node)) {
 				setRegisterDropdown(false);
 			}
-			if (
-				loginRef.current &&
-				!loginRef.current.contains(e.target as Node)
-			) {
+			if (loginRef.current && !loginRef.current.contains(e.target as Node)) {
 				setLoginDropdown(false);
 			}
-			if (
-				clientProfileRef.current &&
-				!clientProfileRef.current.contains(e.target as Node)
-			) {
+			if (clientProfileRef.current && !clientProfileRef.current.contains(e.target as Node)) {
 				setClientProfile(false);
 			}
-			if (
-				tutorProfileRef.current &&
-				!tutorProfileRef.current.contains(e.target as Node)
-			) {
+			if (tutorProfileRef.current && !tutorProfileRef.current.contains(e.target as Node)) {
 				setTutorProfile(false);
 			}
 		};
@@ -113,6 +96,7 @@ const NavBar = () => {
 					if (res.ok) {
 						const userData = await res.json();
 						setUserImage(userData.image);
+						setUserId(userData.id);
 					} else {
 						console.error("Failed to fetch client details");
 					}
@@ -185,55 +169,44 @@ const NavBar = () => {
 			</div>
 			<div className="flex-1 flex justify-center space-x-8">
 				<div>
-					<a
-						href="/"
-						style={hoverText(6)}
-						onMouseEnter={() => handleMouseEnter(6)}
-						onMouseLeave={handleMouseLeave}
-					>
+					<a href="/" style={hoverText(6)} onMouseEnter={() => handleMouseEnter(6)} onMouseLeave={handleMouseLeave}>
 						Home
 					</a>
 				</div>
-				<div className="relative" ref={clientDropdownRef}>
-					<button
-						style={hoverText(0)}
-						onMouseEnter={() => handleMouseEnter(0)}
-						onMouseLeave={handleMouseLeave}
-						onClick={() => {
-							setClientsDropdown(!clientsDropdown);
-						}}
-						className="flex items-center"
-					>
-						For Clients
-						<Image
-							src="/images/arrowdown.png"
-							alt="Arrow down"
-							width={20}
-							height={20}
-						/>
-					</button>
-					{clientsDropdown && <ClientDropdown />}
-				</div>
-				<div className="relative" ref={tutorDropdownRef}>
-					<button
-						style={hoverText(1)}
-						onMouseEnter={() => handleMouseEnter(1)}
-						onMouseLeave={handleMouseLeave}
-						onClick={() => {
-							setTutorsDropdown(!tutorsDropdown);
-						}}
-						className="flex items-center"
-					>
-						For Tutors
-						<Image
-							src="/images/arrowdown.png"
-							alt="Arrow down"
-							width={20}
-							height={20}
-						/>
-					</button>
-					{tutorsDropdown && <TutorDropdown />}
-				</div>
+				{(session?.user?.randomKey == "client" || !session) && (
+					<div className="relative" ref={clientDropdownRef}>
+						<button
+							style={hoverText(0)}
+							onMouseEnter={() => handleMouseEnter(0)}
+							onMouseLeave={handleMouseLeave}
+							onClick={() => {
+								setClientsDropdown(!clientsDropdown);
+							}}
+							className="flex items-center"
+						>
+							For Clients
+							<Image src="/images/arrowdown.png" alt="Arrow down" width={20} height={20} />
+						</button>
+						{clientsDropdown && <ClientDropdown id={userId}/>}
+					</div>
+				)}
+				{(session?.user?.randomKey == "tutor" || !session) && (
+					<div className="relative" ref={tutorDropdownRef}>
+						<button
+							style={hoverText(1)}
+							onMouseEnter={() => handleMouseEnter(1)}
+							onMouseLeave={handleMouseLeave}
+							onClick={() => {
+								setTutorsDropdown(!tutorsDropdown);
+							}}
+							className="flex items-center"
+						>
+							For Tutors
+							<Image src="/images/arrowdown.png" alt="Arrow down" width={20} height={20} />
+						</button>
+						{tutorsDropdown && <TutorDropdown id={userId} />}
+					</div>
+				)}
 				<div>
 					<a
 						href="/rates"
@@ -264,7 +237,7 @@ const NavBar = () => {
 				</div>
 				<div>
 					<a
-						href="#"
+						href="/contact_us"
 						style={hoverText(4)}
 						onMouseEnter={() => handleMouseEnter(4)}
 						onMouseLeave={handleMouseLeave}
@@ -280,10 +253,7 @@ const NavBar = () => {
 			<div className="flex items-center space-x-4">
 				{session ? (
 					session.user?.randomKey == "client" ? (
-						<div
-							className="flex items-center space-x-2"
-							ref={clientProfileRef}
-						>
+						<div className="flex items-center space-x-2" ref={clientProfileRef}>
 							<button
 								style={hoverText(6)}
 								onMouseEnter={() => handleMouseEnter(6)}
@@ -294,11 +264,7 @@ const NavBar = () => {
 								className="flex items-center"
 							>
 								<Image
-									src={
-										userImage
-											? userImage
-											: "/images/Blank Profile Photo.jpg"
-									}
+									src={userImage ? userImage : "/images/Blank Profile Photo.jpg"}
 									alt="Profile Picture"
 									width={40}
 									height={40}
@@ -309,19 +275,14 @@ const NavBar = () => {
 									}}
 								/>
 								<div style={profile.container}>
-									<span style={profile.name}>
-										{session.user.name}
-									</span>
+									<span style={profile.name}>{session.user.name}</span>
 									<h3 style={profile.role}>Client</h3>
 								</div>
 							</button>
 							{clientProfile && <ClientProfile />}
 						</div>
 					) : (
-						<div
-							className="flex items-center space-x-2"
-							ref={tutorProfileRef}
-						>
+						<div className="flex items-center space-x-2" ref={tutorProfileRef}>
 							<button
 								style={hoverText(7)}
 								onMouseEnter={() => handleMouseEnter(7)}
@@ -332,24 +293,18 @@ const NavBar = () => {
 								className="flex items-center"
 							>
 								<Image
-									src={
-										userImage
-											? userImage
-											: "/images/Blank Profile Photo.jpg"
-									}
+									src={userImage ? userImage : "/images/Blank Profile Photo.jpg"}
 									alt="Profile Picture"
 									width={40}
 									height={40}
-									className="rounded-full  mr-2"
+									className="rounded-full mr-2"
 									style={{
 										width: "40px",
 										height: "40px",
 									}}
 								/>
 								<div style={profile.container}>
-									<span style={profile.name}>
-										{session.user?.name}
-									</span>
+									<span style={profile.name}>{session.user?.name}</span>
 									<h3 style={profile.role}>Tutor</h3>
 								</div>
 							</button>
@@ -374,9 +329,7 @@ const NavBar = () => {
 							<button
 								className="px-4 py-2 rounded"
 								style={{ ...registerButton }}
-								onClick={() =>
-									setRegisterDropdown(!registerDropdown)
-								}
+								onClick={() => setRegisterDropdown(!registerDropdown)}
 							>
 								Register
 							</button>

@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { level } from "winston";
 
 export async function POST(req: Request) {
 	try {

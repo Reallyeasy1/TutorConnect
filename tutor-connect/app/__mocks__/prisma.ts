@@ -1,35 +1,13 @@
-// __mocks__/prisma.ts
-import { jest } from '@jest/globals';
+// src/__mocks__/prisma.ts
+import { mockDeep, mockReset } from 'jest-mock-extended';
+import { PrismaClient } from '@prisma/client';
 
-export interface Assignment {
-  id: number;
-  subject: string;
-  level: string;
-  clientId: number;
-  tutorId: number;
-  client: { name: string };
-  tutor: { name: string };
-  additionalDetails: string;
-  postDate: Date;
-  taken: boolean;
-  address: string;
-  postalCode: number;
-  minRate: number;
-  maxRate: number;
-  duration: string;
-  frequency: string;
-  typeOfTutor: string[];
-  gender: string;
-  race: string[];
-  availability: string;
-}
+const prisma = new PrismaClient();
 
-const prisma = {
-  assignment: {
-    findMany: jest.fn<() => Promise<Assignment[]>>(),  // Correctly type as a function returning a promise of Assignment[]
-  },
+const prismaMock = mockDeep<PrismaClient>();
+
+export const resetPrismaMock = () => {
+  mockReset(prismaMock);
 };
 
-export { prisma };
-
-
+export default prismaMock;

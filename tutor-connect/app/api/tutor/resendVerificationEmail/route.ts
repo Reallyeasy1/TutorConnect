@@ -9,15 +9,12 @@ export async function POST(req: Request) {
 		const { email } = await req.json();
 
 		const user = await prisma.tutor.findUnique({
-            where: { email },
-        });
+			where: { email },
+		});
 
-        if (!user) {
-            return NextResponse.json(
-                { error: "This email is not registered" },
-                { status: 404 }
-            );
-        }
+		if (!user) {
+			return NextResponse.json({ error: "This email is not registered" }, { status: 404 });
+		}
 
 		const token = await prisma.activateTutorToken.create({
 			data: {
@@ -29,8 +26,22 @@ export async function POST(req: Request) {
 		const from: string = "<lowethan11@gmail.com>";
 		const to: string = user.email;
 		const subject: string = "Please Activate Your Account";
-		const baseUrl: string = process.env.NEXTAUTH_URL || "http://localhost:3000";
-		const mailTemplate: string = `Hello ${user.name}, <br> Please click on the link to activate your account: https://tutorconnect-delta.vercel.app/api/tutor/activate/${token.token}`;
+		const mailTemplate: string = `
+      		<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        		<h2>Hello ${user.name},</h2>
+        		<p>Please click on the link below to activate your account:</p>
+       			<p>
+          			<a href="https://tutorconnect-delta.vercel.app/api/tutor/activate/${token.token}" 
+             			style="display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+            			Activate Your Account
+          			</a>
+        		</p>
+        		<p>If you did not request this activation, please ignore this email.</p>
+        		<br>
+        		<p>Thank you,</p>
+        		<p>The TutorConnect Team</p>
+      		</div>
+    	`;
 
 		sendMail(from, to, subject, mailTemplate);
 
