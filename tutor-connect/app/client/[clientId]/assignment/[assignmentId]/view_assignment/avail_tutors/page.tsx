@@ -5,19 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { Alert } from "@/components/ui/alert";
 import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
 import * as React from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Assignment } from "@prisma/client";
 import { OfferForm } from "./offer";
 
 interface Tutor {

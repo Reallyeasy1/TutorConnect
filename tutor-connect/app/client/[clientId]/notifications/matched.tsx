@@ -22,7 +22,7 @@ export const Matched: React.FC<MatchedProps> = ({ clientId, tutor, assignment, d
 	};
 
 	const payButton = () => {
-		router.push(`#`);
+		router.push(`/client/${clientId}/assignment/${assignment.id}/view_assignment/payment_form`);
 	};
 
 
