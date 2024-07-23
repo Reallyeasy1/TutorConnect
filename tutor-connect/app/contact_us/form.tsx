@@ -67,9 +67,9 @@ export const ContactUsForm = () => {
   };
 
   return (
-    <div className="space-y-6 w-full p-8">
-      <form onSubmit={onSubmit} className="space-y-6">
-        <div className="space-y-4">
+    <div className="space-y-6 w-full ">
+      <form onSubmit={onSubmit} className="space-y-4">
+        <div className="space-y-2">
           <div>
             <Label htmlFor="name">Name</Label>
             <Input
@@ -78,7 +78,7 @@ export const ContactUsForm = () => {
               onChange={(e) => setName(e.target.value)}
               id="name"
               type="text"
-              className="mt-1"
+              className="mt-1 w-full"
             />
           </div>
           <div>

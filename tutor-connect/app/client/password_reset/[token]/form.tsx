@@ -55,6 +55,15 @@ export const ResetPasswordForm = () => {
 		console.log("Reset Password!");
 	};
 
+	const blueButton = {
+		backgroundColor: "#5790AB",
+		color: "#fff",
+		font: "Poppins",
+		fontWeight: "bold",
+		fontSize: "16px",
+		width: "100%",
+	};
+
 	return (
 		<form onSubmit={onSubmit}>
 			<Card className="w-[350px]">
@@ -87,7 +96,7 @@ export const ResetPasswordForm = () => {
 				</CardContent>
 				<CardFooter className="flex flex-col items-center space-y-2">
 					{error && <Alert>{error}</Alert>}
-					<Button className="w-full">Reset Password</Button>
+					<Button style={blueButton}>Reset Password</Button>
 					<Link
 						className="text-sm text-indigo-500 hover:underline center"
 						href="/client/login"

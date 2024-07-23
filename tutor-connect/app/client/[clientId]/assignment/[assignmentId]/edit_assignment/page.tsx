@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { UpdateAssignmentForm } from "./form";
 import Footer from "@/components/footer/footer";
 import NavBar from "@/components/nav-bar/navBar";

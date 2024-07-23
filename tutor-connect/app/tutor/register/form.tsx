@@ -283,6 +283,25 @@ export const RegisterForm = () => {
 		},
 	};
 
+	const blueButton = {
+		backgroundColor: "#5790AB",
+		color: "#fff",
+		font: "Poppins",
+		fontWeight: "bold",
+		fontSize: "16px",
+		width: "100%",
+	};
+	
+	 const whiteButton = {
+	   backgroundColor: "#fff",
+	   color: "#5790AB",
+	   font: "Poppins",
+	   fontWeight: "bold",
+	   fontSize: "16px",
+	   width: "100%",
+	   border: "1px solid #5790AB",
+	};
+
 	return (
 		<form onSubmit={onSubmit}>
 			<Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
@@ -297,7 +316,7 @@ export const RegisterForm = () => {
 							<CardTitle>Personal Information</CardTitle>
 							<CardDescription>Fill up your personal information. Click next when you&apos;re done.</CardDescription>
 						</CardHeader>
-						<CardContent className="space-y-2">
+						<CardContent className="space-y-4">
 							<div className="space-y-1">
 								<Label htmlFor="name">Name</Label>
 								<Input required value={name} onChange={(e) => setName(e.target.value)} id="name" type="name" />
@@ -412,7 +431,7 @@ export const RegisterForm = () => {
 							)}
 						</CardContent>
 						<CardFooter>
-							<Button onClick={onNext} className="w-full">
+							<Button onClick={onNext} style={blueButton}>
 								Next
 							</Button>
 						</CardFooter>
@@ -423,7 +442,7 @@ export const RegisterForm = () => {
 						<CardHeader>
 							<CardTitle>Tutor Preferences</CardTitle>
 						</CardHeader>
-						<CardContent className="space-y-5">
+						<CardContent className="space-y-4">
 							<div className="space-y-1">
 								<Label htmlFor="levelsAndSubjects" style={{ fontSize: "20px" }}>
 									Levels and Subjects
@@ -490,10 +509,10 @@ export const RegisterForm = () => {
 							)}
 						</CardContent>
 						<CardFooter className="flex justify-between space-x-2">
-							<Button onClick={onBack} className="flex-1">
+							<Button onClick={onBack} className="flex-1" style={whiteButton}>
 								Back
 							</Button>
-							<Button onClick={onNext} className="flex-1">
+							<Button onClick={onNext} className="flex-1" style={blueButton}>
 								Next
 							</Button>
 						</CardFooter>
@@ -504,7 +523,7 @@ export const RegisterForm = () => {
 						<CardHeader>
 							<CardTitle>Academic Qualifications</CardTitle>
 						</CardHeader>
-						<CardContent className="space-y-2">
+						<CardContent className="space-y-4">
 							<div className="space-y-1">
 								<Label htmlFor="yearsOfExperience">Years of Teaching Experience</Label>
 								<Input
@@ -557,10 +576,10 @@ export const RegisterForm = () => {
 							)}
 						</CardContent>
 						<CardFooter className="flex justify-between space-x-2">
-							<Button onClick={onBack} className="flex-1">
+							<Button onClick={onBack} className="flex-1" style={whiteButton}>
 								Back
 							</Button>
-							<Button className="flex-1">Register</Button>
+							<Button className="flex-1" style={blueButton}>Register</Button>
 						</CardFooter>
 					</Card>
 				</TabsContent>
