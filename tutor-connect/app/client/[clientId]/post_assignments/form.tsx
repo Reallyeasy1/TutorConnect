@@ -451,54 +451,55 @@ export const PostAssignmentForm = () => {
 							</div>
 							<div className="space-y-2">
 								<Label htmlFor="race">Race Preference</Label>
-							</div>
-							<div className="flex items-center space-x-2">
-								<input
-									type="checkbox"
-									id="Chinese"
-									checked={race.includes("Chinese")}
-									onChange={() => handleRaceChange("Chinese")}
-									className="form-checkbox h-3 w-3 text-indigo-600"
-								/>
-								<label htmlFor="Chinese" style={{ fontSize: "14px" }}>
-									Chinese
-								</label>
-							</div>
-							<div className="flex items-center space-x-2">
-								<input
-									type="checkbox"
-									id="Malay"
-									checked={race.includes("Malay")}
-									onChange={() => handleRaceChange("Malay")}
-									className="form-checkbox h-3 w-3 text-indigo-600"
-								/>
-								<label htmlFor="Malay" style={{ fontSize: "14px" }}>
-									Malay
-								</label>
-							</div>
-							<div className="flex items-center space-x-2">
-								<input
-									type="checkbox"
-									id="Indian"
-									checked={race.includes("Indian")}
-									onChange={() => handleRaceChange("Indian")}
-									className="form-checkbox h-3 w-3 text-indigo-600"
-								/>
-								<label htmlFor="Indian" style={{ fontSize: "14px" }}>
-									Indian
-								</label>
-							</div>
-							<div className="flex items-center space-x-2">
-								<input
-									type="checkbox"
-									id="No Preference"
-									checked={race.includes("No Preference")}
-									onChange={() => handleRaceChange("No Preference")}
-									className="form-checkbox h-3 w-3 text-indigo-600"
-								/>
-								<label htmlFor="No Preference" style={{ fontSize: "14px" }}>
-									No Preference
-								</label>
+
+								<div className="flex items-center space-x-2">
+									<input
+										type="checkbox"
+										id="Chinese"
+										checked={race.includes("Chinese")}
+										onChange={() => handleRaceChange("Chinese")}
+										className="form-checkbox h-3 w-3 text-indigo-600"
+									/>
+									<label htmlFor="Chinese" style={{ fontSize: "14px" }}>
+										Chinese
+									</label>
+								</div>
+								<div className="flex items-center space-x-2">
+									<input
+										type="checkbox"
+										id="Malay"
+										checked={race.includes("Malay")}
+										onChange={() => handleRaceChange("Malay")}
+										className="form-checkbox h-3 w-3 text-indigo-600"
+									/>
+									<label htmlFor="Malay" style={{ fontSize: "14px" }}>
+										Malay
+									</label>
+								</div>
+								<div className="flex items-center space-x-2">
+									<input
+										type="checkbox"
+										id="Indian"
+										checked={race.includes("Indian")}
+										onChange={() => handleRaceChange("Indian")}
+										className="form-checkbox h-3 w-3 text-indigo-600"
+									/>
+									<label htmlFor="Indian" style={{ fontSize: "14px" }}>
+										Indian
+									</label>
+								</div>
+								<div className="flex items-center space-x-2">
+									<input
+										type="checkbox"
+										id="No Preference"
+										checked={race.includes("No Preference")}
+										onChange={() => handleRaceChange("No Preference")}
+										className="form-checkbox h-3 w-3 text-indigo-600"
+									/>
+									<label htmlFor="No Preference" style={{ fontSize: "14px" }}>
+										No Preference
+									</label>
+								</div>
 							</div>
 							<div className="space-y-2">
 								<Label htmlFor="availability">Availability</Label>
@@ -518,7 +519,9 @@ export const PostAssignmentForm = () => {
 							<Button onClick={onBack} className="flex-1" style={whiteButton}>
 								Back
 							</Button>
-							<Button className="flex-1" style={blueButton}>Post Assignment</Button>
+							<Button className="flex-1" style={blueButton}>
+								Post Assignment
+							</Button>
 						</CardFooter>
 					</Card>
 				</TabsContent>
