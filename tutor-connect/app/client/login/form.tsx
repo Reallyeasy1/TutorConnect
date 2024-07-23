@@ -90,6 +90,16 @@ export const Form = () => {
     }
   };
 
+  const blueButton = {
+    backgroundColor: "#5790AB",
+    color: "#fff",
+    font: "Poppins",
+    fontWeight: "bold",
+    fontSize: "16px",
+    width: "100%",
+    marginTop: "10px",
+  };
+
   return (
     <form onSubmit={onSubmit} className="space-y-4 w-full sm:w-[400px]">
       <div className="grid w-full items-center gap-1.5">
@@ -114,7 +124,7 @@ export const Form = () => {
       </div>
       {error && <Alert>{error}</Alert>}
       <div className="w-full">
-        <Button className="w-full" size="lg">
+        <Button style={blueButton}>
           Log in
         </Button>
       </div>

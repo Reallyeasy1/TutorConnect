@@ -6,6 +6,8 @@ import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
 import Spinner from "@/components/spinner/spinner";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Nothing from "@/components/ui/Nothing";
 
 interface Assignment {
 	id: number;
@@ -132,6 +134,28 @@ export default function AllAssignments() {
 			color: "#000",
 			textAlign: "justify" as "justify",
 		},
+		emptySection: {
+			display: "flex",
+			flexDirection: "column" as "column",
+			justifyContent: "center",
+			alignItems: "center",
+			padding: "20px",
+			width: "100%",
+		},
+		arrowIcon: {
+			marginLeft: "10px",
+			width: "24px",
+			height: "24px",
+			fill: "white",
+			transform: "rotate(180deg)",
+		},
+		none: {
+			fontSize: "24px",
+			fontWeight: "normal" as "normal",
+			font: "Poppins",
+			color: "#909090",
+			padding: "20px",
+		},
 	};
 
 	return (
@@ -140,7 +164,7 @@ export default function AllAssignments() {
 			<div className="container mx-auto p-6 flex flex-col items-center flex-grow">
 				<h1 className="text-4xl font-bold mb-8 text-center">My Assignments</h1>
 				{assignment_filtered.length === 0 ? (
-					<p className="text-gray-500 text-center">No assignments available.</p>
+					<Nothing message={"No assignments yet"} imageSrc={"/images/Assignment.png"} imageAlt={"Assignmnet"}/>
 				) : (
 					<div className="grid grid-cols-1 gap-8">
 						{assignment_filtered.map((assignment) => (
@@ -197,14 +221,17 @@ export default function AllAssignments() {
 						))}
 					</div>
 				)}
-				<button
-					className="mt-8 bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-700 transition-colors"
+				<Button
+					style={{ ...styles.blueButton, width: "25%" }}
 					onClick={() => {
 						router.push(`/client/${clientId}/post_assignments`);
 					}}
 				>
-					Post New Assignment Here!
-				</button>
+					Post an Assignment here!{" "}
+					<svg style={styles.arrowIcon} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+						<path d="M12 2l1.41 1.41L5.83 11H22v2H5.83l7.58 7.59L12 22 2 12 12 2z" />
+					</svg>
+				</Button>
 			</div>
 			<Footer />
 		</div>

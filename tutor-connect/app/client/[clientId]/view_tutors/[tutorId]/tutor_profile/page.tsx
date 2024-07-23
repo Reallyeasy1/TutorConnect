@@ -13,6 +13,7 @@ import { Client } from "@prisma/client";
 import { ReviewForm } from "../../form";
 import Loading from "@/app/loading";
 import { RequestForm } from "../../request";
+import Nothing from "@/components/ui/Nothing";
 
 type Tutor = {
 	id: number;
@@ -348,7 +349,7 @@ export default function TutorProfile() {
 	};
 
 	return (
-		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
+		<div className="flex flex-col min-h-screen">
 			<NavBar />
 			{loading && <Loading />}
 			{tutorProfile && clientProfile && (
@@ -442,7 +443,7 @@ export default function TutorProfile() {
 								</TabsContent>
 								<TabsContent value="reviews">
 									<div style={styles.sortSection}>
-										<h2 style={styles.sortText}>Sort by: </h2>
+										<div style={styles.sortText}>Sort by: </div>
 										<Button
 											style={sortBy == "newest" ? styles.activeButton : styles.inactiveButton}
 											onClick={() => setSortBy("newest")}
@@ -462,6 +463,9 @@ export default function TutorProfile() {
 											Lowest
 										</Button>
 									</div>
+									{sortedReviews.length === 0 && (
+										<Nothing message={"No Reviews available."} imageSrc={"/images/Review.png"} imageAlt={"Review"} />
+									)}
 									{sortedReviews.slice(startIndex, endIndex).map((review) => (
 										<div style={styles.reviewContainer} key={review.id}>
 											<div key={review.id} style={styles.reviewSection}>

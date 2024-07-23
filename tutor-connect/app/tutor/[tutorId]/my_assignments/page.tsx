@@ -271,10 +271,10 @@ export default function MyReviews() {
 								className="grid w-full grid-cols-3"
 								style={{ marginBottom: "20px", backgroundColor: "#eff8fa", color: "#5790AB" }}
 							>
-								<TabsTrigger value="accepted" className="font-xl">
+								<TabsTrigger value="accepted">
 									Accepted
 								</TabsTrigger>
-								<TabsTrigger value="offers" className="font-xl">
+								<TabsTrigger value="offers">
 									Offers
 								</TabsTrigger>
 								<TabsTrigger value="applied">Applied</TabsTrigger>

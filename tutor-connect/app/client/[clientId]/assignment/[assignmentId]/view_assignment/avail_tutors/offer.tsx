@@ -47,7 +47,7 @@ export const OfferForm: FC<OfferFormProps> = ({
   clientId,
 }) => {
   const router = useRouter();
-  const [amount, setAmount] = useState<string>("0");
+  const [amount, setAmount] = useState<number>(0);
   const [availability, setAvailability] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [assignment, setAssignment] = useState<Assignment | null>(null);
@@ -77,17 +77,18 @@ export const OfferForm: FC<OfferFormProps> = ({
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (availability === "") {
+      setError("Please enter availability");
+      return;
+    }
+
+    if (amount === 0 || amount > 500) {
+      setError("Please enter a valid amount");
+      return;
+    }
+    
     try {
-      if (availability === "") {
-        setError("Please enter availability");
-        return;
-      }
-
-      if (!clientId) {
-        setError("Client ID is required");
-        return;
-      }
-
       const res = await fetch("/api/client/offer_tutor", {
         method: "PUT",
         body: JSON.stringify({
@@ -128,24 +129,6 @@ export const OfferForm: FC<OfferFormProps> = ({
       setError(error?.message);
     }
     console.log("Request sent!");
-  };
-
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (!isNaN(Number(value)) || value === "") {
-      if (Number(value) < 0) {
-        setError("Amount must be greater than 0");
-        return;
-      }
-      if (Number(value) > 500) {
-        setError("Offered amount is too high");
-        return;
-      }
-      setAmount(value);
-    } else {
-      setError("Please enter a valid number");
-      return;
-    }
   };
 
   const styles = {
@@ -231,9 +214,9 @@ export const OfferForm: FC<OfferFormProps> = ({
                   <Input
                     required
                     value={amount}
-                    onChange={handleAmountChange}
+                    onChange={(e) => setAmount(parseFloat(e.target.value))}
                     id="amount"
-                    type="amount"
+                    type="number"
                   />
                 </div>
               </div>

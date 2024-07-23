@@ -11,6 +11,7 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { Button } from "@/components/ui/button";
 import { Client } from "@prisma/client";
 import Loading from "@/app/loading";
+import Nothing from "@/components/ui/Nothing";
 
 type Tutor = {
 	id: number;
@@ -399,7 +400,7 @@ export default function TutorProfile() {
 								</TabsContent>
 								<TabsContent value="reviews">
 									<div style={styles.sortSection}>
-										<h2 style={styles.sortText}>Sort by: </h2>
+										<div style={styles.sortText}>Sort by: </div>
 										<Button
 											style={sortBy == "newest" ? styles.activeButton : styles.inactiveButton}
 											onClick={() => setSortBy("newest")}
@@ -419,6 +420,9 @@ export default function TutorProfile() {
 											Lowest
 										</Button>
 									</div>
+									{sortedReviews.length === 0 && (
+										<Nothing message={"No reviews yet."} imageSrc={"/images/Review.png"} imageAlt={"Review"} />
+									)}
 									{sortedReviews.slice(startIndex, endIndex).map((review) => (
 										<div style={styles.reviewContainer} key={review.id}>
 											<div key={review.id} style={styles.reviewSection}>

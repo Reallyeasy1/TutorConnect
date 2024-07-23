@@ -44,7 +44,7 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 	const [additionalDetails, setAdditionalDetails] = useState("");
 	const [address, setAddress] = useState("");
 	const [postalCode, setPostalCode] = useState("");
-	const [amount, setAmount] = useState<string>("0");
+	const [amount, setAmount] = useState<number>(0);
 	const [duration, setDuration] = useState("");
 	const [frequency, setFrequency] = useState("");
 	const [currentTab, setCurrentTab] = useState("lessonDetails");
@@ -106,24 +106,6 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 		}
 	};
 
-	const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const value = e.target.value;
-		if (!isNaN(Number(value)) || value === "") {
-			if (Number(value) < 0) {
-				setError("Amount must be greater than 0");
-				return;
-			}
-			if (Number(value) > 500) {
-				setError("Offered amount is too high");
-				return;
-			}
-			setAmount(value);
-		} else {
-			setError("Please enter a valid number");
-			return;
-		}
-	};
-
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		const postDate = Date.now();
@@ -144,6 +126,11 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 			newLevel = level + " " + otherLevel;
 		} else {
 			newLevel = level;
+		}
+
+		if (amount > 500) {
+			setError("Please enter a rate less than $500");
+			return;
 		}
 
 		let locationString = null;
@@ -250,7 +237,7 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 									<CardTitle>Lesson Details</CardTitle>
 									<CardDescription>Fill up your lesson details. Click next when you&apos;re done.</CardDescription>
 								</CardHeader>
-								<CardContent className="space-y-2">
+								<CardContent className="space-y-3">
 									<div className="space-y-2">
 										<Label htmlFor="Level">Level</Label>
 										<Select required value={level} onValueChange={(value: string) => setLevel(value)}>
@@ -354,7 +341,13 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 										</div>
 										<div className="col-span-1 space-y-1">
 											<Label htmlFor="minRate">Offered Rate</Label>
-											<Input required value={amount} onChange={handleAmountChange} id="amount" type="amount" />
+											<Input
+												required
+												value={amount}
+												onChange={(e) => setAmount(parseFloat(e.target.value))}
+												id="amount"
+												type="number"
+											/>
 										</div>
 									</div>
 									{/* Error Message */}
@@ -376,7 +369,7 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 										The first lesson can be scheduled after the tutor accepts and the matchmaking fee is paid.
 									</CardDescription>
 								</CardHeader>
-								<CardContent className="space-y-2">
+								<CardContent className="space-y-3">
 									<div className="grid grid-cols-2 gap-4">
 										<div className="col-span-1 space-y-1">
 											<Label htmlFor="duration">Duration</Label>

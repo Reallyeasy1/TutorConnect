@@ -69,7 +69,7 @@ export const ContactUsForm = () => {
   return (
     <div className="space-y-6 w-full ">
       <form onSubmit={onSubmit} className="space-y-4">
-        <div className="space-y-2">
+        <div className="space-y-3">
           <div>
             <Label htmlFor="name">Name</Label>
             <Input

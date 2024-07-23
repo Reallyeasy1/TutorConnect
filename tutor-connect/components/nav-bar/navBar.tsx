@@ -12,7 +12,7 @@ import { TutorDropdown } from "./tutorDropdown";
 import RegisterDropdown from "./registerDropdown";
 import LoginDropdown from "./loginDropdown";
 import Image from "next/image";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import ClientProfile from "./clientProfile";
 import TutorProfile from "./tutorProfile";
 

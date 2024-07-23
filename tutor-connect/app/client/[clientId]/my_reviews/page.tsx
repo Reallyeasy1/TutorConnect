@@ -14,6 +14,7 @@ import { DeletePopup } from "./delete";
 import { Edit } from "lucide-react";
 import { EditReview } from "./edit";
 import Loading from "@/app/loading";
+import Nothing from "@/components/ui/Nothing";
 
 type Review = {
 	id: number;
@@ -37,12 +38,12 @@ export default function MyReviews() {
 	const [startIndex, setStartIndex] = useState(0);
 	const [endIndex, setEndIndex] = useState(limit);
 	const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-    const [clientName, setClientName] = useState("");
-    const [clientImage, setClientImage] = useState("");
+	const [error, setError] = useState<string | null>(null);
+	const [clientName, setClientName] = useState("");
+	const [clientImage, setClientImage] = useState("");
 	const params = useParams();
 	const clientId = params.clientId;
-    const router = useRouter();
+	const router = useRouter();
 
 	useEffect(() => {
 		const fetchReviews = async () => {
@@ -61,8 +62,8 @@ export default function MyReviews() {
 					setReviews(reviewsData.reviews);
 					setSortedReviews(reviewsData.reviews);
 					setTotalPages(Math.ceil(reviewsData.reviews.length / limit));
-                    setClientImage(reviewsData.clientImage);
-                    setClientName(reviewsData.clientName);
+					setClientImage(reviewsData.clientImage);
+					setClientName(reviewsData.clientName);
 				} else {
 					console.error("Failed to fetch reviews");
 				}
@@ -220,12 +221,12 @@ export default function MyReviews() {
 			marginTop: "10px",
 			textAlign: "justify" as "justify",
 		},
-        reviewHeader: {
-            display: "flex",
-        },
-        buttons: {
-            marginLeft: 'auto'
-        },
+		reviewHeader: {
+			display: "flex",
+		},
+		buttons: {
+			marginLeft: "auto",
+		},
 	};
 	return (
 		<div className="flex flex-col min-h-screen">
@@ -234,7 +235,7 @@ export default function MyReviews() {
 				<div style={styles.container}>
 					<h1 style={styles.title}>My Reviews</h1>
 					<div style={styles.sortSection}>
-						<p style={styles.sortText}>Sort by:</p>
+						<div style={styles.sortText}>Sort by:</div>
 						<Button style={sortBy == "newest" ? styles.activeButton : styles.inactiveButton} onClick={() => setSortBy("newest")}>
 							Newest
 						</Button>
@@ -252,7 +253,10 @@ export default function MyReviews() {
 							style={styles.searchbar}
 						/>
 					</div>
-                    {loading && <Loading />}
+					{loading && <Loading />}
+					{!loading && filteredReviews.length === 0 && (
+						<Nothing message={"No reviews yet."} imageSrc={"/images/Review.png"} imageAlt={"Review"} />
+					)}
 					{filteredReviews.slice(startIndex, endIndex).map((review) => (
 						<div style={styles.reviewContainer} key={review.id}>
 							<div style={styles.imageSection}>
@@ -266,11 +270,11 @@ export default function MyReviews() {
 							</div>
 							<div style={styles.reviewSection}>
 								<div style={styles.reviewHeader}>
-                                    <div>
-									<h2 style={styles.profileName}>{review.tutor.name}</h2>
-                                    </div>
+									<div>
+										<h2 style={styles.profileName}>{review.tutor.name}</h2>
+									</div>
 									<div style={styles.buttons}>
-                                        <EditReview review={review} />
+										<EditReview review={review} />
 										<DeletePopup reviewId={review.id} />
 									</div>
 								</div>

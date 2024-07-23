@@ -27,7 +27,16 @@ export async function POST(req: Request) {
 			location,
 		} = body;
 
-		// Validate required fields
+		if (!subject || !level || !clientId || (minRate == null) || (maxRate == null) || !postDate) {
+			return new NextResponse(
+				JSON.stringify({
+					error: "Missing required fields",
+				}),
+				{
+					status: 500,
+				}
+			);
+		}
 
 		if (!subject || !level || !clientId || (minRate == null) || (maxRate == null) || !postDate) {
 			return new NextResponse(

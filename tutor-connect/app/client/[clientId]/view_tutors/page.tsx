@@ -11,6 +11,7 @@ import { ReviewForm } from "./form";
 import { Filter } from "./filter";
 import Loading from "@/app/loading";
 import { RequestForm } from "./request";
+import Nothing from "@/components/ui/Nothing";
 
 type Tutor = {
 	id: number;
@@ -178,6 +179,21 @@ export default function ViewTutorsPage() {
 			gridColumn: "span 1",
 			marginTop: "10px",
 		},
+		emptySection: {
+			display: "flex",
+			flexDirection: "column" as "column",
+			justifyContent: "center",
+			alignItems: "center",
+			padding: "20px",
+			width: "100%",
+		},
+		none: {
+			fontSize: "24px",
+			fontWeight: "normal" as "normal",
+			font: "Poppins",
+			color: "#909090",
+			padding: "20px",
+		},
 	};
 
 	return (
@@ -187,6 +203,7 @@ export default function ViewTutorsPage() {
 				<Filter tutors={tutors} setFilteredTutors={setFilteredTutors} />
 			</div>
 			{loading && <Loading />}
+			{filteredTutors.length === 0 && !loading && <Nothing message={"No tutors found"} imageSrc={"/images/teacher.png"} imageAlt={"tutor"} />}
 			<div className="flex-grow flex flex-col justify-center items-center">
 				<div style={styles.tutorContainer}>
 					{filteredTutors.slice(startIndex, endIndex).map((tutor: Tutor) => (
