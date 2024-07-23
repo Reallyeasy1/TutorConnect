@@ -432,7 +432,7 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 									<Button onClick={onBack} className="flex-1">
 										Back
 									</Button>
-									<Button className="flex-1">Post Assignment</Button>
+									<Button className="flex-1">Send Request</Button>
 								</CardFooter>
 							</Card>
 						</TabsContent>

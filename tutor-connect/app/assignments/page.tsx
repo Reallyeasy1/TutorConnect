@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
-// import NavBar from "./../../components/nav-bar/navBar";
 
 interface Assignment {
 	id: number;
