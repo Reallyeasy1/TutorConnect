@@ -1,0 +1,188 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table Client {
+  id Int [pk, increment]
+  email String [unique, not null]
+  password String [not null]
+  name String [not null]
+  contactNumber Int [not null]
+  address String [not null]
+  postalCode Int [not null]
+  active Boolean [not null, default: false]
+  image String
+  activateClientToken ActivateClientToken [not null]
+  assignments Assignment [not null]
+  ClientNotification ClientNotification [not null]
+  passwordResetClientToken PasswordResetClientToken [not null]
+  reviews Review [not null]
+  TutorNotification TutorNotification [not null]
+}
+
+Table Assignment {
+  id Int [pk, increment]
+  subject String [not null]
+  level String [not null]
+  clientId Int [not null]
+  tutorId Int
+  additionalDetails String
+  postDate DateTime [not null]
+  taken Boolean [not null]
+  address String [not null]
+  postalCode Int [not null]
+  minRate Int [not null]
+  maxRate Int [not null]
+  duration String [not null]
+  frequency String [not null]
+  typeOfTutor String[] [not null]
+  gender String [not null]
+  race String[] [not null]
+  availability String [not null]
+  coordinates Decimal[] [not null]
+  isPaid Boolean [not null, default: false]
+  startDate String
+  amount Int
+  isRequest Boolean [not null, default: false]
+  client Client [not null]
+  tutor Tutor
+  ClientNotification ClientNotification [not null]
+  TutorNotification TutorNotification [not null]
+  avail_tutors Tutor [not null]
+}
+
+Table Tutor {
+  id Int [pk, increment]
+  email String [unique, not null]
+  password String [not null]
+  name String [not null]
+  contactNumber Int [not null]
+  dateOfBirth DateTime [not null]
+  gender String [not null]
+  age Int [not null]
+  nationality String [not null]
+  race String [not null]
+  levelAndSubjects Json [not null]
+  location String[] [not null]
+  typeOfTutor String [not null]
+  yearsOfExperience Int [not null]
+  highestEducationLevel String [not null]
+  active Boolean [not null, default: false]
+  image String
+  introduction String
+  summary String
+  studentsResults String
+  activateTutorToken ActivateTutorToken [not null]
+  assignmentsPrimary Assignment [not null]
+  ClientNotification ClientNotification [not null]
+  passwordResetTutorToken PasswordResetTutorToken [not null]
+  reviews Review [not null]
+  TutorNotification TutorNotification [not null]
+  assignmentsAvailable Assignment [not null]
+}
+
+Table ClientNotification {
+  id Int [pk, increment]
+  read Boolean [not null, default: false]
+  clientId Int [not null]
+  date DateTime [default: `now()`, not null]
+  assignmentId Int
+  tutorId Int
+  type String [not null]
+  assignment Assignment
+  client Client [not null]
+  tutor Tutor
+}
+
+Table TutorNotification {
+  id Int [pk, increment]
+  read Boolean [not null, default: false]
+  tutorId Int [not null]
+  date DateTime [default: `now()`, not null]
+  assignmentId Int
+  clientId Int
+  type String [not null]
+  assignment Assignment
+  client Client
+  tutor Tutor [not null]
+}
+
+Table Review {
+  id Int [pk, increment]
+  tutorId Int [not null]
+  review String [not null]
+  rating Int [not null]
+  clientId Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  client Client [not null]
+  tutor Tutor [not null]
+}
+
+Table ActivateTutorToken {
+  id Int [pk, increment]
+  token String [unique, not null]
+  createdAt DateTime [default: `now()`, not null]
+  activatedAt DateTime
+  tutorId Int [not null]
+  tutor Tutor [not null]
+}
+
+Table PasswordResetTutorToken {
+  id Int [pk, increment]
+  token String [unique, not null]
+  createdAt DateTime [default: `now()`, not null]
+  resetAt DateTime
+  tutorId Int [not null]
+  tutor Tutor [not null]
+}
+
+Table ActivateClientToken {
+  id Int [pk, increment]
+  token String [unique, not null]
+  createdAt DateTime [default: `now()`, not null]
+  activatedAt DateTime
+  clientId Int [not null]
+  client Client [not null]
+}
+
+Table PasswordResetClientToken {
+  id Int [pk, increment]
+  token String [unique, not null]
+  createdAt DateTime [default: `now()`, not null]
+  resetAt DateTime
+  clientId Int [not null]
+  client Client [not null]
+}
+
+Table AvailableTutors {
+  avail_tutorsId Int [ref: > Tutor.id]
+  assignmentsavailableId Int [ref: > Assignment.id]
+}
+
+Ref: Assignment.clientId > Client.id
+
+Ref: Assignment.tutorId > Tutor.id
+
+Ref: ClientNotification.assignmentId > Assignment.id
+
+Ref: ClientNotification.clientId > Client.id
+
+Ref: ClientNotification.tutorId > Tutor.id
+
+Ref: TutorNotification.assignmentId > Assignment.id
+
+Ref: TutorNotification.clientId > Client.id
+
+Ref: TutorNotification.tutorId > Tutor.id
+
+Ref: Review.clientId > Client.id [delete: Cascade]
+
+Ref: Review.tutorId > Tutor.id [delete: Cascade]
+
+Ref: ActivateTutorToken.tutorId > Tutor.id
+
+Ref: PasswordResetTutorToken.tutorId > Tutor.id
+
+Ref: ActivateClientToken.clientId > Client.id
+
+Ref: PasswordResetClientToken.clientId > Client.id
