@@ -139,8 +139,17 @@ console.log(strapiData);
     console.log("Register!");
   };
 
+  const blueButton = {
+    backgroundColor: "#5790AB",
+    color: "#fff",
+    font: "Poppins",
+    fontWeight: "bold",
+    fontSize: "16px",
+    width: "100%",
+  };
+
   return (
-    <form onSubmit={onSubmit} className="space-y-6 w-full sm:w-[400px]">
+    <form onSubmit={onSubmit} className="space-y-4 w-full sm:w-[400px]">
       <div className="grid w-full items-center gap-1.5">
         <Label htmlFor="name">Name</Label>
         <Input
@@ -203,7 +212,7 @@ console.log(strapiData);
       </div>
       {error && <Alert>{error}</Alert>}
       <div className="w-full">
-        <Button className="w-full" size="lg">
+        <Button style={blueButton}>
           Register
         </Button>
       </div>

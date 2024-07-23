@@ -8,6 +8,7 @@ import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import Loading from "@/app/loading";
 import { Filter } from "./filter";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 interface Assignment {
 	id: number;
@@ -37,6 +38,15 @@ interface Assignment {
 const AssignmentRow = ({ assignments, selectedAssignment }: { assignments: Assignment[]; selectedAssignment: Assignment | null }) => {
 	const params = useParams();
 	const tutorId = params.tutorId;
+	const router = useRouter();
+	const blueButton = {
+		backgroundColor: "#5790AB",
+		color: "#fff",
+		font: "Poppins",
+		fontWeight: "bold",
+		fontSize: "16px",
+		width: "100%",
+	};
 
 	return (
 		<div className="grid grid-cols-3 gap-2 p-4">
@@ -80,12 +90,12 @@ const AssignmentRow = ({ assignments, selectedAssignment }: { assignments: Assig
 						</p>
 					</div>
 					<div className="mt-4">
-						<button
-							className="w-full bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors"
-							onClick={() => (window.location.href = `/tutor/${tutorId}/view_assignment/${assignment.id}`)}
+						<Button
+							style={blueButton}
+							onClick={() => router.push(`/tutor/${tutorId}/view_assignment/${assignment.id}`)}
 						>
 							View Assignment
-						</button>
+						</Button>
 					</div>
 				</div>
 			))}

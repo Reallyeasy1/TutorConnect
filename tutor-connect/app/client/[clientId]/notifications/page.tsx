@@ -14,6 +14,7 @@ import { Matched } from "./matched";
 import Image from "next/image";
 import { RequestRejected } from "./requestRejected";
 import { OfferRejected } from "./offerRejected";
+import Nothing from "@/components/ui/Nothing";
 
 type ClientNotification = {
 	id: number;
@@ -199,7 +200,7 @@ export default function Notifications() {
 				<div style={styles.container}>
 					<h1 style={styles.title}>My Notifications ({sortedNotifications.filter((notif) => !notif.read).length})</h1>
 					<div style={styles.sortSection}>
-						<p style={styles.sortText}>Sort by:</p>
+						<div style={styles.sortText}>Sort by:</div>
 						<Button style={sortBy == "newest" ? styles.activeButton : styles.inactiveButton} onClick={() => setSortBy("newest")}>
 							Newest
 						</Button>
@@ -211,6 +212,9 @@ export default function Notifications() {
 						</Button>
 					</div>
 					{loading && <Loading />}
+					{sortedNotifications.length === 0 && !loading && (
+						<Nothing message={"No Notifications."} imageSrc={"/images/Notification.png"} imageAlt={"Notification"} />
+					)}
 					{sortedNotifications.map((notif) => (
 						<div key={notif.id} style={{ marginTop: "10px", width: "100%" }}>
 							{notif.type === "apply" && (
