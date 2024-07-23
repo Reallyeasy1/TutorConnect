@@ -237,7 +237,7 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 									<CardTitle>Lesson Details</CardTitle>
 									<CardDescription>Fill up your lesson details. Click next when you&apos;re done.</CardDescription>
 								</CardHeader>
-								<CardContent className="space-y-2">
+								<CardContent className="space-y-3">
 									<div className="space-y-2">
 										<Label htmlFor="Level">Level</Label>
 										<Select required value={level} onValueChange={(value: string) => setLevel(value)}>
@@ -369,7 +369,7 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 										The first lesson can be scheduled after the tutor accepts and the matchmaking fee is paid.
 									</CardDescription>
 								</CardHeader>
-								<CardContent className="space-y-2">
+								<CardContent className="space-y-3">
 									<div className="grid grid-cols-2 gap-4">
 										<div className="col-span-1 space-y-1">
 											<Label htmlFor="duration">Duration</Label>
