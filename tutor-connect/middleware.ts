@@ -6,20 +6,20 @@ import { getToken } from 'next-auth/jwt';
 
 export async function middleware(request: NextRequest) {
   const session = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
-  console.log(session)
-  console.log("helloworld")
   const url = request.nextUrl.clone();
+  const isClientViewTutors = url.pathname.match(/^\/client\/[^\/]+\/view_tutors$/);
+  const isTutorViewAssignments = url.pathname.match(/^\/tutor\/[^\/]+\/view_assignments$/);
 
-  if (!url.pathname.startsWith('/client/login') && url.pathname.startsWith('/client')) {
+  if (!isClientViewTutors && !url.pathname.startsWith('/client/login') && url.pathname.startsWith('/client')) {
     // Check if user is a client
     if (!session || session.randomKey !== 'client') {
-      url.pathname = '/';
+      url.pathname = '/client/login';
       return NextResponse.redirect(url);
     }
-  } else if (!url.pathname.startsWith('/tutor/login') && url.pathname.startsWith('/tutor')) {
+  } else if (!isTutorViewAssignments &&!url.pathname.startsWith('/tutor/login') && url.pathname.startsWith('/tutor')) {
     // Check if user is a tutor
     if (!session || session.randomKey !== 'tutor') {
-      url.pathname = '/';
+      url.pathname = '/tutor/login';
       return NextResponse.redirect(url);
     }
   }
