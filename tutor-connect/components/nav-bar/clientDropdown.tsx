@@ -17,7 +17,7 @@ export const ClientDropdown: React.FC<ClientDropdownProps> = ({ id }) => {
             cName: "dropdown-link"
         },
         {
-            title: "View Assignments",
+            title: "My Assignments",
             path: `/client/${clientId}/assignment/client_assignment`,
             cName: "dropdown-link"
         },

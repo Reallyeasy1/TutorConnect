@@ -66,6 +66,10 @@ const AssignmentRow = ({ assignments, selectedAssignment }: { assignments: Assig
 							{assignment.subject}
 						</h2>
 						<p className="text-gray-700 mb-1">
+							<strong>Tutor Type:</strong> {(assignment.gender === "Male" || assignment.gender === "Female") && assignment.gender}{" "}
+							{assignment.typeOfTutor.join(", ")}
+						</p>
+						<p className="text-gray-700 mb-1">
 							<strong>Address:</strong> {assignment.address} Singapore {assignment.postalCode}
 						</p>
 						<p className="text-gray-700 mb-1">
@@ -90,10 +94,7 @@ const AssignmentRow = ({ assignments, selectedAssignment }: { assignments: Assig
 						</p>
 					</div>
 					<div className="mt-4">
-						<Button
-							style={blueButton}
-							onClick={() => router.push(`/tutor/${tutorId}/view_assignment/${assignment.id}`)}
-						>
+						<Button style={blueButton} onClick={() => router.push(`/tutor/${tutorId}/view_assignment/${assignment.id}`)}>
 							View Assignment
 						</Button>
 					</div>
@@ -110,7 +111,9 @@ export default function AllAssignments() {
 	const router = useRouter();
 	const params = useParams();
 	const tutorId = params.tutorId;
-	const [center, setCenter] = useState({ lat: 1.287953, lng: 103.851784 });
+	const [center, setCenter] = useState<google.maps.LatLng>(
+		new google.maps.LatLng(1.287953, 103.851784)
+	);
 	const [map, setMap] = useState<google.maps.Map | null>(null);
 	const [zoom, setZoom] = useState(11);
 	const [markers, setMarkers] = useState<{ lat: number; lng: number; price: string; assignment: Assignment }[]>([]);
@@ -182,7 +185,7 @@ export default function AllAssignments() {
 
 	const handleMarkerClick = (assignment: Assignment, markerLat: number, markerLng: number) => {
 		setSelectedAssignment(assignment);
-		setCenter({ lat: markerLat, lng: markerLng });
+		setCenter(new google.maps.LatLng(markerLat, markerLng));
 		setZoom(15);
 	};
 
