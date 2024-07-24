@@ -15,6 +15,7 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import ClientProfile from "./clientProfile";
 import TutorProfile from "./tutorProfile";
+import { ClientNotification, TutorNotification } from "@prisma/client";
 
 const NavBar = () => {
 	const [clientsDropdown, setClientsDropdown] = useState(false);
@@ -32,6 +33,7 @@ const NavBar = () => {
 	const tutorProfileRef = useRef<HTMLDivElement>(null);
 	const [userImage, setUserImage] = useState<string | null>(null);
 	const [userId, setUserId] = useState<number>(-1);
+	const [userNotifications, setUserNotifications] = useState<ClientNotification[] | TutorNotification[]>([]);
 
 	const { data: session } = useSession();
 
@@ -97,6 +99,7 @@ const NavBar = () => {
 						const userData = await res.json();
 						setUserImage(userData.image);
 						setUserId(userData.id);
+						setUserNotifications(userData.notifications);
 					} else {
 						console.error("Failed to fetch client details");
 					}
@@ -157,6 +160,19 @@ const NavBar = () => {
 			flexDirection: "column" as "column",
 			padding: 2,
 		},
+		notificationCircle: {
+			width: "24px",
+			height: "24px",
+			backgroundColor: "#5790AB",
+			borderRadius: "50%",
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "center",
+			color: "#fff",
+			fontSize: "12px",
+			fontWeight: "bold",
+			marginLeft: "8px",
+		},
 	};
 
 	return (
@@ -187,7 +203,7 @@ const NavBar = () => {
 							For Clients
 							<Image src="/images/arrowdown.png" alt="Arrow down" width={20} height={20} />
 						</button>
-						{clientsDropdown && <ClientDropdown id={userId}/>}
+						{clientsDropdown && <ClientDropdown id={userId} />}
 					</div>
 				)}
 				{(session?.user?.randomKey == "tutor" || !session) && (
@@ -278,8 +294,11 @@ const NavBar = () => {
 									<span style={profile.name}>{session.user.name}</span>
 									<h3 style={profile.role}>Client</h3>
 								</div>
+								{userNotifications.filter((notif) => !notif.read).length > 0 && (
+									<div style={profile.notificationCircle}>{userNotifications.filter((notif) => !notif.read).length}</div>
+								)}
 							</button>
-							{clientProfile && <ClientProfile />}
+							{clientProfile && <ClientProfile notificationCount={userNotifications.filter((notif) => !notif.read).length} />}
 						</div>
 					) : (
 						<div className="flex items-center space-x-2" ref={tutorProfileRef}>
@@ -307,8 +326,11 @@ const NavBar = () => {
 									<span style={profile.name}>{session.user?.name}</span>
 									<h3 style={profile.role}>Tutor</h3>
 								</div>
+								{userNotifications.filter((notif) => !notif.read).length > 0 && (
+									<div style={profile.notificationCircle}>{userNotifications.filter((notif) => !notif.read).length}</div>
+								)}
 							</button>
-							{tutorProfile && <TutorProfile />}
+							{tutorProfile && <TutorProfile notificationCount={userNotifications.filter((notif) => !notif.read).length} />}
 						</div>
 					)
 				) : (

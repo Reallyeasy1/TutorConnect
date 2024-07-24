@@ -2,7 +2,7 @@ import { useState } from "react";
 import { signOut } from "next-auth/react";
 import { useParams } from "next/navigation";
 
-export default function ClientProfile() {
+export default function ClientProfile({ notificationCount }: { notificationCount: number }) {
 	const [hoveredIndex, setHoveredIndex] = useState(-1);
 	const params = useParams();
 	const clientId = params.clientId;
@@ -17,6 +17,7 @@ export default function ClientProfile() {
 			title: "Notifications",
 			path: `/client/${clientId}/notifications`,
 			cName: "dropdown-link",
+			hasNotification: notificationCount > 0,
 		},
 		{
 			title: "Settings",
@@ -31,9 +32,23 @@ export default function ClientProfile() {
 		},
 	];
 
+	const notificationCircle = {
+		width: "8px",
+		height: "8px",
+		backgroundColor: "#5790AB",
+		borderRadius: "50%",
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
+		color: "#fff",
+		fontSize: "12px",
+		fontWeight: "bold",
+		marginLeft: "8px",
+	};
+
 	return (
 		<div className="relative inline-block" style={{ zIndex: 50 }}>
-			<ul className="absolute right-5 top-8 bg-white border border-gray-300 rounded shadow-lg" style={{ width: "110px" }}>
+			<ul className="absolute right-5 top-8 bg-white border border-gray-300 rounded shadow-lg" style={{ width: "140px" }}>
 				{clientItems.map((item, index) => (
 					<li
 						key={index}
@@ -42,8 +57,9 @@ export default function ClientProfile() {
 						onMouseLeave={() => setHoveredIndex(-1)}
 						onClick={item.action ? item.action : undefined}
 					>
-						<a className={`${item.cName} block w-full h-full`} href={item.path}>
+						<a className={`${item.cName} block w-full h-full flex flex-row items-center`} href={item.path}>
 							{item.title}
+							{item.hasNotification && <div style={notificationCircle}></div>}
 						</a>
 					</li>
 				))}

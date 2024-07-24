@@ -9,18 +9,21 @@ export async function POST(req: Request) {
 		if (email) {
 			user = await prisma.tutor.findUnique({
 				where: { email },
+				include: {
+					TutorNotification: true,
+				},
 			});
 		} else if (tutorId) {
 			user = await prisma.tutor.findUnique({
 				where: { id: parseInt(tutorId) },
+				include: {
+					TutorNotification: true,
+				},
 			});
 		}
 
 		if (!user) {
-			return NextResponse.json(
-				{ error: "This email is not registered" },
-				{ status: 404 }
-			);
+			return NextResponse.json({ error: "This email is not registered" }, { status: 404 });
 		} else {
 			return NextResponse.json({
 				id: user.id,
@@ -41,6 +44,7 @@ export async function POST(req: Request) {
 				summary: user.summary,
 				studentsResults: user.studentsResults,
 				image: user.image,
+				notifications: user.TutorNotification,
 			});
 		}
 	} catch (err: any) {
