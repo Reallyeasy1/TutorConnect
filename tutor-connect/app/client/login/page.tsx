@@ -6,8 +6,6 @@ import NavBar from "@/components/nav-bar/navBar";
 import Logo from "@/components/nav-bar/logo";
 import Footer from "@/components/footer/footer";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
-import { signOut } from "next-auth/react";
 
 export default function LoginPage() {
 	const searchParams = useSearchParams();
