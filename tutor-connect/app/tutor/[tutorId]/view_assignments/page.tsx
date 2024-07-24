@@ -111,9 +111,7 @@ export default function AllAssignments() {
 	const router = useRouter();
 	const params = useParams();
 	const tutorId = params.tutorId;
-	const [center, setCenter] = useState<google.maps.LatLng>(
-		new google.maps.LatLng(1.287953, 103.851784)
-	);
+	const [center, setCenter] = useState<{ lat: number; lng: number }>({ lat: 1.287953, lng: 103.851784 });
 	const [map, setMap] = useState<google.maps.Map | null>(null);
 	const [zoom, setZoom] = useState(11);
 	const [markers, setMarkers] = useState<{ lat: number; lng: number; price: string; assignment: Assignment }[]>([]);
@@ -185,7 +183,10 @@ export default function AllAssignments() {
 
 	const handleMarkerClick = (assignment: Assignment, markerLat: number, markerLng: number) => {
 		setSelectedAssignment(assignment);
-		setCenter(new google.maps.LatLng(markerLat, markerLng));
+		const latLng = new google.maps.LatLng(markerLat, markerLng);
+		const latitude = latLng.lat();
+		const longitude = latLng.lng();
+		setCenter({ lat: latitude, lng: longitude });
 		setZoom(15);
 	};
 
