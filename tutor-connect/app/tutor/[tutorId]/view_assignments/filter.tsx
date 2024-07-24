@@ -15,7 +15,6 @@ import { Label } from "@/components/ui/label";
 import { levels, subjectsByLevel } from "@/utils/levelsAndSubjects";
 import { locations } from "@/utils/locations";
 import Link from "next/link";
-import { link } from "fs";
 
 interface Assignment {
 	id: number;
@@ -92,7 +91,7 @@ export const Filter: React.FC<FilterProps> = ({ assignments, setFilteredAssignme
 				(!selectedLevel || assignment.level.includes(selectedLevel)) &&
 				(!selectedSubject.length || selectedSubject.includes(assignment.subject)) &&
 				(!tutorType || assignment.typeOfTutor.includes(tutorType)) &&
-				(!location || location.includes(determineRegion(assignment.coordinates[0], assignment.coordinates[1])))
+				(!location.length || location.includes(determineRegion(assignment.coordinates[0], assignment.coordinates[1])))
 		);
 		setFilteredAssignments(filtered);
 	};
