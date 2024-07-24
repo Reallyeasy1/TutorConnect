@@ -5,13 +5,24 @@ import { Form as LoginForm } from "./form";
 import NavBar from "@/components/nav-bar/navBar";
 import Logo from "@/components/nav-bar/logo";
 import Footer from "@/components/footer/footer";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { signOut } from "next-auth/react";
 
 export default function LoginPage() {
+    const searchParams = useSearchParams();
+    const error = searchParams.get('error');
+
 	const logoText = {
 		color: "#5790AB",
 		fontFamily: "Poppins",
 		fontSize: 28,
 		fontWeight: "bold",
+	};
+
+	const errorText = {
+		color: "red",
+		fontSize: "16px",
 	};
 
 	return (
@@ -26,6 +37,7 @@ export default function LoginPage() {
 								TutorConnect
 							</div>
 						</div>
+						{error && <p style={errorText}>{error}</p>}
 						<LoginForm />
 						<p className="text-center">
 							Need to create an account?{" "}

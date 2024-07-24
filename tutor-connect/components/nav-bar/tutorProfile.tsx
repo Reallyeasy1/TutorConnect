@@ -2,7 +2,7 @@ import { useState } from "react";
 import { signOut } from "next-auth/react";
 import { useParams } from "next/navigation";
 
-export default function TutorProfile() {
+export default function TutorProfile({ notificationCount }: { notificationCount: number }) {
 	const [hoveredIndex, setHoveredIndex] = useState(-1);
 	const params = useParams();
     const tutorId = params.tutorId;
@@ -17,6 +17,7 @@ export default function TutorProfile() {
 			title: "Notifications",
 			path: `/tutor/${tutorId}/notifications`,
 			cName: "dropdown-link",
+			hasNotification: notificationCount > 0,
 		},
 				{
 			title: "Settings",
@@ -31,9 +32,23 @@ export default function TutorProfile() {
 		},
 	];
 
+	const notificationCircle = {
+		width: "8px",
+		height: "8px",
+		backgroundColor: "#5790AB",
+		borderRadius: "50%",
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
+		color: "#fff",
+		fontSize: "12px",
+		fontWeight: "bold",
+		marginLeft: "8px",
+	};
+
 	return (
 		<div className="relative inline-block" style={{zIndex:50}}>
-			<ul className="absolute right-5 top-8 bg-white border border-gray-300 rounded shadow-lg" style={{width: "110px"}}>
+			<ul className="absolute right-5 top-8 bg-white border border-gray-300 rounded shadow-lg" style={{width: "140px"}}>
 				{tutorItems.map((item, index) => (
 					<li
 						key={index}
@@ -45,10 +60,11 @@ export default function TutorProfile() {
 						onClick={item.action ? item.action : undefined}
 					>
 						<a
-							className={`${item.cName} block w-full h-full`}
+							className={`${item.cName} block w-full h-full flex flex-row items-center`}
 							href={item.path}
 						>
 							{item.title}
+							{item.hasNotification && <div style={notificationCircle}></div>}
 						</a>
 					</li>
 				))}

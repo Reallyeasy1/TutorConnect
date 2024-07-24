@@ -196,7 +196,11 @@ export default function Notifications() {
 			<NavBar />
 			<div style={styles.main}>
 				<div style={styles.container}>
-					<h1 style={styles.title}>My Notifications ({sortedNotifications.filter((notif) => !notif.read).length})</h1>
+					<h1 style={styles.title}>
+						My Notifications{" "}
+						{sortedNotifications.filter((notif) => !notif.read).length > 0 &&
+							`(${sortedNotifications.filter((notif) => !notif.read).length})`}
+					</h1>
 					<div style={styles.sortSection}>
 						<div style={styles.sortText}>Sort by:</div>
 						<Button style={sortBy == "newest" ? styles.activeButton : styles.inactiveButton} onClick={() => setSortBy("newest")}>
@@ -215,40 +219,48 @@ export default function Notifications() {
 					)}
 					{sortedNotifications.map((notif) => (
 						<div key={notif.id} style={{ marginTop: "10px", width: "100%" }}>
-							{notif.type === "picked" && (<Picked
-								tutorId={tutorId}
-								client={notif.client}
-								assignment={notif.assignment}
-								date={notif.date}
-								markAsRead={markNotificationAsRead}
-								notificationId={notif.id}
-								read={notif.read}
-							/>)}
-							{notif.type === "request" && (<Request
-								tutorId={tutorId}
-								client={notif.client}
-								assignment={notif.assignment}
-								date={notif.date}
-								markAsRead={markNotificationAsRead}
-								notificationId={notif.id}
-								read={notif.read}
-							/>)}
-							{notif.type === "update" && (<Update
-								tutorId={tutorId}
-								date={notif.date}
-								markAsRead={markNotificationAsRead}
-								notificationId={notif.id}
-								read={notif.read}
-							/>)}
-							{notif.type === "paid" && (<Paid
-								tutorId={tutorId}
-								client={notif.client}
-								assignment={notif.assignment}
-								date={notif.date}
-								markAsRead={markNotificationAsRead}
-								notificationId={notif.id}
-								read={notif.read}
-							/>)}
+							{notif.type === "picked" && (
+								<Picked
+									tutorId={tutorId}
+									client={notif.client}
+									assignment={notif.assignment}
+									date={notif.date}
+									markAsRead={markNotificationAsRead}
+									notificationId={notif.id}
+									read={notif.read}
+								/>
+							)}
+							{notif.type === "request" && (
+								<Request
+									tutorId={tutorId}
+									client={notif.client}
+									assignment={notif.assignment}
+									date={notif.date}
+									markAsRead={markNotificationAsRead}
+									notificationId={notif.id}
+									read={notif.read}
+								/>
+							)}
+							{notif.type === "update" && (
+								<Update
+									tutorId={tutorId}
+									date={notif.date}
+									markAsRead={markNotificationAsRead}
+									notificationId={notif.id}
+									read={notif.read}
+								/>
+							)}
+							{notif.type === "paid" && (
+								<Paid
+									tutorId={tutorId}
+									client={notif.client}
+									assignment={notif.assignment}
+									date={notif.date}
+									markAsRead={markNotificationAsRead}
+									notificationId={notif.id}
+									read={notif.read}
+								/>
+							)}
 						</div>
 					))}
 					<Pagination style={{ padding: "10px", fontSize: "16px" }}>

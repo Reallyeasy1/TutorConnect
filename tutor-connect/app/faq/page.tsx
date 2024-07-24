@@ -1,13 +1,22 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
-import "../globals.css"; // Import global styles
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/customTabs";
 
 export default function FAQPage() {
+	const [isMounted, setIsMounted] = useState(false);
+
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
+
+	if (!isMounted) {
+		return null;
+	}
+
 	const clientFAQs = [
 		{
 			question: "How Do I Register For A Tuition Teacher?",

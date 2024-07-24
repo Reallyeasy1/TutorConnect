@@ -291,15 +291,15 @@ export const RegisterForm = () => {
 		fontSize: "16px",
 		width: "100%",
 	};
-	
-	 const whiteButton = {
-	   backgroundColor: "#fff",
-	   color: "#5790AB",
-	   font: "Poppins",
-	   fontWeight: "bold",
-	   fontSize: "16px",
-	   width: "100%",
-	   border: "1px solid #5790AB",
+
+	const whiteButton = {
+		backgroundColor: "#fff",
+		color: "#5790AB",
+		font: "Poppins",
+		fontWeight: "bold",
+		fontSize: "16px",
+		width: "100%",
+		border: "1px solid #5790AB",
 	};
 
 	return (
@@ -579,7 +579,9 @@ export const RegisterForm = () => {
 							<Button onClick={onBack} className="flex-1" style={whiteButton}>
 								Back
 							</Button>
-							<Button className="flex-1" style={blueButton}>Register</Button>
+							<Button className="flex-1" style={blueButton}>
+								Register
+							</Button>
 						</CardFooter>
 					</Card>
 				</TabsContent>
