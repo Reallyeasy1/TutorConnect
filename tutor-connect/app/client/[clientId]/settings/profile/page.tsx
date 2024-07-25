@@ -300,7 +300,6 @@ export default function ProfilePage() {
 
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
-			<NavBar />
 			<div style={profileCard.container} className="py-6">
 				<div style={sidebar.container}>
 					<h2 style={sidebar.title}>Settings</h2>

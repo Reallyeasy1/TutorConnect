@@ -56,7 +56,6 @@ export default function AllAssignments() {
 
 	return (
 		<div>
-			<NavBar />
 			<div className="container mx-auto p-6 flex flex-col items-center">
 				<h1 className="text-4xl font-bold mb-8 text-center">
 					Available Assignments

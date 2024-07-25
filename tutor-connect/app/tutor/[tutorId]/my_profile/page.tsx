@@ -315,7 +315,6 @@ export default function TutorProfile() {
 
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
-			<NavBar />
 			{loading && <Loading />}
 			{profile && (
 				<div style={styles.sectionContainer}>

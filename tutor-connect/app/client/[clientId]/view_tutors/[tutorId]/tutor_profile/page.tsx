@@ -352,7 +352,6 @@ export default function TutorProfile() {
 
 	return (
 		<div className="flex flex-col min-h-screen">
-			<NavBar />
 			{loading && <Loading />}
 			{tutorProfile && clientProfile && (
 				<div style={styles.sectionContainer}>

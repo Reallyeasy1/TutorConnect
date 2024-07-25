@@ -214,7 +214,6 @@ export default function AppliedAssignments() {
 
 	return (
 		<div className="flex flex-col min-h-screen">
-			<NavBar />
 			<div
 				className="flex-grow grid grid-cols-3 gap-8"
 				style={{ height: "calc(100vh - 100px)" }}

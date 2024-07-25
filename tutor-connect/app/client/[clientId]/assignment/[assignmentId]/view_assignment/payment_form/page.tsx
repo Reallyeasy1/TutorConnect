@@ -184,7 +184,6 @@ export default function Payment() {
 
 	return (
 		<div className="flex flex-col min-h-screen">
-			<NavBar />
 			<div style={styles.main}>
 				<h1 style={styles.header}>Payment Page</h1>
 				{!assignments && <Loading />}

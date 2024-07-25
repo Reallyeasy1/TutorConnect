@@ -201,7 +201,6 @@ export default function ViewTutorsPage() {
 
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
-			<NavBar />
 			<div className="flex-grow flex flex-col justify-center items-center py-6">
 				<Filter tutors={tutors} setFilteredTutors={setFilteredTutors} />
 			</div>

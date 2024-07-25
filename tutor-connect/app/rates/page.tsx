@@ -89,7 +89,6 @@ export default function Rates() {
 
 	return (
 		<div>
-			<NavBar />
 			<div style={styles.ratesContainer}>
 				<div style={styles.title}>Home Tuition Rates</div>
 				<div style={styles.subtitle}>

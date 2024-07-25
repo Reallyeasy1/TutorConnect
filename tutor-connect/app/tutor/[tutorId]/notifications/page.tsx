@@ -193,7 +193,6 @@ export default function Notifications() {
 	};
 	return (
 		<div className="flex flex-col min-h-screen">
-			<NavBar />
 			<div style={styles.main}>
 				<div style={styles.container}>
 					<h1 style={styles.title}>

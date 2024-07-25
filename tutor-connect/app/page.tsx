@@ -101,7 +101,6 @@ export default function HomePage() {
 
 	return (
 		<div style={styles.body}>
-			<NavBar />
 			<div style={styles.sectionContainer}>
 				<Image
 					src="/images/tutorteaching.jpg"

@@ -125,7 +125,6 @@ export default function FAQPage() {
 
 	return (
 		<div className="flex flex-col min-h-screen">
-			<NavBar />
 			<div style={styles.main}>
 				<div style={styles.container}>
 					{/* Check to see if current is at client or tutor */}

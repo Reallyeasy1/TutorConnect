@@ -68,7 +68,6 @@ export default function VerifyEmail() {
 
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
-			<NavBar />
 			<div className="flex-grow flex justify-center items-center py-6">
 				<Card className="w-[500px]">
 					<CardHeader>

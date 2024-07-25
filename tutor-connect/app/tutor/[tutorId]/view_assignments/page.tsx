@@ -233,7 +233,6 @@ export default function AllAssignments() {
 
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
-			<NavBar />
 			<div className="flex-grow flex flex-col justify-center items-center py-6">
 				<Filter assignments={assignments} setFilteredAssignments={setFilteredAssignments} tutorId={tutorId} />
 			</div>

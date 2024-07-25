@@ -44,7 +44,6 @@ export default function Chat() {
       {done !== "done" ? ( // Waiting for access to be granted
         <h1>Verifying token..... Please wait</h1>
       ) : (<div>
-      <NavBar />
         <ChatRoom username={username} id = {clientId} isTutor = {false} curr_recipient = {curr_recipient_inp}/>
         </div>
         

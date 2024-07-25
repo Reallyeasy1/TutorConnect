@@ -17,7 +17,7 @@ export default function RegisterPage() {
 
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
-			<NavBar />
+
 			<div className="h-full w-screen flex justify-center items-center bg-navy-100 py-6">
 				<div className="sm:shadow-xl px-8 pb-8 pt-8 sm:bg-white rounded-xl space-y-5">
 					<div className="flex items-center justify-center">
