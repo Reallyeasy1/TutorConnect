@@ -271,12 +271,8 @@ export default function MyReviews() {
 								className="grid w-full grid-cols-3"
 								style={{ marginBottom: "20px", backgroundColor: "#eff8fa", color: "#5790AB" }}
 							>
-								<TabsTrigger value="accepted">
-									Accepted
-								</TabsTrigger>
-								<TabsTrigger value="offers">
-									Offers
-								</TabsTrigger>
+								<TabsTrigger value="accepted">Accepted</TabsTrigger>
+								<TabsTrigger value="offers">Offers</TabsTrigger>
 								<TabsTrigger value="applied">Applied</TabsTrigger>
 							</TabsList>
 							<TabsContent value="accepted">
@@ -317,7 +313,8 @@ export default function MyReviews() {
 												<p style={styles.assignmentNum}>Assignment #{assignment.id}</p>
 												<p style={styles.text}>
 													<strong>Address: </strong>
-													{assignment.address}, Singapore {assignment.postalCode}
+													{assignment.address}, {assignment.unitNumber && `${assignment.unitNumber}, `}Singapore{" "}
+													{assignment.postalCode}
 												</p>
 												<p style={styles.text}>
 													<strong>Rate: </strong>${assignment.amount}/h

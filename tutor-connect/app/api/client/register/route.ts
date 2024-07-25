@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { email, password, name, contactNumber, address, postalCode } = await req.json();
+    const { email, password, name, contactNumber, address, unitNumber, postalCode } = await req.json();
     console.log('Request Body:', { email, password, name, contactNumber, address, postalCode });
 
     const hashed = await hash(password, 12);
@@ -19,6 +19,7 @@ export async function POST(req: Request) {
         name,
         contactNumber: parseInt(contactNumber),
         address,
+        unitNumber,
         postalCode: parseInt(postalCode),
         active: false,
         image: null,

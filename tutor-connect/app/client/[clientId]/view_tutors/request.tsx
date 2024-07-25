@@ -43,6 +43,7 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 	const router = useRouter();
 	const [additionalDetails, setAdditionalDetails] = useState("");
 	const [address, setAddress] = useState("");
+	const [unitNumber, setUnitNumber] = useState("");
 	const [postalCode, setPostalCode] = useState("");
 	const [amount, setAmount] = useState<number>(0);
 	const [duration, setDuration] = useState("");
@@ -66,6 +67,7 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 				const response = await fetch(`/api/client/getDetails?clientId=${clientId}`);
 				const data = await response.json();
 				setAddress(data.address);
+				setUnitNumber(data.unitNumber);
 				setPostalCode(data.postalCode);
 			} catch (error) {
 				console.log(error);
@@ -156,6 +158,7 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 					level: newLevel,
 					subject,
 					address,
+					unitNumber,
 					postalCode,
 					minRate: amount,
 					maxRate: amount,
@@ -330,6 +333,16 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 									</div>
 									<div className="grid grid-cols-2 gap-4">
 										<div className="col-span-1 space-y-1">
+											<Label htmlFor="unitNumber">Unit Number</Label>
+											<Input
+												required
+												value={unitNumber}
+												onChange={(e) => setUnitNumber(e.target.value)}
+												id="unitNumber"
+												type="text"
+											/>
+										</div>
+										<div className="col-span-1 space-y-1">
 											<Label htmlFor="postalCode">Postal Code</Label>
 											<Input
 												required
@@ -339,16 +352,16 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 												type="text"
 											/>
 										</div>
-										<div className="col-span-1 space-y-1">
-											<Label htmlFor="minRate">Offered Rate</Label>
-											<Input
-												required
-												value={amount}
-												onChange={(e) => setAmount(parseFloat(e.target.value))}
-												id="amount"
-												type="number"
-											/>
-										</div>
+									</div>
+									<div className="space-y-2">
+										<Label htmlFor="rate">Offered Rate</Label>
+										<Input
+											required
+											value={amount}
+											onChange={(e) => setAmount(parseFloat(e.target.value))}
+											id="amount"
+											type="number"
+										/>
 									</div>
 									{/* Error Message */}
 									{error && <div className="text-red-500">{error}</div>}

@@ -15,6 +15,7 @@ model Client {
   name                     String
   contactNumber            Int
   address                  String
+  unitNumber               String?
   postalCode               Int
   assignments              Assignment[]
   active                   Boolean                    @default(false)
@@ -38,6 +39,7 @@ model Assignment {
   postDate           DateTime
   taken              Boolean
   address            String
+  unitNumber         String?
   postalCode         Int
   minRate            Int
   maxRate            Int

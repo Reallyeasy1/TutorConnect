@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { notification } from "antd";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -32,6 +31,7 @@ export async function POST(req: Request) {
 				name: user.name,
 				contactNumber: user.contactNumber,
 				address: user.address,
+				unitNumber: user.unitNumber,
 				postalCode: user.postalCode,
 				image: user.image,
 				notifications: user.ClientNotification,

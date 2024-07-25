@@ -27,6 +27,7 @@ export const PostAssignmentForm = () => {
 	const clientId = params.clientId;
 	const [additionalDetails, setAdditionalDetails] = useState("");
 	const [address, setAddress] = useState("");
+	const [unitNumber, setUnitNumber] = useState("");
 	const [postalCode, setPostalCode] = useState("");
 	const [minRate, setMinRate] = useState<number>(0);
 	const [maxRate, setMaxRate] = useState<number>(0);
@@ -54,6 +55,7 @@ export const PostAssignmentForm = () => {
 				const response = await fetch(`/api/client/getDetails?clientId=${clientId}`);
 				const data = await response.json();
 				setAddress(data.address);
+				setUnitNumber(data.unitNumber);
 				setPostalCode(data.postalCode);
 			} catch (error) {
 				console.log(error);
@@ -308,10 +310,27 @@ export const PostAssignmentForm = () => {
 								<Label htmlFor="address">Address</Label>
 								<Input required value={address} onChange={(e) => setAddress(e.target.value)} id="address" type="text" />
 							</div>
-							{/* Tutee Location */}
-							<div className="space-y-2">
-								<Label htmlFor="postalCode">Postal Code</Label>
-								<Input required value={postalCode} onChange={(e) => setPostalCode(e.target.value)} id="postalCode" type="text" />
+							<div className="grid grid-cols-2 gap-4">
+								<div className="col-span-1 space-y-1">
+									<Label htmlFor="unitNumber">Unit Number</Label>
+									<Input
+										required
+										value={unitNumber}
+										onChange={(e) => setUnitNumber(e.target.value)}
+										id="unitNumber"
+										type="unitNumber"
+									/>
+								</div>
+								<div className="col-span-1 space-y-1">
+									<Label htmlFor="postalCode">Postal Code</Label>
+									<Input
+										required
+										value={postalCode}
+										onChange={(e) => setPostalCode(e.target.value)}
+										id="postalCode"
+										type="postalCode"
+									/>
+								</div>
 							</div>
 							<div className="grid grid-cols-2 gap-4">
 								<div className="col-span-1 space-y-1">

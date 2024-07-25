@@ -12,6 +12,7 @@ interface Assignment {
 	subject: string;
 	level: string;
 	address: string;
+	unitNumber: string;
 	postalCode: number;
 	minRate: number;
 	maxRate: number;
@@ -165,7 +166,8 @@ export default function ViewAssignment() {
 										{assignment.level} {assignment.subject}
 									</h2>
 									<p className="text-gray-700 mb-1">
-										<strong>Address:</strong> {assignment.address} Singapore {assignment.postalCode}
+									<strong>Address:</strong> {assignment.address}, {assignment.unitNumber && `${assignment.unitNumber}, `}Singapore{" "}
+									{assignment.postalCode}
 									</p>
 									<p className="text-gray-700 mb-1">
 										<strong>Frequency:</strong> {assignment.duration}, {assignment.frequency}

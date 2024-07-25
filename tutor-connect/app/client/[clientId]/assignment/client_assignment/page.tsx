@@ -14,6 +14,7 @@ interface Assignment {
 	subject: string;
 	level: string;
 	address: string;
+	unitNumber: string;
 	postalCode: number;
 	minRate: number;
 	maxRate: number;
@@ -164,7 +165,7 @@ export default function AllAssignments() {
 			<div className="container mx-auto p-6 flex flex-col items-center flex-grow">
 				<h1 className="text-4xl font-bold mb-8 text-center">My Assignments</h1>
 				{assignment_filtered.length === 0 ? (
-					<Nothing message={"No assignments yet"} imageSrc={"/images/Assignment.png"} imageAlt={"Assignmnet"}/>
+					<Nothing message={"No assignments yet"} imageSrc={"/images/Assignment.png"} imageAlt={"Assignmnet"} />
 				) : (
 					<div className="grid grid-cols-1 gap-8">
 						{assignment_filtered.map((assignment) => (
@@ -173,7 +174,8 @@ export default function AllAssignments() {
 									{assignment.level} {assignment.subject}
 								</h2>
 								<p className="text-gray-700 mb-1">
-									<strong>Address:</strong> {assignment.address}, Singapore {assignment.postalCode}
+									<strong>Address:</strong> {assignment.address}, {assignment.unitNumber && `${assignment.unitNumber}, `}Singapore{" "}
+									{assignment.postalCode}
 								</p>
 								<p className="text-gray-700 mb-1">
 									<strong>Frequency:</strong> {assignment.duration}, {assignment.frequency}

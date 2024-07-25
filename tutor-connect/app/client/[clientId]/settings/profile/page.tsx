@@ -20,13 +20,12 @@ export default function ProfilePage() {
 		email: "",
 		contactNumber: "",
 		address: "",
+		unitNumber: "",
 		postalCode: "",
 		name: "",
 		image: "",
 	});
-	const [modifiedFields, setModifiedFields] = useState<Set<string>>(
-		new Set()
-	);
+	const [modifiedFields, setModifiedFields] = useState<Set<string>>(new Set());
 
 	useEffect(() => {
 		const fetchClientDetails = async () => {
@@ -109,18 +108,12 @@ export default function ProfilePage() {
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		if (
-			modifiedFields.has("contactNumber") &&
-			profile.contactNumber.length !== 8
-		) {
+		if (modifiedFields.has("contactNumber") && profile.contactNumber.length !== 8) {
 			setError("Contact number must be 8 digits");
 			return;
 		}
 
-		if (
-			modifiedFields.has("postalCode") &&
-			profile.postalCode.length !== 6
-		) {
+		if (modifiedFields.has("postalCode") && profile.postalCode.length !== 6) {
 			setError("Postal code must be 6 digits");
 			return;
 		}
@@ -130,33 +123,28 @@ export default function ProfilePage() {
 			formData.append("email", profile.email);
 			formData.append("contactNumber", profile.contactNumber);
 			formData.append("address", profile.address);
+			formData.append("unitNumber", profile.unitNumber);
 			formData.append("postalCode", profile.postalCode);
 			if (modifiedFields.has("image") && newImage) {
 				if (profile.image) {
 					const imageLink = profile.image;
-					const deleteRes = await fetch(
-						`/api/client/edit_profile/image_upload`,
-						{
-							method: "DELETE",
-							headers: {
-								"Content-Type": "application/json",
-							},
-							body: JSON.stringify({ imageLink }),
-						}
-					);
+					const deleteRes = await fetch(`/api/client/edit_profile/image_upload`, {
+						method: "DELETE",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({ imageLink }),
+					});
 
 					if (!deleteRes.ok) {
 						alert("Failed to delete old image");
 						return;
 					}
 				}
-				const imageRes = await fetch(
-					`/api/client/edit_profile/image_upload?filename=${newImage.name}`,
-					{
-						method: "POST",
-						body: newImage,
-					}
-				);
+				const imageRes = await fetch(`/api/client/edit_profile/image_upload?filename=${newImage.name}`, {
+					method: "POST",
+					body: newImage,
+				});
 
 				if (imageRes.ok) {
 					const imageBlob: PutBlobResult = await imageRes.json();
@@ -324,21 +312,13 @@ export default function ProfilePage() {
 									Profile
 								</a>
 							</li>
-							<li
-								style={hoverText(0)}
-								onMouseEnter={() => handleMouseEnter(0)}
-								onMouseLeave={handleMouseLeave}
-							>
+							<li style={hoverText(0)} onMouseEnter={() => handleMouseEnter(0)} onMouseLeave={handleMouseLeave}>
 								<a href="#" style={sidebar.navLink}>
 									<span style={sidebar.icon}>🔔</span>
 									Notifications
 								</a>
 							</li>
-							<li
-								style={hoverText(1)}
-								onMouseEnter={() => handleMouseEnter(1)}
-								onMouseLeave={handleMouseLeave}
-							>
+							<li style={hoverText(1)} onMouseEnter={() => handleMouseEnter(1)} onMouseLeave={handleMouseLeave}>
 								<a href="#" style={sidebar.navLink}>
 									<span style={sidebar.icon}>❓</span>
 									Help
@@ -354,13 +334,7 @@ export default function ProfilePage() {
 							<form onSubmit={onSubmit}>
 								<div style={profileCard.profileImage}>
 									<Image
-										src={
-											preview
-												? preview
-												: profile.image
-												? profile.image
-												: "/images/Blank Profile Photo.jpg"
-										}
+										src={preview ? preview : profile.image ? profile.image : "/images/Blank Profile Photo.jpg"}
 										alt="Profile Picture"
 										width={100}
 										height={100}
@@ -377,35 +351,15 @@ export default function ProfilePage() {
 										onChange={handlePhotoChange}
 										accept=".png, .jpg, .jpeg, .gif"
 									/>
-									<button
-										type="button"
-										style={profileCard.editIcon}
-										onClick={() =>
-											document
-												.getElementById("fileInput")
-												?.click()
-										}
-									>
+									<button type="button" style={profileCard.editIcon} onClick={() => document.getElementById("fileInput")?.click()}>
 										✏️
 									</button>
 								</div>
-								<h2 style={profileCard.clientName}>
-									{profile.name}
-								</h2>
-								<Label htmlFor="email">
-									Email (Cannot be changed)
-								</Label>
-								<input
-									type="email"
-									name="email"
-									value={profile.email}
-									style={profileCard.input}
-									readOnly
-								/>
+								<h2 style={profileCard.clientName}>{profile.name}</h2>
+								<Label htmlFor="email">Email (Cannot be changed)</Label>
+								<input type="email" name="email" value={profile.email} style={profileCard.input} readOnly />
 
-								<Label htmlFor="contactNumber">
-									Contact Number
-								</Label>
+								<Label htmlFor="contactNumber">Contact Number</Label>
 								<input
 									type="contactNumber"
 									name="contactNumber"
@@ -425,6 +379,16 @@ export default function ProfilePage() {
 									required
 								/>
 
+								<Label htmlFor="unitNumber">Unit Number</Label>
+								<input
+									type="unitNumber"
+									name="unitNumber"
+									value={profile.unitNumber}
+									onChange={handleInputChange}
+									style={profileCard.input}
+									required
+								/>
+
 								<Label htmlFor="postalCode">Postal Code</Label>
 								<input
 									type="postalCode"
@@ -436,23 +400,14 @@ export default function ProfilePage() {
 								/>
 
 								<div style={profileCard.buttonContainer}>
-									<button
-										type="button"
-										style={profileCard.resetPasswordButton}
-										onClick={handleResetPassword}
-									>
+									<button type="button" style={profileCard.resetPasswordButton} onClick={handleResetPassword}>
 										Reset Password
 									</button>
-									<button
-										type="submit"
-										style={profileCard.saveButton}
-									>
+									<button type="submit" style={profileCard.saveButton}>
 										Save Changes
 									</button>
 								</div>
-								{error && (
-									<p style={{ color: "red" }}>{error}</p>
-								)}
+								{error && <p style={{ color: "red" }}>{error}</p>}
 							</form>
 						</div>
 					</div>
