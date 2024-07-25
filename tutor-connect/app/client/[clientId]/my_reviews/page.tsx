@@ -11,7 +11,6 @@ import { useParams, useRouter } from "next/navigation";
 import StarRating from "@/components/ui/StarRating";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { DeletePopup } from "./delete";
-import { Edit } from "lucide-react";
 import { EditReview } from "./edit";
 import Loading from "@/app/loading";
 import Nothing from "@/components/ui/Nothing";
@@ -110,7 +109,6 @@ export default function MyReviews() {
 
 	const styles = {
 		title: {
-			font: "Poppins",
 			fontSize: "32px",
 			textAlign: "center" as "center",
 			fontWeight: "bold",
@@ -174,7 +172,6 @@ export default function MyReviews() {
 		reviewContainer: {
 			display: "grid",
 			gridTemplateColumns: "2fr 6fr",
-			padding: "0 20px 0 20px",
 			width: "100%",
 		},
 		tutorImage: {

@@ -9,6 +9,7 @@ import Loading from "@/app/loading";
 import { Filter } from "./filter";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { Tutor } from "@prisma/client";
 
 interface Assignment {
 	id: number;
@@ -33,6 +34,7 @@ interface Assignment {
 	};
 	coordinates: number[];
 	tutorId: number | null;
+	avail_tutors: Tutor[];
 }
 
 const AssignmentRow = ({ assignments, selectedAssignment }: { assignments: Assignment[]; selectedAssignment: Assignment | null }) => {
@@ -156,7 +158,11 @@ export default function AllAssignments() {
 					const data = await res.json();
 					setAssignments(data);
 
-					const availableAssignments = data.filter((assignment: Assignment) => assignment.taken === false && !assignment.tutorId);
+					const availableAssignments = data.filter((assignment: Assignment) => {
+						const isAvailable = assignment.taken === false && !assignment.tutorId;
+						const tutorApplied = assignment.avail_tutors && assignment.avail_tutors.some(tutor => tutor.id === Number(tutorId));
+						return isAvailable && !tutorApplied;
+					});
 					setFilteredAssignments(availableAssignments);
 
 					const markerPromises = availableAssignments.map((assignment: Assignment) => ({

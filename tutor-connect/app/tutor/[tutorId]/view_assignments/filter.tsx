@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { levels, subjectsByLevel } from "@/utils/levelsAndSubjects";
 import { locations } from "@/utils/locations";
 import Link from "next/link";
+import { Tutor } from "@prisma/client";
 
 interface Assignment {
 	id: number;
@@ -39,6 +40,7 @@ interface Assignment {
 	};
 	coordinates: number[];
 	tutorId: number | null;
+	avail_tutors: Tutor[];
 }
 
 type FilterProps = {

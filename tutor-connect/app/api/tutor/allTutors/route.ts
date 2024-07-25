@@ -9,6 +9,9 @@ export async function GET() {
 			where: {
 				active: true,
 			},
+			include: {
+				reviews: true,
+			},
 		});
 		const totalTutors = await prisma.tutor.count({
 			where: {

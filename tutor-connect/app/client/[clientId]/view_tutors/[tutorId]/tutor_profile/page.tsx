@@ -9,7 +9,7 @@ import StarRating from "@/components/ui/StarRating";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/customTabs";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
-import { Client } from "@prisma/client";
+import { Assignment, Client } from "@prisma/client";
 import { ReviewForm } from "../../form";
 import Loading from "@/app/loading";
 import { RequestForm } from "../../request";
@@ -29,6 +29,8 @@ type Tutor = {
 	location: string[];
 	summary: string;
 	studentsResults: string;
+	assignmentsPrimary: Assignment[];
+	contactNumber: number;
 };
 
 type CheckedSubjects = {
@@ -405,6 +407,12 @@ export default function TutorProfile() {
 							<div style={{ marginBottom: "15px " }}>
 								<StarRating rating={averageRating} />
 							</div>
+							{tutorProfile.assignmentsPrimary.filter((assignment) => assignment.clientId === Number(clientId)).length > 0 && (
+								<p style={styles.detailItem}>
+									<strong>Contact Number: </strong>
+									{tutorProfile.contactNumber}
+								</p>
+							)}
 							<p style={styles.detailItem}>
 								<strong>Years of Experience: </strong>
 								{tutorProfile.yearsOfExperience}
