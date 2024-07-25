@@ -56,15 +56,7 @@ export default function ViewAssignment() {
 	}
 
 	async function tutorInfo(assignment: Assignment) {
-		try {
-			if (clientId != null) {
-				router.push(`/client/${clientId}/assignment/${assignmentId}/view_assignment/tutorInfo`);
-			} else {
-				setError2("Client ID is required");
-			}
-		} catch (error: any) {
-			setError(error?.message);
-		}
+		router.push(`/client/${clientId}/view_tutors/${assignment.tutorId}/tutor_profile`);
 	}
 
 	async function edit_assignment(assignment: Assignment) {
@@ -180,7 +172,8 @@ export default function ViewAssignment() {
 									</p>
 									{/* Do Boolean check to see if the tutor is matched */}
 									<p className="text-gray-700 mb-1">
-										<strong>Hourly Rate:</strong> {assignment.amount ? `$${assignment.amount}` : `$${assignment.minRate} - $${assignment.maxRate}`}
+										<strong>Hourly Rate:</strong>{" "}
+										{assignment.amount ? `$${assignment.amount}` : `$${assignment.minRate} - $${assignment.maxRate}`}
 									</p>
 									{assignment.additionalDetails && (
 										<p className="text-gray-700 mb-1">

@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { subjectsByCategory } from "@/utils/levelsAndSubjects";
+import { Review } from "@prisma/client";
 
 type Tutor = {
 	id: number;
@@ -26,6 +27,7 @@ type Tutor = {
 	image: string;
 	introduction: string;
 	levelAndSubjects: CheckedSubjects;
+	reviews: Review[],
 };
 
 type CheckedSubjects = {

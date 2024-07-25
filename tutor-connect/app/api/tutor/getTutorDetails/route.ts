@@ -11,6 +11,7 @@ export async function POST(req: Request) {
 				where: { email },
 				include: {
 					TutorNotification: true,
+					assignmentsPrimary: true,
 				},
 			});
 		} else if (tutorId) {
@@ -18,6 +19,7 @@ export async function POST(req: Request) {
 				where: { id: parseInt(tutorId) },
 				include: {
 					TutorNotification: true,
+					assignmentsPrimary: true,
 				},
 			});
 		}
@@ -45,6 +47,7 @@ export async function POST(req: Request) {
 				studentsResults: user.studentsResults,
 				image: user.image,
 				notifications: user.TutorNotification,
+				assignmentsPrimary: user.assignmentsPrimary,
 			});
 		}
 	} catch (err: any) {

@@ -3,10 +3,10 @@
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import convertToSubcurrency from "@/lib/convertToSubcurrency";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Footer from "@/components/footer/footer";
 import NavBar from "@/components/nav-bar/navBar";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Loading from "@/app/loading";
 import CheckoutPage from "./checkout_page";
 import Logo from "@/components/nav-bar/logo";
@@ -19,13 +19,14 @@ export default function Payment() {
 	const assignmentId = params.assignmentId;
 	const [assignments, setAssignments] = useState<Assignment | null>(null);
 	const [error, setError] = useState<string | null>(null);
+	const router = useRouter();
+	const alertShown = useRef(false);
 
 	if (stripePublishableKey === undefined) {
 		throw new Error("NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is not defined");
 	}
 
 	const stripePromise = loadStripe(stripePublishableKey);
-	//Do API Calls to get assignment Details
 
 	useEffect(() => {
 		async function fetchAssignments() {
@@ -47,6 +48,16 @@ export default function Payment() {
 				}
 
 				const data = await res.json();
+
+				if (data.assignments.isPaid) {
+					if (!alertShown.current) {
+						alertShown.current = true;
+						alert("Assignment has already been paid for");
+						router.push(`/client/${clientId}/assignment/${assignmentId}/view_assignment`);
+						return;
+					}
+				}
+
 				setAssignments(data.assignments);
 			} catch (err: any) {
 				setError(err.message);
@@ -54,9 +65,7 @@ export default function Payment() {
 		}
 
 		fetchAssignments();
-	}, [assignmentId]);
-
-	// Set amount to minRate * 3/2
+	}, [assignmentId, clientId, router]);
 
 	const fee = assignments && assignments.amount ? assignments.amount * parseFloat(assignments.duration.split("h")[0]) * 2 : 0.5;
 
@@ -179,7 +188,7 @@ export default function Payment() {
 			<div style={styles.main}>
 				<h1 style={styles.header}>Payment Page</h1>
 				{!assignments && <Loading />}
-				{assignments && (
+				{assignments && !assignments.isPaid && (
 					<div style={styles.container}>
 						<div style={styles.details}>
 							<div style={styles.title}>
@@ -194,7 +203,7 @@ export default function Payment() {
 									<strong>Subject: {assignments.subject}</strong>
 								</p>
 								<p style={styles.assignmentDetails}>
-									<strong>Rate:</strong> ${assignments.minRate}/h
+									<strong>Rate:</strong> ${assignments.amount}/h
 								</p>
 								<p style={styles.assignmentDetails}>
 									<strong>Duration:</strong> {assignments.duration}

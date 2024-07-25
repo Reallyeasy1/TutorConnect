@@ -12,6 +12,8 @@ import { Filter } from "./filter";
 import Loading from "@/app/loading";
 import { RequestForm } from "./request";
 import Nothing from "@/components/ui/Nothing";
+import { Review } from "@prisma/client";
+import SmallStarRating from "@/components/ui/SmallStarRating";
 
 type Tutor = {
 	id: number;
@@ -24,6 +26,7 @@ type Tutor = {
 	image: string;
 	introduction: string;
 	levelAndSubjects: CheckedSubjects;
+	reviews: Review[];
 };
 
 type CheckedSubjects = {
@@ -229,6 +232,16 @@ export default function ViewTutorsPage() {
 									<p style={styles.tutorSummary}>
 										{tutor.typeOfTutor}, {tutor.gender}, {tutor.race}
 									</p>
+									<div style={{ marginTop: "10px" }}>
+										<SmallStarRating
+											rating={
+												tutor.reviews.length > 0
+													? tutor.reviews.reduce((sum, review) => sum + review.rating, 0) / tutor.reviews.length
+													: 0
+											}
+											starSize="24px"
+										/>
+									</div>
 									<div style={styles.detailsSection}>
 										<p style={styles.detailItem}>
 											Years of Experience: <span className="font-normal">{tutor.yearsOfExperience} years</span>

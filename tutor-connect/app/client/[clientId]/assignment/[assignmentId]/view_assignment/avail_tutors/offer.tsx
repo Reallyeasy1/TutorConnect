@@ -16,7 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
-import { Assignment } from "@prisma/client";
+import { Assignment, Review } from "@prisma/client";
 
 type Tutor = {
   id: number;
@@ -32,7 +32,10 @@ type Tutor = {
   typeOfTutor: string;
   yearsOfExperience: number;
   highestEducationLevel: string;
-  location: string; // Added location field
+  location: string;
+  reviews: Review[];
+  image: string;
+  introduction: string;
 };
 
 interface OfferFormProps {
@@ -132,16 +135,15 @@ export const OfferForm: FC<OfferFormProps> = ({
   };
 
   const styles = {
-    blueButton: {
-      backgroundColor: "#5790AB",
-      color: "#fff",
-      font: "Poppins",
-      fontWeight: "bold",
-      fontSize: "16px",
-      width: "100%",
-      gridColumn: "span 1",
-      marginTop: "10px",
-    },
+    whiteButton: {
+			backgroundColor: "#fff",
+			color: "#5790AB",
+			font: "Poppins",
+			fontWeight: "bold",
+			fontSize: "16px",
+			border: "1px solid #5790AB",
+      marginLeft: "10px",
+		},
     text: {
       font: "Poppins",
       fontWeight: "bold",
@@ -163,12 +165,22 @@ export const OfferForm: FC<OfferFormProps> = ({
       width: "100%",
       marginTop: "10px",
     },
+    blueButton: {
+			backgroundColor: "#5790AB",
+			color: "#fff",
+			font: "Poppins",
+			fontWeight: "bold",
+			fontSize: "16px",
+			width: "100%",
+			gridColumn: "span 1",
+			marginTop: "10px",
+		},
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button style={styles.blueButton}>Make Offer</Button>
+        <Button style={styles.whiteButton}>Make Offer</Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={onSubmit}>
