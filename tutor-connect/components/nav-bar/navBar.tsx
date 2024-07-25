@@ -4,13 +4,14 @@ import Logo from './logo';
 import Image from 'next/image';
 import "@fontsource/poppins";
 import { ClientNotification, TutorNotification } from '@prisma/client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ClientDropdown } from './clientDropdown';
 import { TutorDropdown } from './tutorDropdown';
 import ClientProfile from './clientProfile';
 import TutorProfile from './tutorProfile';
 import LoginDropdown from './loginDropdown';
 import RegisterDropdown from './registerDropdown';
+import { useSession } from 'next-auth/react';
 
 type NavBarProps = {
   userImage: string | null;
