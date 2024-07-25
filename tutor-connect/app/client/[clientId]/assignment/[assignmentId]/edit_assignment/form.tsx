@@ -63,9 +63,6 @@ export const UpdateAssignmentForm = () => {
 	const [otherLevel, setOtherLevel] = useState("");
 	const [subject, setSubject] = useState("");
 
-	//TODO Redirect to main page/assignments
-	//TODO: Create inputs, change onSubmit
-
 	const onDelete = async () => {
 		try {
 			const res = await fetch(`/api/client/deleteAssignment?id=${assignmentId}`, {
@@ -206,6 +203,30 @@ export const UpdateAssignmentForm = () => {
 		console.log("Assignment posted!");
 	};
 
+	const blueButton = {
+		backgroundColor: "#5790AB",
+		color: "#fff",
+		font: "Poppins",
+		fontWeight: "bold",
+		fontSize: "16px",
+		width: "100%",
+	};
+	const whiteButton = {
+		backgroundColor: "#fff",
+		color: "#5790AB",
+		font: "Poppins",
+		fontWeight: "bold",
+		fontSize: "16px",
+		width: "100%",
+		border: "1px solid #5790AB",
+	};
+	const deleteButton = {
+		width: "100%",
+		marginTop: "10px",
+		fontWeight: "bold",
+		fontSize: "16px",
+	}
+
 	return (
 		<form onSubmit={onSubmit}>
 			<Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
@@ -219,7 +240,7 @@ export const UpdateAssignmentForm = () => {
 							<CardTitle>Lesson Details</CardTitle>
 							<CardDescription>Fill up your lesson details. Click next when you&apos;re done.</CardDescription>
 						</CardHeader>
-						<CardContent className="space-y-2">
+						<CardContent className="space-y-4">
 							<div className="space-y-2">
 								<Label htmlFor="Level">Level</Label>
 								<Select required value={level} onValueChange={(value: string) => setLevel(value)}>
@@ -403,7 +424,7 @@ export const UpdateAssignmentForm = () => {
 							{/* Submit Button */}
 						</CardContent>
 						<CardFooter>
-							<Button onClick={onNext} className="w-full">
+							<Button onClick={onNext} style={blueButton}>
 								Next
 							</Button>
 						</CardFooter>
@@ -414,7 +435,7 @@ export const UpdateAssignmentForm = () => {
 						<CardHeader>
 							<CardTitle>Tutor Details</CardTitle>
 						</CardHeader>
-						<CardContent className="space-y-2">
+						<CardContent className="space-y-4">
 							<div className="space-y-2">
 								<Label htmlFor="typeOfTutor">Type of Tutor</Label>
 								<div className="flex items-center space-x-2">
@@ -532,16 +553,22 @@ export const UpdateAssignmentForm = () => {
 								/>
 							</div>
 						</CardContent>
-						<CardFooter className="flex justify-between space-x-2">
-							<Button onClick={onBack} className="flex-1">
-								Back
-							</Button>
-							<Button className="flex-1">Update Assignment</Button>
+						<CardFooter className="flex flex-col">
+							<div className="w-full flex flex-row gap-2">
+								<Button onClick={onBack} className="flex-1" style={blueButton}>
+									Back
+								</Button>
+								<Button className="flex-1" style={whiteButton}>
+									Update Assignment
+								</Button>
+							</div>
+							<div className="w-full">
+								<Button variant="destructive" style={deleteButton} onClick={onDelete}>
+									Delete
+								</Button>
+							</div>
 						</CardFooter>
 					</Card>
-					<Button type="button" className="w-full mt-4" style={{ backgroundColor: "#ff0000", color: "#fff" }} onClick={onDelete}>
-						Delete
-					</Button>
 				</TabsContent>
 			</Tabs>
 		</form>
