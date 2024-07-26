@@ -25,8 +25,8 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 
 	let userImage = null;
 	let userName = null;
-  let userId = null;
-	let userRole: 'client' | 'tutor' | null = null;
+	let userId = null;
+	let userRole: "client" | "tutor" | null = null;
 	let userNotifications: ClientNotification[] | TutorNotification[] = [];
 
 	if (session?.user?.email) {
@@ -34,22 +34,22 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 			if (session.user.randomKey === "tutor") {
 				const tutorDetails = await prisma.tutor.findUnique({
 					where: { email: session.user.email },
-					include: { TutorNotification: true }
+					include: { TutorNotification: true },
 				});
 				userImage = tutorDetails?.image || null;
 				userName = tutorDetails?.name || null;
-        userId = tutorDetails?.id || null;
-				userRole = 'tutor';
+				userId = tutorDetails?.id || null;
+				userRole = "tutor";
 				userNotifications = tutorDetails?.TutorNotification || [];
 			} else {
 				const clientDetails = await prisma.client.findUnique({
 					where: { email: session.user.email },
-					include: { ClientNotification: true }
+					include: { ClientNotification: true },
 				});
 				userImage = clientDetails?.image || null;
 				userName = clientDetails?.name || null;
-        userId = clientDetails?.id || null;
-				userRole = 'client';
+				userId = clientDetails?.id || null;
+				userRole = "client";
 				userNotifications = clientDetails?.ClientNotification || [];
 			}
 		} catch (error) {
@@ -61,13 +61,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 		<html lang="en">
 			<body>
 				<Providers session={session}>
-					<NavBar
-						userImage={userImage}
-						userName={userName}
-            userId={userId}
-						userRole={userRole}
-						userNotifications={userNotifications}
-					/>
+					<NavBar userImage={userImage} userName={userName} userId={userId} userRole={userRole} userNotifications={userNotifications} />
 					{children}
 				</Providers>
 			</body>
