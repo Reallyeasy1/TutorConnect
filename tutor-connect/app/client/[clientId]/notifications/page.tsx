@@ -12,36 +12,26 @@ export default async function NotificationsPage() {
 		redirect("/client/invalid_session");
 	}
 
-	try {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/client/notifications/getNotifications`, {
-			method: "POST",
-			body: JSON.stringify({
-				clientId: session.user.id,
-			}),
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
+	const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/client/notifications/getNotifications`, {
+		method: "POST",
+		body: JSON.stringify({
+			clientId: session.user.id,
+		}),
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
 
-		if (!res.ok) {
-			throw new Error("Failed to fetch notifications");
-		}
-
-		const clientData = await res.json();
-
-		return (
-			<div className="flex flex-col min-h-screen">
-				<Notifications notifs={clientData.notifications} clientId={session.user.id} />
-				<Footer />
-			</div>
-		);
-	} catch (error) {
-		console.error("Error fetching notifications:", error);
-		return (
-			<div className="flex flex-col min-h-screen">
-				<Loading />
-				<Footer />
-			</div>
-		);
+	if (!res.ok) {
+		throw new Error("Failed to fetch client notifications");
 	}
+
+	const clientData = await res.json();
+
+	return (
+		<div className="flex flex-col min-h-screen">
+			<Notifications notifs={clientData.notifications} clientId={session.user.id} />
+			<Footer />
+		</div>
+	);
 }

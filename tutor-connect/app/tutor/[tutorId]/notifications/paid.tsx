@@ -5,7 +5,7 @@ import { Assignment, Client } from "@prisma/client";
 import { useRouter } from "next/navigation";
 
 type PaidProps = {
-	tutorId: string | string[];
+	tutorId: number;
 	client: Client;
 	assignment: Assignment;
 	date: string;
