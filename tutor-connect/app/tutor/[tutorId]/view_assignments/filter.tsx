@@ -46,7 +46,7 @@ interface Assignment {
 type FilterProps = {
 	assignments: Assignment[];
 	setFilteredAssignments: (filteredAssignments: Assignment[]) => void;
-	tutorId: string | string[];
+	tutorId: number;
 };
 
 export const Filter: React.FC<FilterProps> = ({ assignments, setFilteredAssignments, tutorId }) => {
