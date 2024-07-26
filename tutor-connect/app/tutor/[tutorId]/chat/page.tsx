@@ -3,9 +3,6 @@
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ChatRoom from "@/components/ChatRoom/index";
-import NavBar from "@/components/nav-bar/navBar";
-import Footer from "@/components/footer/footer";
-import { cli } from "winston/lib/winston/config";
 
 export default function Chat() {
   const router = useRouter();

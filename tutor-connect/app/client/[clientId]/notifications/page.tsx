@@ -1,21 +1,9 @@
 import Footer from "@/components/footer/footer";
-import { Assignment, Client, Tutor } from "@prisma/client";
-import { redirect, useParams } from "next/navigation";
+import { redirect } from "next/navigation";
 import Loading from "@/app/loading";
 import { Notifications } from "./notifications";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
-
-type ClientNotification = {
-	id: number;
-	assignment: Assignment;
-	client: Client;
-	tutor: Tutor;
-	date: string;
-	message: string;
-	read: boolean;
-	type: string;
-};
 
 export default async function NotificationsPage() {
 	const session = await getServerSession(authOptions);

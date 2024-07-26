@@ -1,7 +1,6 @@
 "use client";
 
 import Footer from "@/components/footer/footer";
-import NavBar from "@/components/nav-bar/navBar";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -11,7 +10,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { B } from "@vercel/blob/dist/helpers-BfcvAwfQ.cjs";
 import Link from "next/link";
 
 export default function SuccessPage() {

@@ -5,7 +5,6 @@ import { loadStripe } from "@stripe/stripe-js";
 import convertToSubcurrency from "@/lib/convertToSubcurrency";
 import { useParams, useRouter } from "next/navigation";
 import Footer from "@/components/footer/footer";
-import NavBar from "@/components/nav-bar/navBar";
 import { useEffect, useRef, useState } from "react";
 import Loading from "@/app/loading";
 import CheckoutPage from "./checkout_page";

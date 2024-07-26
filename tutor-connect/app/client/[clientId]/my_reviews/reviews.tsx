@@ -10,7 +10,6 @@ import StarRating from "@/components/ui/StarRating";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { DeletePopup } from "./delete";
 import { EditReview } from "./edit";
-import Loading from "@/app/loading";
 import Nothing from "@/components/ui/Nothing";
 
 type Review = {

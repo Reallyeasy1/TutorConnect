@@ -1,6 +1,5 @@
 "use client";
 
-import NavBar from "@/components/nav-bar/navBar";
 import React from "react";
 import { RegisterForm } from "./form";
 import Logo from "@/components/nav-bar/logo";

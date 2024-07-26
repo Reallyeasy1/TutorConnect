@@ -1,19 +1,15 @@
 "use client";
 
 import Footer from "@/components/footer/footer";
-import NavBar from "@/components/nav-bar/navBar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRouter, useParams } from "next/navigation";
-import { useState } from "react";
 
 //Pass in tutor id in checkout page
-export default function PaymentSuccess({ searchParams: { amount, tutorId } }: { searchParams: { amount: string; tutorId: string } }) {
+export default function PaymentSuccess({ searchParams: { amount } }: { searchParams: { amount: string; } }) {
 	const router = useRouter();
 	const params = useParams();
 	const clientId = params.clientId;
-	const assignmentId = params.assignmentId;
-	const [error, setError] = useState<string | null>(null);
 
 	const toNotifications = () => {
 		router.push(`/client/${clientId}/notifications`);

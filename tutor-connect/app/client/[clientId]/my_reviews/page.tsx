@@ -1,5 +1,4 @@
 import Footer from "@/components/footer/footer";
-import { Client, Tutor } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { Reviews } from "./reviews";
 import { getServerSession } from "next-auth";

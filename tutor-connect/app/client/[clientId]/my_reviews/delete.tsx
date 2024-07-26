@@ -3,21 +3,7 @@
 import { Dialog, DialogClose, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { FC, useState } from "react";
-import { Alert } from "@/components/ui/alert";
-import { useParams, useRouter } from "next/navigation";
-import { text } from "stream/consumers";
-
-type Tutor = {
-	id: number;
-	name: string;
-	gender: string;
-	race: string;
-	typeOfTutor: string;
-	yearsOfExperience: number;
-	highestEducationLevel: string;
-	image: string;
-	introduction: string;
-};
+import { useRouter } from "next/navigation";
 
 interface ReviewFormProps {
 	reviewId: number;

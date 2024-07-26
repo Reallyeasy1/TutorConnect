@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Form as LoginForm } from "./form";
-import NavBar from "@/components/nav-bar/navBar";
 import Logo from "@/components/nav-bar/logo";
 import Footer from "@/components/footer/footer";
 import { useSearchParams } from "next/navigation";

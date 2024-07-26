@@ -7,23 +7,21 @@ type ClientDropdownProps = {
 
 export const ClientDropdown: React.FC<ClientDropdownProps> = ({ id }) => {
     const [hoveredIndex, setHoveredIndex] = useState(-1);
-    const params = useParams();
-    const clientId = params.clientId || id;
     
     const clientItems = [
         {
             title: "Post Assignment",
-            path: `/client/${clientId}/post_assignments`,
+            path: `/client/${id}/post_assignments`,
             cName: "dropdown-link"
         },
         {
             title: "My Assignments",
-            path: `/client/${clientId}/assignment/client_assignment`,
+            path: `/client/${id}/assignment/client_assignment`,
             cName: "dropdown-link"
         },
         {
             title: "View Tutors",
-            path: `/client/${clientId}/view_tutors`,
+            path: `/client/${id}/view_tutors`,
             cName: "dropdown-link"
         },
     ]

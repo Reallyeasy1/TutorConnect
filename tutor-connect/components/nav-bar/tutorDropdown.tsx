@@ -7,18 +7,16 @@ type TutorDropdownProps = {
 
 export const TutorDropdown: React.FC<TutorDropdownProps> = ({ id }) => {
     const [hoveredIndex, setHoveredIndex] = useState(-1);
-    const params = useParams();
-    const tutorId = params.tutorId || id;
     
     const tutorItems = [
         {
             title: "View Assignments",
-            path: `/tutor/${tutorId}/view_assignments`,
+            path: `/tutor/${id}/view_assignments`,
             cName: "dropdown-link"
         },
         {
             title: "My Assignments",
-            path: `/tutor/${tutorId}/my_assignments`,
+            path: `/tutor/${id}/my_assignments`,
             cName: "dropdown-link"
         },
     ]

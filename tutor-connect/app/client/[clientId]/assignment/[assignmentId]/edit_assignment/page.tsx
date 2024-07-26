@@ -2,7 +2,6 @@
 
 import { UpdateAssignmentForm } from "./form";
 import Footer from "@/components/footer/footer";
-import NavBar from "@/components/nav-bar/navBar";
 
 export default function UpdateAssignmentPage() {
 	return (

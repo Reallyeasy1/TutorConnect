@@ -2,12 +2,9 @@
 
 import Link from "next/link";
 import { Form as LoginForm } from "./form";
-import NavBar from "@/components/nav-bar/navBar";
 import Logo from "@/components/nav-bar/logo";
 import Footer from "@/components/footer/footer";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
-import { signOut } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
     const searchParams = useSearchParams();

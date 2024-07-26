@@ -1,6 +1,5 @@
 "use client";
 
-import NavBar from "@/components/nav-bar/navBar";
 import React, { useState, useEffect } from "react";
 import Footer from "@/components/footer/footer";
 import { Label } from "@/components/ui/label";

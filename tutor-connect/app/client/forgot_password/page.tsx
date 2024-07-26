@@ -1,6 +1,5 @@
 "use client";
 
-import NavBar from "@/components/nav-bar/navBar";
 import { ForgotPasswordForm } from "./form";
 import Footer from "@/components/footer/footer";
 

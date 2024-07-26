@@ -3,9 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Assignment, Client, Tutor } from "@prisma/client";
-import { useParams } from "next/navigation";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import Loading from "@/app/loading";
 import { Apply } from "./apply";
 import { Paid } from "./paid";
 import { Matched } from "./matched";

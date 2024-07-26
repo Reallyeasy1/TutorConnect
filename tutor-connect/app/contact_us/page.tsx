@@ -1,6 +1,5 @@
 "use client";
 
-import NavBar from "@/components/nav-bar/navBar";
 import React from "react";
 import ContactUsHeader from "./ContactUsHeader";
 import BlueBackground from "./BlueBackground";

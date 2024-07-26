@@ -1,5 +1,4 @@
 "use client";
-import NavBar from "@/components/nav-bar/navBar";
 import React from "react";
 import Footer from "@/components/footer/footer";
 import Image from "next/image";

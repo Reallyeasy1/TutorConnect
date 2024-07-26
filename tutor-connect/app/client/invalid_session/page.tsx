@@ -1,9 +1,8 @@
 "use client";
 
-import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { signOut } from "next-auth/react";
 

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { FC, useState } from "react";
 import Image from "next/image";
 import { Alert } from "@/components/ui/alert";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Client, Tutor } from "@prisma/client";
 
 type Review = {

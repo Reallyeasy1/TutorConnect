@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams, useParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { Alert } from "@/components/ui/alert";
 import Footer from "@/components/footer/footer";
-import NavBar from "@/components/nav-bar/navBar";
 
 interface Assignment {
 	id: number;

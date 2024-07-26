@@ -59,7 +59,7 @@ const NavBar = ({ userImage, userName, userRole, userId, userNotifications }: Na
 		document.addEventListener("mousedown", handler);
 	});
 
-  const handleMouseEnter = (index: number) => {
+	const handleMouseEnter = (index: number) => {
 		setHoverIndex(index);
 	};
 
@@ -149,15 +149,17 @@ const NavBar = ({ userImage, userName, userRole, userId, userNotifications }: Na
 					<div className="relative" ref={clientDropdownRef}>
 						<button
 							style={hoverText(0)}
-							onMouseEnter={() => setHoverIndex(0)}
+							onMouseEnter={() => handleMouseEnter(0)}
 							onMouseLeave={handleMouseLeave}
-							onClick={() => setClientsDropdown(!clientsDropdown)}
+							onClick={() => {
+								setClientsDropdown(!clientsDropdown);
+							}}
 							className="flex items-center"
 						>
 							For Clients
 							<Image src="/images/arrowdown.png" alt="Arrow down" width={20} height={20} />
 						</button>
-						{clientsDropdown && userId && <ClientDropdown id={userId || -1} />}
+						{clientsDropdown && <ClientDropdown id={userId || -1} />}
 					</div>
 				)}
 				{(userRole === "tutor" || !userRole) && (
@@ -223,7 +225,7 @@ const NavBar = ({ userImage, userName, userRole, userId, userNotifications }: Na
 							)}
 						</div>
 					) : (
-						<div className="flex items-center space-x-2" ref={tutorDropdownRef}>
+						<div className="flex items-center space-x-2" ref={tutorProfileRef}>
 							<button
 								style={hoverText(7)}
 								onMouseEnter={() => handleMouseEnter(7)}

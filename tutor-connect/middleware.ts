@@ -5,7 +5,6 @@ import { getToken } from "next-auth/jwt";
 export async function middleware(request: NextRequest) {
 	const session = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
 	const url = request.nextUrl.clone();
-	console.log(session);
 
 	if (
 		!url.pathname.startsWith("/client/login") &&
