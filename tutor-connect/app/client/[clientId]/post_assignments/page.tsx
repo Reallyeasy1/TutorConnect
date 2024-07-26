@@ -1,12 +1,25 @@
-"use client";
-
-import Link from "next/link";
 import { PostAssignmentForm } from "./form";
 import Footer from "@/components/footer/footer";
-import NavBar from "@/components/nav-bar/navBar";
 import Logo from "@/components/nav-bar/logo";
+import { authOptions } from "@/utils/authOptions";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-export default function PostAssignmentPage() {
+export default async function PostAssignmentPage() {
+	const session = await getServerSession(authOptions);
+
+	if (!session || !session.user.id) {
+		redirect("/client/invalid_session");
+	}
+
+	const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/client/getDetails?clientId=${session.user.id}`);
+
+	if (!res.ok) {
+		throw new Error("Failed to fetch client details");
+	}
+
+	const clientData = await res.json();
+
 	const logoText = {
 		color: "#5790AB",
 		fontFamily: "Poppins",
@@ -24,10 +37,8 @@ export default function PostAssignmentPage() {
 							TutorConnect
 						</div>
 					</div>
-					<h1 className="font-bold text-2xl text-center">
-						Post an Assignment here!
-					</h1>
-					<PostAssignmentForm />
+					<h1 className="font-bold text-2xl text-center">Post an Assignment here!</h1>
+					<PostAssignmentForm clientData={clientData} />
 				</div>
 			</div>
 			<Footer />

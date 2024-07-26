@@ -21,14 +21,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { levels, subjectsByLevel } from "@/utils/levelsAndSubjects";
 
-export const PostAssignmentForm = () => {
+interface ClientData {
+	address: string;
+	unitNumber: string;
+	postalCode: string;
+}
+
+export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) => {
 	const router = useRouter();
 	const params = useParams();
 	const clientId = params.clientId;
 	const [additionalDetails, setAdditionalDetails] = useState("");
-	const [address, setAddress] = useState("");
-	const [unitNumber, setUnitNumber] = useState("");
-	const [postalCode, setPostalCode] = useState("");
+	const [address, setAddress] = useState(clientData.address);
+	const [unitNumber, setUnitNumber] = useState(clientData.unitNumber);
+	const [postalCode, setPostalCode] = useState(clientData.postalCode);
 	const [minRate, setMinRate] = useState<number>(0);
 	const [maxRate, setMaxRate] = useState<number>(0);
 	const [duration, setDuration] = useState("");
@@ -45,24 +51,6 @@ export const PostAssignmentForm = () => {
 	const [level, setLevel] = useState<Level | "">("");
 	const [otherLevel, setOtherLevel] = useState("");
 	const [subject, setSubject] = useState("");
-
-	//TODO Redirect to main page/assignments
-	//TODO: Create inputs, change onSubmit
-
-	useEffect(() => {
-		async function getDetails() {
-			try {
-				const response = await fetch(`/api/client/getDetails?clientId=${clientId}`);
-				const data = await response.json();
-				setAddress(data.address);
-				setUnitNumber(data.unitNumber);
-				setPostalCode(data.postalCode);
-			} catch (error) {
-				console.log(error);
-			}
-		}
-		getDetails();
-	}, [clientId, router]);
 
 	const onBack = () => {
 		const tabs = ["lessonDetails", "tutorDetails"];
