@@ -26,7 +26,7 @@ export const Apply: React.FC<ApplyProps> = ({ clientId, tutor, assignment, date,
 	};
 
 	const assignmentButton = () => {
-		router.push(`client/${clientId}/assignment/${assignment.id}/view_assignment/`);
+		router.push(`/client/${clientId}/assignment/${assignment.id}/view_assignment/`);
 	};
 
 	const styles = {

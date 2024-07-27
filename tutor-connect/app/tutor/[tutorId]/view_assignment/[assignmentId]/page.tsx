@@ -44,7 +44,6 @@ export default function ViewAssignment() {
 			if (tutorId == null) {
 				setError2("Tutor ID is required");
 			} else {
-				//TODO: Change to tutor/applyAssignment
 				const res = await fetch("/api/tutor/applyAssignment", {
 					method: "PUT",
 					body: JSON.stringify({
@@ -65,7 +64,7 @@ export default function ViewAssignment() {
 						race: assignment.race,
 						availability: assignment.availability,
 						postDate: assignment.postDate,
-						tutorId: tutorId, // Provide a value for the tutorId property
+						tutorId: tutorId,
 					}),
 					headers: {
 						"Content-Type": "application/json",
@@ -85,7 +84,7 @@ export default function ViewAssignment() {
 				});
 
 				if (res.ok && notif.ok) {
-					alert("Successfully sent offer to client!");
+					alert("Successfully sent application to client!");
 					router.push(`/tutor/${tutorId}/view_assignments`);
 				} else {
 					setError((await res.json()).error);

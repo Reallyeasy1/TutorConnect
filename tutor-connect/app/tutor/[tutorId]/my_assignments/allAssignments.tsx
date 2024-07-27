@@ -1,26 +1,60 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Assignment } from "@prisma/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/customTabs";
 import { useState } from "react";
 
+interface Assignment {
+	id: number;
+	subject: string;
+	level: string;
+	address: string;
+	postalCode: number;
+	minRate: number;
+	maxRate: number;
+	duration: string;
+	frequency: string;
+	additionalDetails: string;
+	typeOfTutor: string[];
+	gender: string;
+	race: string[];
+	availability: string;
+	postDate: string;
+	taken: boolean;
+	client: {
+		id: number;
+		name: string;
+		contactNumber: string;
+	};
+	coordinates: number[];
+	tutorId: number | null;
+	isPaid: boolean;
+	startDate: string;
+	amount: number;
+	isRequest: boolean;
+	clientId: number;
+	unitNumber: string;	
+}
+
+
 type AllAssignmentsProps = {
 	tutorId: number;
 	offered: Assignment[];
-    applied: Assignment[];
+	applied: Assignment[];
 };
 
 export const AllAssignments: React.FC<AllAssignmentsProps> = ({ tutorId, offered, applied }) => {
 	const [error, setError] = useState<string | null>(null);
-	const [offeredAssignments, setOfferedAssignments] = useState<Assignment[]>(offered.filter((assignment: Assignment) => !assignment.isPaid && !assignment.taken));
+	const [offeredAssignments, setOfferedAssignments] = useState<Assignment[]>(
+		offered.filter((assignment: Assignment) => !assignment.isPaid && !assignment.taken)
+	);
 	const [appliedAssignments, setAppliedAssignments] = useState<Assignment[]>(applied.filter((assignment: Assignment) => !assignment.taken));
 	const [acceptedAssignments, setAcceptedAssignments] = useState<Assignment[]>(offered.filter((assignment: Assignment) => assignment.taken));
 	const router = useRouter();
 
-    const findAssignments = () => {
+	const findAssignments = () => {
 		router.push(`/tutor/${tutorId}/view_assignments`);
 	};
 
@@ -55,6 +89,7 @@ export const AllAssignments: React.FC<AllAssignmentsProps> = ({ tutorId, offered
 			alert("Assignment accepted successfully");
 			const updatedAssignments = offeredAssignments.filter((a) => a.id !== assignment.id);
 			setOfferedAssignments(updatedAssignments);
+			setAcceptedAssignments((prevAcceptedAssignments) => [...prevAcceptedAssignments, assignment]);
 		} catch (error) {
 			console.error("Error accepting assignment:", error);
 		}
@@ -209,7 +244,7 @@ export const AllAssignments: React.FC<AllAssignmentsProps> = ({ tutorId, offered
 		pending: {
 			color: "#FFA500",
 		},
-        rejected: {
+		rejected: {
 			color: "#dd0000",
 		},
 	};
@@ -265,6 +300,12 @@ export const AllAssignments: React.FC<AllAssignmentsProps> = ({ tutorId, offered
 												{assignment.address}, {assignment.unitNumber && `${assignment.unitNumber}, `}Singapore{" "}
 												{assignment.postalCode}
 											</p>
+											{assignment.isPaid && (
+												<p style={styles.text}>
+													<strong>Contact Number: </strong>
+													{assignment.client.contactNumber}
+												</p>
+											)}
 											<p style={styles.text}>
 												<strong>Rate: </strong>${assignment.amount}/h
 											</p>
@@ -412,7 +453,7 @@ export const AllAssignments: React.FC<AllAssignmentsProps> = ({ tutorId, offered
 													{assignment.additionalDetails}
 												</p>
 											)}
-                                            <p style={{ ...styles.text, ...(assignment.taken ? styles.rejected : styles.confirmed) }}>
+											<p style={{ ...styles.text, ...(assignment.taken ? styles.rejected : styles.confirmed) }}>
 												<strong>Status: </strong>
 												{assignment.isPaid ? "Rejected" : "Available"}
 											</p>
