@@ -14,13 +14,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FC, useState } from "react";
-import { useEffect } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { levels, subjectsByLevel } from "@/utils/levelsAndSubjects";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
+import { Client } from "@prisma/client";
 
 type Tutor = {
 	id: number;
@@ -35,15 +35,16 @@ type Tutor = {
 };
 
 interface RequestFormProps {
-	clientId: string | string[];
+	client: Client;
 	tutor: Tutor;
 }
 
-export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
+export const RequestForm: FC<RequestFormProps> = ({ client, tutor }) => {
 	const router = useRouter();
 	const [additionalDetails, setAdditionalDetails] = useState("");
-	const [address, setAddress] = useState("");
-	const [postalCode, setPostalCode] = useState("");
+	const [address, setAddress] = useState(client.address);
+	const [unitNumber, setUnitNumber] = useState(client.unitNumber ?? "");
+	const [postalCode, setPostalCode] = useState(client.postalCode.toString());
 	const [amount, setAmount] = useState<number>(0);
 	const [duration, setDuration] = useState("");
 	const [frequency, setFrequency] = useState("");
@@ -56,23 +57,6 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 	const [level, setLevel] = useState<Level | "">("");
 	const [otherLevel, setOtherLevel] = useState("");
 	const [subject, setSubject] = useState("");
-
-	//TODO Redirect to main page/assignments
-	//TODO: Create inputs, change onSubmit
-
-	useEffect(() => {
-		async function getDetails() {
-			try {
-				const response = await fetch(`/api/client/getDetails?clientId=${clientId}`);
-				const data = await response.json();
-				setAddress(data.address);
-				setPostalCode(data.postalCode);
-			} catch (error) {
-				console.log(error);
-			}
-		}
-		getDetails();
-	}, [clientId, router]);
 
 	const onBack = () => {
 		const tabs = ["lessonDetails", "tutorDetails"];
@@ -152,10 +136,11 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 			const res = await fetch("/api/client/requestAssignment", {
 				method: "POST",
 				body: JSON.stringify({
-					clientId,
+					clientId: client.id,
 					level: newLevel,
 					subject,
 					address,
+					unitNumber,
 					postalCode,
 					minRate: amount,
 					maxRate: amount,
@@ -183,7 +168,7 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 				const notif = await fetch("/api/tutor/notifications/pickedNotification", {
 					method: "POST",
 					body: JSON.stringify({
-						clientId,
+						clientId: client.id,
 						tutorId: tutor.id,
 						assignmentId: data.assignment.id,
 					}),
@@ -194,7 +179,7 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 
 				if (notif.ok) {
 					alert("Assignment sent to tutor!");
-					router.push(`/client/${clientId}/assignment/client_assignment`);
+					router.push(`/client/${client.id}/assignment/client_assignment`);
 				}
 			} else {
 				setError((await res.json()).error);
@@ -330,6 +315,16 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 									</div>
 									<div className="grid grid-cols-2 gap-4">
 										<div className="col-span-1 space-y-1">
+											<Label htmlFor="unitNumber">Unit Number</Label>
+											<Input
+												required
+												value={unitNumber}
+												onChange={(e) => setUnitNumber(e.target.value)}
+												id="unitNumber"
+												type="text"
+											/>
+										</div>
+										<div className="col-span-1 space-y-1">
 											<Label htmlFor="postalCode">Postal Code</Label>
 											<Input
 												required
@@ -339,16 +334,16 @@ export const RequestForm: FC<RequestFormProps> = ({ clientId, tutor }) => {
 												type="text"
 											/>
 										</div>
-										<div className="col-span-1 space-y-1">
-											<Label htmlFor="minRate">Offered Rate</Label>
-											<Input
-												required
-												value={amount}
-												onChange={(e) => setAmount(parseFloat(e.target.value))}
-												id="amount"
-												type="number"
-											/>
-										</div>
+									</div>
+									<div className="space-y-2">
+										<Label htmlFor="rate">Offered Rate</Label>
+										<Input
+											required
+											value={amount}
+											onChange={(e) => setAmount(parseFloat(e.target.value))}
+											id="amount"
+											type="number"
+										/>
 									</div>
 									{/* Error Message */}
 									{error && <div className="text-red-500">{error}</div>}

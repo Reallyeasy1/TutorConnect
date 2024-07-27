@@ -5,7 +5,7 @@ import { Client, Assignment } from "@prisma/client";
 import { useRouter } from "next/navigation";
 
 type UpdateProps = {
-	tutorId: string | string[];
+	tutorId: number;
 	date: string;
 	markAsRead: (notificationId: number) => void;
 	notificationId: number;

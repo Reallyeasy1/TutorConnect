@@ -1,9 +1,8 @@
 "use client";
 
-import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { signOut } from "next-auth/react";
 
@@ -17,7 +16,6 @@ export default function InvalidSession() {
 
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
-			<NavBar />
 			<div className="flex-grow flex justify-center items-center py-6">
 				<Card className="w-[500px]">
 					<CardHeader>

@@ -1,5 +1,4 @@
 "use client";
-import NavBar from "@/components/nav-bar/navBar";
 import React from "react";
 import Footer from "@/components/footer/footer";
 import Image from "next/image";
@@ -89,7 +88,6 @@ export default function Rates() {
 
 	return (
 		<div>
-			<NavBar />
 			<div style={styles.ratesContainer}>
 				<div style={styles.title}>Home Tuition Rates</div>
 				<div style={styles.subtitle}>

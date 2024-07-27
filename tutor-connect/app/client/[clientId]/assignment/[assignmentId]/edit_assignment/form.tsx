@@ -45,6 +45,7 @@ export const UpdateAssignmentForm = () => {
 	const assignmentId = params.assignmentId;
 	const [additionalDetails, setAdditionalDetails] = useState("");
 	const [address, setAddress] = useState("");
+	const [unitNumber, setUnitNumber] = useState("");
 	const [postalCode, setPostalCode] = useState("");
 	const [minRate, setMinRate] = useState<number>(0);
 	const [maxRate, setMaxRate] = useState<number>(0);
@@ -61,9 +62,6 @@ export const UpdateAssignmentForm = () => {
 	const [level, setLevel] = useState<Level | "">("");
 	const [otherLevel, setOtherLevel] = useState("");
 	const [subject, setSubject] = useState("");
-
-	//TODO Redirect to main page/assignments
-	//TODO: Create inputs, change onSubmit
 
 	const onDelete = async () => {
 		try {
@@ -103,6 +101,7 @@ export const UpdateAssignmentForm = () => {
 						setMaxRate(assignment.maxRate);
 						setAdditionalDetails(assignment.additionalDetails);
 						setAddress(assignment.address);
+						setUnitNumber(assignment.unitNumber);
 						setPostalCode(assignment.postalCode);
 						setDuration(assignment.duration);
 						setFrequency(assignment.frequency);
@@ -120,19 +119,6 @@ export const UpdateAssignmentForm = () => {
 		}
 
 		fetchAssignments();
-		// async function getDetails() {
-		// 	try {
-		// 		const response = await fetch(
-		// 			`/api/client/getDetails?clientId=${clientId}`
-		// 		);
-		// 		const data = await response.json();
-		// 		setAddress(data.address);
-		// 		setPostalCode(data.postalCode);
-		// 	} catch (error) {
-		// 		console.log(error);
-		// 	}
-		// }
-		// getDetails();
 	}, [clientId, router, assignmentId]);
 
 	const onBack = () => {
@@ -186,6 +172,7 @@ export const UpdateAssignmentForm = () => {
 					level: newLevel,
 					subject,
 					address,
+					unitNumber,
 					postalCode,
 					minRate,
 					maxRate,
@@ -216,6 +203,30 @@ export const UpdateAssignmentForm = () => {
 		console.log("Assignment posted!");
 	};
 
+	const blueButton = {
+		backgroundColor: "#5790AB",
+		color: "#fff",
+		font: "Poppins",
+		fontWeight: "bold",
+		fontSize: "16px",
+		width: "100%",
+	};
+	const whiteButton = {
+		backgroundColor: "#fff",
+		color: "#5790AB",
+		font: "Poppins",
+		fontWeight: "bold",
+		fontSize: "16px",
+		width: "100%",
+		border: "1px solid #5790AB",
+	};
+	const deleteButton = {
+		width: "100%",
+		marginTop: "10px",
+		fontWeight: "bold",
+		fontSize: "16px",
+	}
+
 	return (
 		<form onSubmit={onSubmit}>
 			<Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
@@ -229,7 +240,7 @@ export const UpdateAssignmentForm = () => {
 							<CardTitle>Lesson Details</CardTitle>
 							<CardDescription>Fill up your lesson details. Click next when you&apos;re done.</CardDescription>
 						</CardHeader>
-						<CardContent className="space-y-2">
+						<CardContent className="space-y-4">
 							<div className="space-y-2">
 								<Label htmlFor="Level">Level</Label>
 								<Select required value={level} onValueChange={(value: string) => setLevel(value)}>
@@ -320,10 +331,27 @@ export const UpdateAssignmentForm = () => {
 								<Label htmlFor="address">Address</Label>
 								<Input required value={address} onChange={(e) => setAddress(e.target.value)} id="address" type="text" />
 							</div>
-							{/* Tutee Location */}
-							<div className="space-y-2">
-								<Label htmlFor="postalCode">Postal Code</Label>
-								<Input required value={postalCode} onChange={(e) => setPostalCode(e.target.value)} id="postalCode" type="text" />
+							<div className="grid grid-cols-2 gap-4">
+								<div className="col-span-1 space-y-1">
+									<Label htmlFor="postalCode">Unit Number</Label>
+									<Input
+										required
+										value={unitNumber}
+										onChange={(e) => setUnitNumber(e.target.value)}
+										id="unitNumber"
+										type="unitNumber"
+									/>
+								</div>
+								<div className="col-span-1 space-y-1">
+									<Label htmlFor="postalCode">Postal Code</Label>
+									<Input
+										required
+										value={postalCode}
+										onChange={(e) => setPostalCode(e.target.value)}
+										id="postalCode"
+										type="postalCode"
+									/>
+								</div>
 							</div>
 							<div className="grid grid-cols-2 gap-4">
 								<div className="col-span-1 space-y-1">
@@ -396,7 +424,7 @@ export const UpdateAssignmentForm = () => {
 							{/* Submit Button */}
 						</CardContent>
 						<CardFooter>
-							<Button onClick={onNext} className="w-full">
+							<Button onClick={onNext} style={blueButton}>
 								Next
 							</Button>
 						</CardFooter>
@@ -407,7 +435,7 @@ export const UpdateAssignmentForm = () => {
 						<CardHeader>
 							<CardTitle>Tutor Details</CardTitle>
 						</CardHeader>
-						<CardContent className="space-y-2">
+						<CardContent className="space-y-4">
 							<div className="space-y-2">
 								<Label htmlFor="typeOfTutor">Type of Tutor</Label>
 								<div className="flex items-center space-x-2">
@@ -525,16 +553,22 @@ export const UpdateAssignmentForm = () => {
 								/>
 							</div>
 						</CardContent>
-						<CardFooter className="flex justify-between space-x-2">
-							<Button onClick={onBack} className="flex-1">
-								Back
-							</Button>
-							<Button className="flex-1">Update Assignment</Button>
+						<CardFooter className="flex flex-col">
+							<div className="w-full flex flex-row gap-2">
+								<Button onClick={onBack} className="flex-1" style={blueButton}>
+									Back
+								</Button>
+								<Button className="flex-1" style={whiteButton}>
+									Update Assignment
+								</Button>
+							</div>
+							<div className="w-full">
+								<Button variant="destructive" style={deleteButton} onClick={onDelete}>
+									Delete
+								</Button>
+							</div>
 						</CardFooter>
 					</Card>
-					<Button type="button" className="w-full mt-4" style={{ backgroundColor: "#ff0000", color: "#fff" }} onClick={onDelete}>
-						Delete
-					</Button>
 				</TabsContent>
 			</Tabs>
 		</form>

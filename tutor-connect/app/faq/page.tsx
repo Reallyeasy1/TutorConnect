@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/customTabs";
@@ -125,7 +124,6 @@ export default function FAQPage() {
 
 	return (
 		<div className="flex flex-col min-h-screen">
-			<NavBar />
 			<div style={styles.main}>
 				<div style={styles.container}>
 					{/* Check to see if current is at client or tutor */}

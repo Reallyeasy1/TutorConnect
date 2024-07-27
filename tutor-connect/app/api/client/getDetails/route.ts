@@ -25,6 +25,7 @@ export async function GET(req: Request) {
         email: user.email,
         name: user.name,
         address: user.address,
+        unitNumber: user.unitNumber,
         postalCode: user.postalCode,
         image: user.image,
       });

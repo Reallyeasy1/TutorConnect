@@ -1,5 +1,5 @@
 "use client";
-import NavBar from "@/components/nav-bar/navBar";
+
 import React from "react";
 import Image from "next/image";
 import Footer from "@/components/footer/footer";
@@ -101,7 +101,6 @@ export default function HomePage() {
 
 	return (
 		<div style={styles.body}>
-			<NavBar />
 			<div style={styles.sectionContainer}>
 				<Image
 					src="/images/tutorteaching.jpg"

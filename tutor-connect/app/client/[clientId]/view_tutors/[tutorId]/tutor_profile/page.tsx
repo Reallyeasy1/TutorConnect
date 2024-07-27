@@ -1,8 +1,7 @@
 "use client";
 
 import Footer from "@/components/footer/footer";
-import NavBar from "@/components/nav-bar/navBar";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import StarRating from "@/components/ui/StarRating";
@@ -51,7 +50,7 @@ type Review = {
 	createdAt: string;
 	client: Client;
 };
-// TODO: Fetch rating from database
+
 export default function TutorProfile() {
 	const params = useParams();
 	const tutorId = params.tutorId;
@@ -352,7 +351,6 @@ export default function TutorProfile() {
 
 	return (
 		<div className="flex flex-col min-h-screen">
-			<NavBar />
 			{loading && <Loading />}
 			{tutorProfile && clientProfile && (
 				<div style={styles.sectionContainer}>
@@ -423,7 +421,7 @@ export default function TutorProfile() {
 							</p>
 							<div style={styles.buttonSection}>
 								<ReviewForm tutor={tutorProfile} clientName={clientProfile.name} clientImage={clientProfile.image ?? undefined} />
-								<RequestForm clientId={clientId} tutor={tutorProfile} />
+								<RequestForm client={clientProfile} tutor={tutorProfile} />
 							</div>
 						</div>
 						<div>

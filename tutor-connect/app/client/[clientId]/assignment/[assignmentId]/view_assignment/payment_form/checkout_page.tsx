@@ -7,9 +7,7 @@ import {
   PaymentElement,
 } from "@stripe/react-stripe-js";
 import convertToSubcurrency from "@/lib/convertToSubcurrency";
-import Loading from "@/app/loading";
 import { Button } from "@/components/ui/button";
-import Spinner from "@/components/spinner/spinner";
 import {useRouter} from 'next/navigation';
 
 const CheckoutPage = ({

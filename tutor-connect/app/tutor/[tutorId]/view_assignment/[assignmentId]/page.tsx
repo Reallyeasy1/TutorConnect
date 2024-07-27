@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { Alert } from "@/components/ui/alert";
 import Footer from "@/components/footer/footer";
-import NavBar from "@/components/nav-bar/navBar";
 import { Button } from "@/components/ui/button";
 
 interface Assignment {
@@ -45,7 +44,6 @@ export default function ViewAssignment() {
 			if (tutorId == null) {
 				setError2("Tutor ID is required");
 			} else {
-				//TODO: Change to tutor/applyAssignment
 				const res = await fetch("/api/tutor/applyAssignment", {
 					method: "PUT",
 					body: JSON.stringify({
@@ -66,7 +64,7 @@ export default function ViewAssignment() {
 						race: assignment.race,
 						availability: assignment.availability,
 						postDate: assignment.postDate,
-						tutorId: tutorId, // Provide a value for the tutorId property
+						tutorId: tutorId,
 					}),
 					headers: {
 						"Content-Type": "application/json",
@@ -86,7 +84,7 @@ export default function ViewAssignment() {
 				});
 
 				if (res.ok && notif.ok) {
-					alert("Successfully sent offer to client!");
+					alert("Successfully sent application to client!");
 					router.push(`/tutor/${tutorId}/view_assignments`);
 				} else {
 					setError((await res.json()).error);
@@ -138,7 +136,6 @@ export default function ViewAssignment() {
 
 	return (
 		<div className="flex flex-col min-h-screen">
-			<NavBar />
 			<div className="container mx-auto p-6 flex flex-col items-center flex-grow">
 				<h1 className="text-4xl font-bold mb-8 text-center">Tutee Assignment</h1>
 				{assignments.length === 0 ? (

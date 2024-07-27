@@ -5,7 +5,7 @@ import { Tutor, Assignment } from "@prisma/client";
 import { useRouter } from "next/navigation";
 
 type OfferRejectedProps = {
-	clientId: string | string[];
+	clientId: number;
 	tutor: Tutor;
 	assignment: Assignment;
 	date: string;

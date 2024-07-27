@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { Alert } from "@/components/ui/alert";
-import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
 import * as React from "react";
 import { OfferForm } from "./offer";
@@ -249,7 +247,6 @@ export default function AvailTutors() {
 
 	return (
 		<div className="flex flex-col min-h-screen">
-			<NavBar />
 			<div style={styles.main}>
 				<div style={styles.container}>
 					<h1 style={styles.title}>Available Tutors</h1>

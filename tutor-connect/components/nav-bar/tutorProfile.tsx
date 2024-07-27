@@ -2,26 +2,24 @@ import { useState } from "react";
 import { signOut } from "next-auth/react";
 import { useParams } from "next/navigation";
 
-export default function TutorProfile({ notificationCount }: { notificationCount: number }) {
+export default function TutorProfile({ notificationCount, id }: { notificationCount: number, id: number }) {
 	const [hoveredIndex, setHoveredIndex] = useState(-1);
-	const params = useParams();
-    const tutorId = params.tutorId;
 
 	const tutorItems = [
 		{
 			title: "My Profile",
-			path: `/tutor/${tutorId}/my_profile`,
+			path: `/tutor/${id}/my_profile`,
 			cName: "dropdown-link",
 		},
 		{
 			title: "Notifications",
-			path: `/tutor/${tutorId}/notifications`,
+			path: `/tutor/${id}/notifications`,
 			cName: "dropdown-link",
 			hasNotification: notificationCount > 0,
 		},
 				{
 			title: "Settings",
-			path: `/tutor/${tutorId}/settings/profile`,
+			path: `/tutor/${id}/settings/profile`,
 			cName: "dropdown-link",
 		},
 		{

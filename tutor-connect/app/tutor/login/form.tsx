@@ -44,14 +44,12 @@ export const Form = () => {
 						email,
 					}),
 					headers: {
-						"Content-Type": "application/json",
+						"Content-Type": "application/data.idson",
 					},
 				});
 				const data = await response.json();
 				if (data?.id) {
-					router.push(
-						`/tutor/${data.id}/view_assignments`
-					);
+					window.location.href = `/tutor/${data.id}/view_assignments`;
 				} else {
 					setError("Failed to retrieve user information");
 				}

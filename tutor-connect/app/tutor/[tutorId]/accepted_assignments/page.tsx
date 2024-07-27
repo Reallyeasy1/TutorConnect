@@ -5,7 +5,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
@@ -214,7 +213,6 @@ export default function AppliedAssignments() {
 
 	return (
 		<div className="flex flex-col min-h-screen">
-			<NavBar />
 			<div
 				className="flex-grow grid grid-cols-3 gap-8"
 				style={{ height: "calc(100vh - 100px)" }}

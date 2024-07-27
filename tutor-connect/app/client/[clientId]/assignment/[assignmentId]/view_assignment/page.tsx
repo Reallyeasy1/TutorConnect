@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { Alert } from "@/components/ui/alert";
 import Footer from "@/components/footer/footer";
-import NavBar from "@/components/nav-bar/navBar";
 import { Button } from "@/components/ui/button";
 
 interface Assignment {
@@ -12,6 +11,7 @@ interface Assignment {
 	subject: string;
 	level: string;
 	address: string;
+	unitNumber: string;
 	postalCode: number;
 	minRate: number;
 	maxRate: number;
@@ -147,7 +147,6 @@ export default function ViewAssignment() {
 
 	return (
 		<div className="flex flex-col min-h-screen">
-			<NavBar />
 			<div className="container mx-auto p-6 flex flex-col items-center flex-grow">
 				<h1 className="text-4xl font-bold mb-8 text-center">Tutee Assignment</h1>
 				{assignments.length === 0 ? (
@@ -165,7 +164,8 @@ export default function ViewAssignment() {
 										{assignment.level} {assignment.subject}
 									</h2>
 									<p className="text-gray-700 mb-1">
-										<strong>Address:</strong> {assignment.address} Singapore {assignment.postalCode}
+									<strong>Address:</strong> {assignment.address}, {assignment.unitNumber && `${assignment.unitNumber}, `}Singapore{" "}
+									{assignment.postalCode}
 									</p>
 									<p className="text-gray-700 mb-1">
 										<strong>Frequency:</strong> {assignment.duration}, {assignment.frequency}

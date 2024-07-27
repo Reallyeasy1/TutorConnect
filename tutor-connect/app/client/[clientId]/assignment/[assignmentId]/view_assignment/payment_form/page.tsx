@@ -5,7 +5,6 @@ import { loadStripe } from "@stripe/stripe-js";
 import convertToSubcurrency from "@/lib/convertToSubcurrency";
 import { useParams, useRouter } from "next/navigation";
 import Footer from "@/components/footer/footer";
-import NavBar from "@/components/nav-bar/navBar";
 import { useEffect, useRef, useState } from "react";
 import Loading from "@/app/loading";
 import CheckoutPage from "./checkout_page";
@@ -184,7 +183,6 @@ export default function Payment() {
 
 	return (
 		<div className="flex flex-col min-h-screen">
-			<NavBar />
 			<div style={styles.main}>
 				<h1 style={styles.header}>Payment Page</h1>
 				{!assignments && <Loading />}

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Alert } from "@/components/ui/alert";
-import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
 import { Button } from "@/components/ui/button";
 
@@ -93,7 +92,6 @@ export default function TutorInfo() {
 
 	return (
 		<div className="flex flex-col min-h-screen">
-			<NavBar />
 			<div className="container mx-auto p-6 flex flex-col items-center flex-grow">
 				<h1 className="text-4xl font-bold mb-8 text-center">Available Tutors</h1>
 				{tutor == null ? (

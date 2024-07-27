@@ -5,7 +5,7 @@ import { Tutor, Assignment } from "@prisma/client";
 import { useRouter } from "next/navigation";
 
 type ApplyProps = {
-	clientId: string | string[];
+	clientId: number;
 	tutor: Tutor;
 	assignment: Assignment;
 	date: string;
@@ -26,7 +26,7 @@ export const Apply: React.FC<ApplyProps> = ({ clientId, tutor, assignment, date,
 	};
 
 	const assignmentButton = () => {
-		router.push(`client/${clientId}/assignment/${assignment.id}/view_assignment/`);
+		router.push(`/client/${clientId}/assignment/${assignment.id}/view_assignment/`);
 	};
 
 	const styles = {

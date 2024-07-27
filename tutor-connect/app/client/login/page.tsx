@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Form as LoginForm } from "./form";
-import NavBar from "@/components/nav-bar/navBar";
 import Logo from "@/components/nav-bar/logo";
 import Footer from "@/components/footer/footer";
 import { useSearchParams } from "next/navigation";
@@ -25,7 +24,6 @@ export default function LoginPage() {
 
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
-			<NavBar />
 			<div className="flex-grow flex justify-center items-center py-6">
 				<div className="bg-white shadow-xl rounded-xl p-6 space-y-6 max-w-md w-full">
 					<div className="flex flex-col items-center space-y-2">

@@ -1,6 +1,5 @@
 "use client";
 
-import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -68,7 +67,6 @@ export default function VerifyEmail() {
 
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
-			<NavBar />
 			<div className="flex-grow flex justify-center items-center py-6">
 				<Card className="w-[500px]">
 					<CardHeader>

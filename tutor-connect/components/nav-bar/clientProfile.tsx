@@ -2,26 +2,24 @@ import { useState } from "react";
 import { signOut } from "next-auth/react";
 import { useParams } from "next/navigation";
 
-export default function ClientProfile({ notificationCount }: { notificationCount: number }) {
+export default function ClientProfile({ notificationCount, id }: { notificationCount: number, id: number }) {
 	const [hoveredIndex, setHoveredIndex] = useState(-1);
-	const params = useParams();
-	const clientId = params.clientId;
 
 	const clientItems = [
 		{
 			title: "My Reviews",
-			path: `/client/${clientId}/my_reviews`,
+			path: `/client/${id}/my_reviews`,
 			cName: "dropdown-link",
 		},
 		{
 			title: "Notifications",
-			path: `/client/${clientId}/notifications`,
+			path: `/client/${id}/notifications`,
 			cName: "dropdown-link",
 			hasNotification: notificationCount > 0,
 		},
 		{
 			title: "Settings",
-			path: `/client/${clientId}/settings/profile`,
+			path: `/client/${id}/settings/profile`,
 			cName: "dropdown-link",
 		},
 		{

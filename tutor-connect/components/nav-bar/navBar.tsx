@@ -1,49 +1,39 @@
-// //TODO: Add Avatar to the profile
-// // TODO: For future reference, to update the list of pages to traverse to
-// // TODO: Highlight current page
-//TODO: Add links/dropdowns to the Nav Bar
-//TODO: Add Nav Bar to the respective links
+"use client";
+
 import Logo from "./logo";
-import React, { useEffect, useRef } from "react";
-import { useState } from "react";
+import Image from "next/image";
 import "@fontsource/poppins";
+import { ClientNotification, TutorNotification } from "@prisma/client";
+import { useEffect, useRef, useState } from "react";
 import { ClientDropdown } from "./clientDropdown";
 import { TutorDropdown } from "./tutorDropdown";
-import RegisterDropdown from "./registerDropdown";
-import LoginDropdown from "./loginDropdown";
-import Image from "next/image";
-import { useSession } from "next-auth/react";
 import ClientProfile from "./clientProfile";
 import TutorProfile from "./tutorProfile";
-import { ClientNotification, TutorNotification } from "@prisma/client";
+import LoginDropdown from "./loginDropdown";
+import RegisterDropdown from "./registerDropdown";
 
-const NavBar = () => {
+type NavBarProps = {
+	userImage: string | null;
+	userName: string | null;
+	userId: number | null;
+	userRole: "client" | "tutor" | null;
+	userNotifications: ClientNotification[] | TutorNotification[];
+};
+
+const NavBar = ({ userImage, userName, userRole, userId, userNotifications }: NavBarProps) => {
 	const [clientsDropdown, setClientsDropdown] = useState(false);
 	const [tutorsDropdown, setTutorsDropdown] = useState(false);
 	const [registerDropdown, setRegisterDropdown] = useState(false);
 	const [loginDropdown, setLoginDropdown] = useState(false);
 	const [clientProfile, setClientProfile] = useState(false);
 	const [tutorProfile, setTutorProfile] = useState(false);
-	const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 	const clientDropdownRef = useRef<HTMLDivElement>(null);
 	const tutorDropdownRef = useRef<HTMLDivElement>(null);
 	const registerRef = useRef<HTMLDivElement>(null);
 	const loginRef = useRef<HTMLDivElement>(null);
 	const clientProfileRef = useRef<HTMLDivElement>(null);
 	const tutorProfileRef = useRef<HTMLDivElement>(null);
-	const [userImage, setUserImage] = useState<string | null>(null);
-	const [userId, setUserId] = useState<number>(-1);
-	const [userNotifications, setUserNotifications] = useState<ClientNotification[] | TutorNotification[]>([]);
-
-	const { data: session } = useSession();
-
-	const handleMouseEnter = (index: number) => {
-		setHoverIndex(index);
-	};
-
-	const handleMouseLeave = () => {
-		setHoverIndex(null);
-	};
+	const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
 	useEffect(() => {
 		let handler = (e: MouseEvent) => {
@@ -69,47 +59,13 @@ const NavBar = () => {
 		document.addEventListener("mousedown", handler);
 	});
 
-	useEffect(() => {
-		const fetchUserDetails = async () => {
-			if (session?.user?.email) {
-				try {
-					let res;
-					if (session.user.randomKey == "tutor") {
-						res = await fetch("/api/tutor/getTutorDetails", {
-							method: "POST",
-							body: JSON.stringify({
-								email: session.user.email,
-							}),
-							headers: {
-								"Content-Type": "application/json",
-							},
-						});
-					} else {
-						res = await fetch("/api/client/getClientDetails", {
-							method: "POST",
-							body: JSON.stringify({
-								email: session.user.email,
-							}),
-							headers: {
-								"Content-Type": "application/json",
-							},
-						});
-					}
-					if (res.ok) {
-						const userData = await res.json();
-						setUserImage(userData.image);
-						setUserId(userData.id);
-						setUserNotifications(userData.notifications);
-					} else {
-						console.error("Failed to fetch client details");
-					}
-				} catch (error) {
-					console.error("Error fetching user details:", error);
-				}
-			}
-		};
-		fetchUserDetails();
-	}, [session]);
+	const handleMouseEnter = (index: number) => {
+		setHoverIndex(index);
+	};
+
+	const handleMouseLeave = () => {
+		setHoverIndex(null);
+	};
 
 	const hoverText = (index: number) => ({
 		color: hoverIndex === index ? "#5790AB" : "#000000",
@@ -189,7 +145,7 @@ const NavBar = () => {
 						Home
 					</a>
 				</div>
-				{(session?.user?.randomKey == "client" || !session) && (
+				{(userRole === "client" || !userRole) && (
 					<div className="relative" ref={clientDropdownRef}>
 						<button
 							style={hoverText(0)}
@@ -203,102 +159,70 @@ const NavBar = () => {
 							For Clients
 							<Image src="/images/arrowdown.png" alt="Arrow down" width={20} height={20} />
 						</button>
-						{clientsDropdown && <ClientDropdown id={userId} />}
+						{clientsDropdown && <ClientDropdown id={userId || -1} />}
 					</div>
 				)}
-				{(session?.user?.randomKey == "tutor" || !session) && (
+				{(userRole === "tutor" || !userRole) && (
 					<div className="relative" ref={tutorDropdownRef}>
 						<button
 							style={hoverText(1)}
 							onMouseEnter={() => handleMouseEnter(1)}
 							onMouseLeave={handleMouseLeave}
-							onClick={() => {
-								setTutorsDropdown(!tutorsDropdown);
-							}}
+							onClick={() => setTutorsDropdown(!tutorsDropdown)}
 							className="flex items-center"
 						>
 							For Tutors
 							<Image src="/images/arrowdown.png" alt="Arrow down" width={20} height={20} />
 						</button>
-						{tutorsDropdown && <TutorDropdown id={userId} />}
+						{tutorsDropdown && <TutorDropdown id={userId || -1} />}
 					</div>
 				)}
 				<div>
-					<a
-						href="/rates"
-						style={hoverText(2)}
-						onMouseEnter={() => handleMouseEnter(2)}
-						onMouseLeave={handleMouseLeave}
-						onClick={() => {
-							setTutorsDropdown(false);
-							setClientsDropdown(false);
-						}}
-					>
+					<a href="/rates" style={hoverText(2)} onMouseEnter={() => handleMouseEnter(2)} onMouseLeave={handleMouseLeave}>
 						Tuition Rates
 					</a>
 				</div>
 				<div>
-					<a
-						href="/faq"
-						style={hoverText(3)}
-						onMouseEnter={() => handleMouseEnter(3)}
-						onMouseLeave={handleMouseLeave}
-						onClick={() => {
-							setTutorsDropdown(false);
-							setClientsDropdown(false);
-						}}
-					>
+					<a href="/faq" style={hoverText(3)} onMouseEnter={() => handleMouseEnter(3)} onMouseLeave={handleMouseLeave}>
 						FAQ
 					</a>
 				</div>
 				<div>
-					<a
-						href="/contact_us"
-						style={hoverText(4)}
-						onMouseEnter={() => handleMouseEnter(4)}
-						onMouseLeave={handleMouseLeave}
-						onClick={() => {
-							setTutorsDropdown(false);
-							setClientsDropdown(false);
-						}}
-					>
+					<a href="/contact_us" style={hoverText(4)} onMouseEnter={() => handleMouseEnter(4)} onMouseLeave={handleMouseLeave}>
 						Contact Us
 					</a>
 				</div>
 			</div>
 			<div className="flex items-center space-x-4">
-				{session ? (
-					session.user?.randomKey == "client" ? (
+				{userRole ? (
+					userRole === "client" ? (
 						<div className="flex items-center space-x-2" ref={clientProfileRef}>
 							<button
 								style={hoverText(6)}
 								onMouseEnter={() => handleMouseEnter(6)}
 								onMouseLeave={handleMouseLeave}
-								onClick={() => {
-									setClientProfile(!clientProfile);
-								}}
+								onClick={() => setClientProfile(!clientProfile)}
 								className="flex items-center"
 							>
 								<Image
-									src={userImage ? userImage : "/images/Blank Profile Photo.jpg"}
+									src={userImage || "/images/Blank Profile Photo.jpg"}
 									alt="Profile Picture"
 									width={40}
 									height={40}
 									className="rounded-full mr-2"
-									style={{
-										width: "40px",
-										height: "40px",
-									}}
+									style={{ width: "40px", height: "40px" }}
 								/>
 								<div style={profile.container}>
-									<span style={profile.name}>{session.user.name}</span>
+									<span style={profile.name}>{userName}</span>
 									<h3 style={profile.role}>Client</h3>
 								</div>
 								{userNotifications.filter((notif) => !notif.read).length > 0 && (
 									<div style={profile.notificationCircle}>{userNotifications.filter((notif) => !notif.read).length}</div>
 								)}
 							</button>
-							{clientProfile && <ClientProfile notificationCount={userNotifications.filter((notif) => !notif.read).length} />}
+							{clientProfile && (
+								<ClientProfile notificationCount={userNotifications.filter((notif) => !notif.read).length} id={userId || -1} />
+							)}
 						</div>
 					) : (
 						<div className="flex items-center space-x-2" ref={tutorProfileRef}>
@@ -306,31 +230,28 @@ const NavBar = () => {
 								style={hoverText(7)}
 								onMouseEnter={() => handleMouseEnter(7)}
 								onMouseLeave={handleMouseLeave}
-								onClick={() => {
-									setTutorProfile(!tutorProfile);
-								}}
+								onClick={() => setTutorProfile(!tutorProfile)}
 								className="flex items-center"
 							>
 								<Image
-									src={userImage ? userImage : "/images/Blank Profile Photo.jpg"}
+									src={userImage || "/images/Blank Profile Photo.jpg"}
 									alt="Profile Picture"
 									width={40}
 									height={40}
 									className="rounded-full mr-2"
-									style={{
-										width: "40px",
-										height: "40px",
-									}}
+									style={{ width: "40px", height: "40px" }}
 								/>
 								<div style={profile.container}>
-									<span style={profile.name}>{session.user?.name}</span>
+									<span style={profile.name}>{userName}</span>
 									<h3 style={profile.role}>Tutor</h3>
 								</div>
 								{userNotifications.filter((notif) => !notif.read).length > 0 && (
 									<div style={profile.notificationCircle}>{userNotifications.filter((notif) => !notif.read).length}</div>
 								)}
 							</button>
-							{tutorProfile && <TutorProfile notificationCount={userNotifications.filter((notif) => !notif.read).length} />}
+							{tutorProfile && (
+								<TutorProfile notificationCount={userNotifications.filter((notif) => !notif.read).length} id={userId || -1} />
+							)}
 						</div>
 					)
 				) : (
