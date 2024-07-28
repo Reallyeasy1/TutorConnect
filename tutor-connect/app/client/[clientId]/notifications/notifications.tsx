@@ -189,7 +189,7 @@ export const Notifications: React.FC<NotifProps> = ({ notifs, clientId }) => {
 				{sortedNotifications.length === 0 && (
 					<Nothing message={"No Notifications."} imageSrc={"/images/Notification.png"} imageAlt={"Notification"} />
 				)}
-				{sortedNotifications.map((notif) => (
+				{sortedNotifications.slice(startIndex, endIndex).map((notif) => (
 					<div key={notif.id} style={{ marginTop: "10px", width: "100%" }}>
 						{notif.type === "apply" && (
 							<Apply
