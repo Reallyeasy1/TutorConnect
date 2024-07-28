@@ -139,7 +139,7 @@ export const RegisterForm = () => {
 		}
 
 		if (!/^\d{2}$/.test(age)) {
-			setError("Age must be a number");
+			setError("Age must be a 2-digit number");
 			return;
 		}
 
@@ -184,17 +184,8 @@ export const RegisterForm = () => {
 				});
 				const data = await response.json();
 
-				const updateNotif = await fetch("/api/client/notifications/updateNotification", {
-					method: "POST",
-					body: JSON.stringify({
-						tutorId: data.id,
-					}),
-					headers: {
-						"Content-Type": "application/json",
-					},
-				});
 				if (data?.id) {
-					const updateNotif = await fetch("/api/client/notifications/updateNotification", {
+					const updateNotif = await fetch("/api/tutor/notifications/updateNotification", {
 						method: "POST",
 						body: JSON.stringify({
 							tutorId: data.id,
