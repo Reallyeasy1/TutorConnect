@@ -26,6 +26,19 @@ export const ResetPasswordForm = () => {
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
+		if (
+			password.length < 8 ||
+			!/[a-z]/.test(password) ||
+			!/[A-Z]/.test(password) ||
+			!/[0-9]/.test(password) ||
+			!/[!@#$%^&*(),.?":{}|<>]/.test(password)
+		) {
+			setError(
+				"Your password must be at least 8 characters long, contain at least one number and one special character, and have a mixture of uppercase and lowercase letters."
+			);
+			return;
+		}
+
 		if (password !== password2) {
 			setError("Passwords do not match");
 			return;
