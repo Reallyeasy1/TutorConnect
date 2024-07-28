@@ -184,7 +184,7 @@ export const Notifications: React.FC<NotificationsProps> = ({ tutorId, notifs })
 				{sortedNotifications.length === 0 && (
 					<Nothing message={"No Notifications."} imageSrc={"/images/Notification.png"} imageAlt={"Notification"} />
 				)}
-				{sortedNotifications.map((notif) => (
+				{sortedNotifications.slice(startIndex, endIndex).map((notif) => (
 					<div key={notif.id} style={{ marginTop: "10px", width: "100%" }}>
 						{notif.type === "picked" && (
 							<Picked

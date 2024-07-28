@@ -164,6 +164,7 @@ export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) =
 
 			if (res.ok) {
 				//TODO: Change to main page
+				alert("Assignment posted successfully!");
 				router.push(`/client/${clientId}/assignment/client_assignment`); // Use relative path
 			} else {
 				setError((await res.json()).error);
