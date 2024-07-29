@@ -220,7 +220,7 @@ const CheckoutPage = ({
 			<Button disabled={!stripe || loading} style={blueButton}>
 				{!loading ? "Pay" : "Processing..."}
 			</Button>
-			<Button style={whiteButton} onClick={testPay}>
+			<Button style={whiteButton} onClick={testPay} type="button">
 				Test Pay
 			</Button>
 		</form>
