@@ -16,3 +16,4 @@ TutorConnect is a centralized platform designed to connect students and parents 
 8. Payment System
 9. Notifications System
 10. FAQ + Rates Page
+11. Contact Us Page
