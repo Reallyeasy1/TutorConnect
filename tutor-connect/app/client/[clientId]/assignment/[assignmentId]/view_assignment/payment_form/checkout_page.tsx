@@ -127,7 +127,7 @@ const CheckoutPage = ({
 				}
 
 				console.log("Notification sent successfully");
-				router.push(`/client/${clientId}/assignment/${assignmentId}/view_assignment/payment_success?amount=${amount}&tutorId=${tutorId}`);
+				window.location.href = `/client/${clientId}/assignment/${assignmentId}/view_assignment/payment_success?amount=${amount}&tutorId=${tutorId}`;
 			}
 		} catch (error: any) {
 			setErrorMessage(error.message);
@@ -189,7 +189,7 @@ const CheckoutPage = ({
 		}
 
 		console.log("Notification sent successfully");
-		router.push(`/client/${clientId}/assignment/${assignmentId}/view_assignment/payment_success?amount=${amount}&tutorId=${tutorId}`);
+		window.location.href = `/client/${clientId}/assignment/${assignmentId}/view_assignment/payment_success?amount=${amount}&tutorId=${tutorId}`;
 	};
 
 	const blueButton = {
