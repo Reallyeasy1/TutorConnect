@@ -136,6 +136,11 @@ export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) =
 			return;
 		}
 
+		if (typeOfTutor.length === 0) {
+			setError("Please select at least one type of tutor");
+			return;
+		}
+
 		try {
 			const res = await fetch("/api/client/postAssignments", {
 				method: "POST",
