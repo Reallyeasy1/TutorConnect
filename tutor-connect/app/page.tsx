@@ -1,10 +1,10 @@
 "use client";
-import NavBar from "@/components/nav-bar/navBar";
+
 import React from "react";
 import Image from "next/image";
 import Footer from "@/components/footer/footer";
 
-export default function AllAssignments() {
+export default function HomePage() {
 	const styles = {
 		body: {
 			fontFamily: "Poppins, sans-serif",
@@ -101,7 +101,6 @@ export default function AllAssignments() {
 
 	return (
 		<div style={styles.body}>
-			<NavBar />
 			<div style={styles.sectionContainer}>
 				<Image
 					src="/images/tutorteaching.jpg"

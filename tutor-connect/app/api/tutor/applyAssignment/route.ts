@@ -28,16 +28,7 @@ export async function PUT(req: Request) {
 
 		// Validate required fields
 		//|| !tuteeLocation
-		if (
-			!tutorId ||
-			!assignmentId ||
-			!subject ||
-			!level ||
-			!clientId ||
-			!minRate ||
-			!maxRate ||
-			!postDate
-		) {
+		if (!tutorId || !assignmentId || !subject || !level || !clientId || !minRate || !maxRate || !postDate) {
 			return new NextResponse(
 				JSON.stringify({
 					error: "Missing required fields",

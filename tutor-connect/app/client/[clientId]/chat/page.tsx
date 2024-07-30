@@ -3,8 +3,6 @@
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ChatRoom from "@/components/ChatRoom/index";
-import NavBar from "@/components/nav-bar/navBar";
-import Footer from "@/components/footer/footer";
 
 export default function Chat() {
   const router = useRouter();
@@ -44,7 +42,6 @@ export default function Chat() {
       {done !== "done" ? ( // Waiting for access to be granted
         <h1>Verifying token..... Please wait</h1>
       ) : (<div>
-      <NavBar />
         <ChatRoom username={username} id = {clientId} isTutor = {false} curr_recipient = {curr_recipient_inp}/>
         </div>
         

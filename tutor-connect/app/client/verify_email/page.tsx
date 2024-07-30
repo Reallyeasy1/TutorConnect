@@ -1,13 +1,7 @@
 "use client";
 
-import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
-import {
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -35,7 +29,7 @@ export default function VerifyEmail() {
 			const resendEmail = await fetch("/api/client/resendVerificationEmail", {
 				method: "POST",
 				body: JSON.stringify({
-					email
+					email,
 				}),
 				headers: {
 					"Content-Type": "application/json",
@@ -52,31 +46,40 @@ export default function VerifyEmail() {
 		}
 	};
 
+	const blueButton = {
+		backgroundColor: "#5790AB",
+		color: "#fff",
+		font: "Poppins",
+		fontWeight: "bold",
+		fontSize: "16px",
+		width: "100%",
+	};
+
+	const whiteButton = {
+		backgroundColor: "#fff",
+		color: "#5790AB",
+		font: "Poppins",
+		fontWeight: "bold",
+		fontSize: "16px",
+		width: "100%",
+		border: "1px solid #5790AB",
+	};
+
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
-			<NavBar />
 			<div className="flex-grow flex justify-center items-center py-6">
 				<Card className="w-[500px]">
 					<CardHeader>
-						<h1 className="font-bold text-2xl text-center">
-							Verify your email
-						</h1>
+						<h1 className="font-bold text-2xl text-center">Verify your email</h1>
 					</CardHeader>
 					<CardContent>
-						<p>
-							We have sent a verification link to your email.
-							Please click on the link to verify your email.
-						</p>
+						<p>We have sent a verification link to your email. Please click on the link to verify your email.</p>
 					</CardContent>
 					<CardFooter className="flex justify-between space-x-2">
-						<Button
-							variant="secondary"
-							className="flex-1"
-							onClick={onClickResend}
-						>
+						<Button style={whiteButton} className="flex-1" onClick={onClickResend}>
 							Resend Verification Email
 						</Button>
-						<Button className="flex-1" onClick={onClickLogin}>
+						<Button style={blueButton} className="flex-1" onClick={onClickLogin}>
 							Login
 						</Button>
 					</CardFooter>

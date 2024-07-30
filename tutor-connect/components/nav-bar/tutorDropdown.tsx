@@ -1,25 +1,22 @@
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
-export default function TutorDropdown() {
+type TutorDropdownProps = {
+  id: number;
+};
+
+export const TutorDropdown: React.FC<TutorDropdownProps> = ({ id }) => {
     const [hoveredIndex, setHoveredIndex] = useState(-1);
-    const params = useParams();
-    const tutorId = params.tutorId;
     
     const tutorItems = [
         {
             title: "View Assignments",
-            path: `/tutor/${tutorId}/view_assignments`,
+            path: `/tutor/${id}/view_assignments`,
             cName: "dropdown-link"
         },
         {
-            title: "View Recommended Assignments",
-            path: "#",
-            cName: "dropdown-link"
-        },
-        {
-            title: "Applied Assignments",
-            path: "#",
+            title: "My Assignments",
+            path: `/tutor/${id}/my_assignments`,
             cName: "dropdown-link"
         },
     ]

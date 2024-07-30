@@ -26,6 +26,19 @@ export const ResetPasswordForm = () => {
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
+		if (
+			password.length < 8 ||
+			!/[a-z]/.test(password) ||
+			!/[A-Z]/.test(password) ||
+			!/[0-9]/.test(password) ||
+			!/[!@#$%^&*(),.?":{}|<>]/.test(password)
+		) {
+			setError(
+				"Your password must be at least 8 characters long, contain at least one number and one special character, and have a mixture of uppercase and lowercase letters."
+			);
+			return;
+		}
+
 		if (password !== password2) {
 			setError("Passwords do not match");
 			return;
@@ -53,6 +66,15 @@ export const ResetPasswordForm = () => {
 		}
 
 		console.log("Reset Password!");
+	};
+
+	const blueButton = {
+		backgroundColor: "#5790AB",
+		color: "#fff",
+		font: "Poppins",
+		fontWeight: "bold",
+		fontSize: "16px",
+		width: "100%",
 	};
 
 	return (
@@ -87,7 +109,7 @@ export const ResetPasswordForm = () => {
 				</CardContent>
 				<CardFooter className="flex flex-col items-center space-y-2">
 					{error && <Alert>{error}</Alert>}
-					<Button className="w-full">Reset Password</Button>
+					<Button style={blueButton}>Reset Password</Button>
 					<Link
 						className="text-sm text-indigo-500 hover:underline center"
 						href="/client/login"

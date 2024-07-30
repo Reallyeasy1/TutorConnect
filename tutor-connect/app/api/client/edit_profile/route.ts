@@ -8,6 +8,7 @@ export async function POST(req: Request) {
 		const email = formData.get("email");
 		const contactNumber = formData.get("contactNumber");
 		const address = formData.get("address");
+		const unitNumber = formData.get("unitNumber");
 		const postalCode = formData.get("postalCode");
 		const image = formData.get("image");
 
@@ -21,6 +22,7 @@ export async function POST(req: Request) {
 		let updateData: any = {
 			contactNumber: parseInt(contactNumber as string),
 			address: address as string,
+			unitNumber: unitNumber as string,
 			postalCode: parseInt(postalCode as string),
 		};
 

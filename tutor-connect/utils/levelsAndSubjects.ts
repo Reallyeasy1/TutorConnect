@@ -1,5 +1,5 @@
 export const levels: { [key: string]: string[] } = {
-	Primary: [
+	"Primary": [
 		"Primary 1",
 		"Primary 2",
 		"Primary 3",
@@ -36,7 +36,7 @@ export const levels: { [key: string]: string[] } = {
 		"Kindergarten 1",
 		"Kindergarten 2",
 	],
-	IGCSE: [
+	"IGCSE": [
 		"IGCSE Year 1",
 		"IGCSE Year 2",
 		"IGCSE Year 3",
@@ -48,10 +48,57 @@ export const levels: { [key: string]: string[] } = {
 		"IGCSE Year 9",
 		"IGCSE Year 10",
 	],
-	"IB/Diploma": ["IB Year 1", "IB Year 2"],
+	"IB Diploma": ["IB Year 1", "IB Year 2"],
 	"Poly/University": ["Poly", "University"],
-	Others: ["Others"],
+	"Others": ["Others"],
 };
+
+export const levelToCategory: { [key: string]: string } = {
+	"Primary 1": "Primary School",
+	"Primary 2": "Primary School",
+	"Primary 3": "Primary School",
+	"Primary 4": "Primary School",
+	"Primary 5": "Primary School",
+	"Primary 6": "Primary School",
+	"Sec 1 Express": "Secondary School",
+	"Sec 1 NA": "Secondary School",
+	"Sec 1 NT": "Secondary School",
+	"Sec 1 IP": "Secondary School",
+	"Sec 2 Express": "Secondary School",
+	"Sec 2 NA": "Secondary School",
+	"Sec 2 NT": "Secondary School",
+	"Sec 2 IP": "Secondary School",
+	"Sec 3 Express": "Secondary School",
+	"Sec 3 NA": "Secondary School",
+	"Sec 3 NT": "Secondary School",
+	"Sec 3 IP": "Secondary School",
+	"Sec 4 Express": "Secondary School",
+	"Sec 4 NA": "Secondary School",
+	"Sec 4 NT": "Secondary School",
+	"Sec 4 IP": "Secondary School",
+	"Sec 5 NA": "Secondary School",
+	"Sec 5 NT": "Secondary School",
+	"JC1": "Junior College",
+	"JC2": "Junior College",
+	"Nursery 1": "Pre-School",
+	"Nursery 2": "Pre-School",
+	"Kindergarten 1": "Pre-School",
+	"Kindergarten 2": "Pre-School",
+	"IGCSE Year 1": "IB/IGCSE",
+	"IGCSE Year 2": "IB/IGCSE",
+	"IGCSE Year 3": "IB/IGCSE",
+	"IGCSE Year 4": "IB/IGCSE",
+	"IGCSE Year 5": "IB/IGCSE",
+	"IGCSE Year 6": "IB/IGCSE",
+	"IGCSE Year 7": "IB/IGCSE",
+	"IGCSE Year 8": "IB/IGCSE",
+	"IGCSE Year 9": "IB/IGCSE",
+	"IGCSE Year 10": "IB/IGCSE",
+	"IB Year 1": "IB/IGCSE",
+	"IB Year 2": "IB/IGCSE",
+	"Poly": "Diploma/Degree",
+	"University": "Diploma/Degree",
+}
 
 export const subjectsByLevel: Record<string, string[]> = {
 	"Primary 1": [
@@ -280,7 +327,7 @@ export const subjectsByLevel: Record<string, string[]> = {
 	],
 	"Sec 3 Express": [
 		"English",
-		" A Math",
+		"A Math",
 		"E Math",
 		"Physics",
 		"Chemistry",
@@ -308,7 +355,7 @@ export const subjectsByLevel: Record<string, string[]> = {
 	],
 	"Sec 3 NA": [
 		"English",
-		" A Math",
+		"A Math",
 		"E Math",
 		"Physics",
 		"Chemistry",
@@ -336,7 +383,7 @@ export const subjectsByLevel: Record<string, string[]> = {
 	],
 	"Sec 3 NT": [
 		"English",
-		" A Math",
+		"A Math",
 		"E Math",
 		"Physics",
 		"Chemistry",
@@ -364,7 +411,7 @@ export const subjectsByLevel: Record<string, string[]> = {
 	],
 	"Sec 3 IP": [
 		"English",
-		" A Math",
+		"A Math",
 		"E Math",
 		"Physics",
 		"Chemistry",
@@ -392,7 +439,7 @@ export const subjectsByLevel: Record<string, string[]> = {
 	],
 	"Sec 4 Express": [
 		"English",
-		" A Math",
+		"A Math",
 		"E Math",
 		"Physics",
 		"Chemistry",
@@ -420,7 +467,7 @@ export const subjectsByLevel: Record<string, string[]> = {
 	],
 	"Sec 4 NA": [
 		"English",
-		" A Math",
+		"A Math",
 		"E Math",
 		"Physics",
 		"Chemistry",
@@ -448,7 +495,7 @@ export const subjectsByLevel: Record<string, string[]> = {
 	],
 	"Sec 4 NT": [
 		"English",
-		" A Math",
+		"A Math",
 		"E Math",
 		"Physics",
 		"Chemistry",
@@ -476,7 +523,7 @@ export const subjectsByLevel: Record<string, string[]> = {
 	],
 	"Sec 4 IP": [
 		"English",
-		" A Math",
+		"A Math",
 		"E Math",
 		"Physics",
 		"Chemistry",
@@ -504,7 +551,7 @@ export const subjectsByLevel: Record<string, string[]> = {
 	],
 	"Sec 5 NA": [
 		"English",
-		" A Math",
+		"A Math",
 		"E Math",
 		"Physics",
 		"Chemistry",
@@ -532,7 +579,7 @@ export const subjectsByLevel: Record<string, string[]> = {
 	],
 	"Sec 5 NT": [
 		"English",
-		" A Math",
+		"A Math",
 		"E Math",
 		"Physics",
 		"Chemistry",

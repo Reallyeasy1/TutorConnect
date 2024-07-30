@@ -1,13 +1,14 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET() {
 	try {
 		const assignments = await prisma.assignment.findMany({
 			// where: { taken: false }, // Fetch only available assignments
 			include: {
 				client: true, // Include client details if needed
 				tutor: true, // Include tutor details if needed
+				avail_tutors: true, // Include available tutors if needed
 			},
 		});
 

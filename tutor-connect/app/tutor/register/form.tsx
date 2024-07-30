@@ -6,26 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import {
-	Select,
-	SelectItem,
-	SelectContent,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
@@ -81,12 +64,9 @@ export const RegisterForm = () => {
 	const handleLevelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { id, checked } = event.target;
 		setShowSubjects({ ...showSubjects, [id]: checked });
-		console.log(showSubjects);
 	};
 
-	const handleSubjectChange = (
-		event: React.ChangeEvent<HTMLInputElement>
-	) => {
+	const handleSubjectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { id, value, checked } = event.target;
 		const level = id as keyof typeof checkedSubjects;
 
@@ -100,9 +80,7 @@ export const RegisterForm = () => {
 		} else {
 			setCheckedSubjects({
 				...checkedSubjects,
-				[id]: checkedSubjects[level].filter(
-					(subject) => subject !== value
-				),
+				[id]: checkedSubjects[level].filter((subject) => subject !== value),
 			});
 		}
 	};
@@ -118,11 +96,7 @@ export const RegisterForm = () => {
 	};
 
 	const onBack = () => {
-		const tabs = [
-			"personalInformation",
-			"tutorPreferences",
-			"academicQualifications",
-		];
+		const tabs = ["personalInformation", "tutorPreferences", "academicQualifications"];
 		const currentIndex = tabs.indexOf(currentTab);
 		if (currentIndex > 0) {
 			setCurrentTab(tabs[currentIndex - 1]);
@@ -130,11 +104,7 @@ export const RegisterForm = () => {
 	};
 
 	const onNext = () => {
-		const tabs = [
-			"personalInformation",
-			"tutorPreferences",
-			"academicQualifications",
-		];
+		const tabs = ["personalInformation", "tutorPreferences", "academicQualifications"];
 		const currentIndex = tabs.indexOf(currentTab);
 		if (currentIndex < tabs.length - 1) {
 			setCurrentTab(tabs[currentIndex + 1]);
@@ -146,9 +116,9 @@ export const RegisterForm = () => {
 		const levelAndSubjects = checkedSubjects;
 
 		if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
-			setError('Invalid email address');
+			setError("Invalid email address");
 			return;
-		  }
+		}
 
 		if (
 			password.length < 8 ||
@@ -169,14 +139,14 @@ export const RegisterForm = () => {
 		}
 
 		if (!/^\d{2}$/.test(age)) {
-			setError("Age must be a number");
+			setError("Age must be a 2-digit number");
 			return;
 		}
 
 		if (location.length === 0) {
-			setError('Please select a location');
+			setError("Please select a location");
 			return;
-		  }
+		}
 
 		try {
 			const res = await fetch("/api/tutor/register", {
@@ -213,7 +183,18 @@ export const RegisterForm = () => {
 					},
 				});
 				const data = await response.json();
+
 				if (data?.id) {
+					const updateNotif = await fetch("/api/tutor/notifications/updateNotification", {
+						method: "POST",
+						body: JSON.stringify({
+							tutorId: data.id,
+						}),
+						headers: {
+							"Content-Type": "application/json",
+						},
+					});
+
 					const account = { token: data.id };
 					const SECRET = "this is a secret";
 					const token = jwt.sign(account, SECRET);
@@ -228,16 +209,13 @@ export const RegisterForm = () => {
 						},
 					};
 
-					const strapiResponse = await fetch(
-						"http://188.166.213.34/api/accounts",
-						{
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json",
-							},
-							body: JSON.stringify(strapiData),
-						}
-					);
+					const strapiResponse = await fetch("https://www.tutorconnect.live/api/accounts", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify(strapiData),
+					});
 
 					if (!strapiResponse.ok) {
 						throw new Error("Failed to upload to Strapi");
@@ -296,85 +274,65 @@ export const RegisterForm = () => {
 		},
 	};
 
+	const blueButton = {
+		backgroundColor: "#5790AB",
+		color: "#fff",
+		font: "Poppins",
+		fontWeight: "bold",
+		fontSize: "16px",
+		width: "100%",
+	};
+
+	const whiteButton = {
+		backgroundColor: "#fff",
+		color: "#5790AB",
+		font: "Poppins",
+		fontWeight: "bold",
+		fontSize: "16px",
+		width: "100%",
+		border: "1px solid #5790AB",
+	};
+
 	return (
 		<form onSubmit={onSubmit}>
-			<Tabs
-				value={currentTab}
-				onValueChange={setCurrentTab}
-				className="w-full"
-			>
+			<Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
 				<TabsList className="grid w-full grid-cols-3">
-					<TabsTrigger value="personalInformation">
-						Personal Information
-					</TabsTrigger>
-					<TabsTrigger value="tutorPreferences">
-						Tutor Preferences
-					</TabsTrigger>
-					<TabsTrigger value="academicQualifications">
-						Academic Qualifications
-					</TabsTrigger>
+					<TabsTrigger value="personalInformation">Personal Information</TabsTrigger>
+					<TabsTrigger value="tutorPreferences">Tutor Preferences</TabsTrigger>
+					<TabsTrigger value="academicQualifications">Academic Qualifications</TabsTrigger>
 				</TabsList>
 				<TabsContent value="personalInformation">
 					<Card>
 						<CardHeader>
 							<CardTitle>Personal Information</CardTitle>
-							<CardDescription>
-								Fill up your personal information. Click next
-								when you&apos;re done.
-							</CardDescription>
+							<CardDescription>Fill up your personal information. Click next when you&apos;re done.</CardDescription>
 						</CardHeader>
-						<CardContent className="space-y-2">
+						<CardContent className="space-y-4">
 							<div className="space-y-1">
 								<Label htmlFor="name">Name</Label>
-								<Input
-									required
-									value={name}
-									onChange={(e) => setName(e.target.value)}
-									id="name"
-									type="name"
-								/>
+								<Input required value={name} onChange={(e) => setName(e.target.value)} id="name" type="name" />
 							</div>
 							<div className="space-y-1">
 								<Label htmlFor="email">Email</Label>
-								<Input
-									required
-									value={email}
-									onChange={(e) => setEmail(e.target.value)}
-									id="email"
-									type="email"
-								/>
+								<Input required value={email} onChange={(e) => setEmail(e.target.value)} id="email" type="email" />
 							</div>
 							<div className="space-y-1">
 								<Label htmlFor="password">Password</Label>
-								<Input
-									required
-									value={password}
-									onChange={(e) =>
-										setPassword(e.target.value)
-									}
-									id="password"
-									type="password"
-								/>
+								<Input required value={password} onChange={(e) => setPassword(e.target.value)} id="password" type="password" />
 							</div>
 							<div className="grid grid-cols-2 gap-4">
 								<div className="col-span-1 space-y-1">
-									<Label htmlFor="contactNumber">
-										Contact Number
-									</Label>
+									<Label htmlFor="contactNumber">Contact Number</Label>
 									<Input
 										required
 										value={contactNumber}
-										onChange={(e) =>
-											setContactNumber(e.target.value)
-										}
+										onChange={(e) => setContactNumber(e.target.value)}
 										id="contactNumber"
 										type="contactNumber"
 									/>
 								</div>
 								<div className="col-span-1 space-y-1">
-									<Label htmlFor="dateOfBirth">
-										Date Of Birth
-									</Label>
+									<Label htmlFor="dateOfBirth">Date Of Birth</Label>
 									<Popover>
 										<PopoverTrigger asChild>
 											<div>
@@ -383,25 +341,15 @@ export const RegisterForm = () => {
 													variant={"outline"}
 													className={cn(
 														"w-[240px] justify-start text-left font-normal",
-														!dateOfBirth &&
-															"text-muted-foreground"
+														!dateOfBirth && "text-muted-foreground"
 													)}
 												>
 													<CalendarIcon className="mr-2 h-4 w-4" />
-													{dateOfBirth ? (
-														dateOfBirth.toLocaleDateString(
-															"en-GB"
-														)
-													) : (
-														<span>Pick a date</span>
-													)}
+													{dateOfBirth ? dateOfBirth.toLocaleDateString("en-GB") : <span>Pick a date</span>}
 												</Button>
 											</div>
 										</PopoverTrigger>
-										<PopoverContent
-											align="start"
-											className=" w-auto p-0"
-										>
+										<PopoverContent align="start" className=" w-auto p-0">
 											<Calendar
 												mode="single"
 												captionLayout="dropdown-buttons"
@@ -417,96 +365,52 @@ export const RegisterForm = () => {
 							<div className="grid grid-cols-2 gap-4">
 								<div className="col-span-1 space-y-1">
 									<Label htmlFor="age">Age</Label>
-									<Input
-										required
-										value={age}
-										onChange={(e) => setAge(e.target.value)}
-										id="age"
-										type="age"
-									/>
+									<Input required value={age} onChange={(e) => setAge(e.target.value)} id="age" type="age" />
 								</div>
 								<div className="col-span-1 space-y-1">
 									<Label htmlFor="gender">Gender</Label>
-									<Select
-										required
-										value={gender}
-										onValueChange={(value: string) =>
-											setGender(value)
-										}
-									>
+									<Select required value={gender} onValueChange={(value: string) => setGender(value)}>
 										<div>
 											<SelectTrigger className="w-full">
 												<SelectValue placeholder="Select a gender" />
 											</SelectTrigger>
 										</div>
 										<SelectContent>
-											<SelectItem value="Male">
-												Male
-											</SelectItem>
-											<SelectItem value="Female">
-												Female
-											</SelectItem>
+											<SelectItem value="Male">Male</SelectItem>
+											<SelectItem value="Female">Female</SelectItem>
 										</SelectContent>
 									</Select>
 								</div>
 							</div>
 							<div className="grid grid-cols-2 gap-4">
 								<div className="col-span-1 space-y-1">
-									<Label htmlFor="nationality">
-										Nationality
-									</Label>
-									<Select
-										required
-										value={nationality}
-										onValueChange={(value: string) =>
-											setNationality(value)
-										}
-									>
+									<Label htmlFor="nationality">Nationality</Label>
+									<Select required value={nationality} onValueChange={(value: string) => setNationality(value)}>
 										<div>
 											<SelectTrigger className="w-full">
 												<SelectValue placeholder="Select a nationality" />
 											</SelectTrigger>
 										</div>
 										<SelectContent>
-											<SelectItem value="Singaporean">
-												Singaporean
-											</SelectItem>
-											<SelectItem value="Singapore PR">
-												Singapore PR
-											</SelectItem>
-											<SelectItem value="Others">
-												Others
-											</SelectItem>
+											<SelectItem value="Singaporean">Singaporean</SelectItem>
+											<SelectItem value="Singapore PR">Singapore PR</SelectItem>
+											<SelectItem value="Others">Others</SelectItem>
 										</SelectContent>
 									</Select>
 								</div>
 								<div className="col-span-1 space-y-1">
 									<Label htmlFor="race">Race</Label>
-									<Select
-										required
-										value={race}
-										onValueChange={(value: string) =>
-											setRace(value)
-										}
-									>
+									<Select required value={race} onValueChange={(value: string) => setRace(value)}>
 										<div>
 											<SelectTrigger className="w-full">
 												<SelectValue placeholder="Select a race" />
 											</SelectTrigger>
 										</div>
 										<SelectContent>
-											<SelectItem value="Chinese">
-												Chinese
-											</SelectItem>
-											<SelectItem value="Malay">
-												Malay
-											</SelectItem>
-											<SelectItem value="Indian">
-												Indian
-											</SelectItem>
-											<SelectItem value="Others">
-												Others
-											</SelectItem>
+											<SelectItem value="Chinese">Chinese</SelectItem>
+											<SelectItem value="Malay">Malay</SelectItem>
+											<SelectItem value="Indian">Indian</SelectItem>
+											<SelectItem value="Others">Others</SelectItem>
 										</SelectContent>
 									</Select>
 								</div>
@@ -518,7 +422,7 @@ export const RegisterForm = () => {
 							)}
 						</CardContent>
 						<CardFooter>
-							<Button onClick={onNext} className="w-full">
+							<Button onClick={onNext} style={blueButton}>
 								Next
 							</Button>
 						</CardFooter>
@@ -529,76 +433,45 @@ export const RegisterForm = () => {
 						<CardHeader>
 							<CardTitle>Tutor Preferences</CardTitle>
 						</CardHeader>
-						<CardContent className="space-y-5">
+						<CardContent className="space-y-4">
 							<div className="space-y-1">
-								<Label
-									htmlFor="levelsAndSubjects"
-									style={{ fontSize: "20px" }}
-								>
+								<Label htmlFor="levelsAndSubjects" style={{ fontSize: "20px" }}>
 									Levels and Subjects
 								</Label>
-								{Object.entries(subjectsByCategory).map(
-									([category, subjects]) => (
-										<div
-											key={category}
-											style={{ marginTop: "10px" }}
-										>
-											<label key={category}>
-												<input
-													type="checkbox"
-													id={category}
-													onChange={handleLevelChange}
-													style={
-														subjectStyle.checkboxes
-													}
-													checked={
-														showSubjects[
-															category as keyof CheckedSubjects
-														]
-													}
-												/>
-												{category}
-											</label>
-											{showSubjects[
-												category as keyof CheckedSubjects
-											] && (
-												<div
-													style={
-														subjectStyle.container
-													}
-												>
-													{subjects.map((subject) => (
-														<label key={subject}>
-															<input
-																type="checkbox"
-																id={category}
-																value={subject}
-																onChange={
-																	handleSubjectChange
-																}
-																style={
-																	subjectStyle.checkboxes
-																}
-																checked={checkedSubjects[
-																	category as keyof CheckedSubjects
-																].includes(
-																	subject
-																)}
-															/>
-															{subject}
-														</label>
-													))}
-												</div>
-											)}
-										</div>
-									)
-								)}
+								{Object.entries(subjectsByCategory).map(([category, subjects]) => (
+									<div key={category} style={{ marginTop: "10px" }}>
+										<label key={category}>
+											<input
+												type="checkbox"
+												id={category}
+												onChange={handleLevelChange}
+												style={subjectStyle.checkboxes}
+												checked={showSubjects[category as keyof CheckedSubjects]}
+											/>
+											{category}
+										</label>
+										{showSubjects[category as keyof CheckedSubjects] && (
+											<div style={subjectStyle.container}>
+												{subjects.map((subject) => (
+													<label key={subject}>
+														<input
+															type="checkbox"
+															id={category}
+															value={subject}
+															onChange={handleSubjectChange}
+															style={subjectStyle.checkboxes}
+															checked={checkedSubjects[category as keyof CheckedSubjects].includes(subject)}
+														/>
+														{subject}
+													</label>
+												))}
+											</div>
+										)}
+									</div>
+								))}
 							</div>
 							<div className="space-y-1">
-								<Label
-									htmlFor="location"
-									style={{ fontSize: "20px" }}
-								>
+								<Label htmlFor="location" style={{ fontSize: "20px" }}>
 									Locations
 								</Label>
 								<div style={locationStyle.container}>
@@ -608,23 +481,13 @@ export const RegisterForm = () => {
 												<input
 													type="checkbox"
 													value={loc[0]}
-													onChange={
-														handleLocationChange
-													}
-													style={
-														locationStyle.checkboxes
-													}
+													onChange={handleLocationChange}
+													style={locationStyle.checkboxes}
 													required
-													checked={location.includes(
-														loc[0]
-													)}
+													checked={location.includes(loc[0])}
 												/>
 												{loc[0]}
-												<span
-													style={locationStyle.places}
-												>
-													{loc[1]}
-												</span>
+												<span style={locationStyle.places}>{loc[1]}</span>
 											</label>
 										</div>
 									))}
@@ -637,10 +500,10 @@ export const RegisterForm = () => {
 							)}
 						</CardContent>
 						<CardFooter className="flex justify-between space-x-2">
-							<Button onClick={onBack} className="flex-1">
+							<Button onClick={onBack} className="flex-1" style={whiteButton}>
 								Back
 							</Button>
-							<Button onClick={onNext} className="flex-1">
+							<Button onClick={onNext} className="flex-1" style={blueButton}>
 								Next
 							</Button>
 						</CardFooter>
@@ -651,101 +514,49 @@ export const RegisterForm = () => {
 						<CardHeader>
 							<CardTitle>Academic Qualifications</CardTitle>
 						</CardHeader>
-						<CardContent className="space-y-2">
+						<CardContent className="space-y-4">
 							<div className="space-y-1">
-								<Label htmlFor="yearsOfExperience">
-									Years of Teaching Experience
-								</Label>
+								<Label htmlFor="yearsOfExperience">Years of Teaching Experience</Label>
 								<Input
 									required
 									value={yearsOfExperience}
-									onChange={(e) =>
-										setYearsOfExperience(e.target.value)
-									}
+									onChange={(e) => setYearsOfExperience(e.target.value)}
 									id="yearsOfExperience"
 									type="yearsOfExperience"
 								/>
 							</div>
 							<div className="space-y-1">
-								<Label htmlFor="typeOfTutor">
-									Type of Tutor
-								</Label>
-								<Select
-									required
-									value={typeOfTutor}
-									onValueChange={(value: string) =>
-										setTypeofTutor(value)
-									}
-								>
+								<Label htmlFor="typeOfTutor">Type of Tutor</Label>
+								<Select required value={typeOfTutor} onValueChange={(value: string) => setTypeofTutor(value)}>
 									<div>
 										<SelectTrigger className="w-full">
 											<SelectValue placeholder="Select a type" />
 										</SelectTrigger>
 									</div>
 									<SelectContent>
-										<SelectItem value="Poly/A level">
-											Poly / A Level student
-										</SelectItem>
-										<SelectItem value="Undergraduate">
-											Undergraduate
-										</SelectItem>
-										<SelectItem value="Part-Time">
-											Part-Time Tutor
-										</SelectItem>
-										<SelectItem value="Full-Time">
-											Full-Time Tutor
-										</SelectItem>
-										<SelectItem value="NIE Trainee">
-											NIE Trainee
-										</SelectItem>
-										<SelectItem value="Ex-MOE">
-											Ex-MOE Teacher
-										</SelectItem>
-										<SelectItem value="Current MOE">
-											Current MOE Teacher
-										</SelectItem>
+										<SelectItem value="Part-Time Tutor">Part-Time Tutor</SelectItem>
+										<SelectItem value="Full-Time Tutor">Full-Time Tutor</SelectItem>
+										<SelectItem value="Ex/Current MOE Teacher">Ex/Current MOE Teacher</SelectItem>
 									</SelectContent>
 								</Select>
 							</div>
 							<div className="space-y-1">
-								<Label htmlFor="highestEducationLevel">
-									Highest Education Level
-								</Label>
-								<Select
-									required
-									value={highestEducationLevel}
-									onValueChange={(value: string) =>
-										setHighestEducationLevel(value)
-									}
-								>
+								<Label htmlFor="highestEducationLevel">Highest Education Level</Label>
+								<Select required value={highestEducationLevel} onValueChange={(value: string) => setHighestEducationLevel(value)}>
 									<div>
 										<SelectTrigger className="w-full">
 											<SelectValue placeholder="Select an education level" />
 										</SelectTrigger>
 									</div>
 									<SelectContent>
-										<SelectItem value="Diploma">
-											Poly Diploma
-										</SelectItem>
-										<SelectItem value="A levels">
-											A Levels
-										</SelectItem>
-										<SelectItem value="Undergraduate">
-											Undergraduate
-										</SelectItem>
-										<SelectItem value="Bachelor Degree">
-											Bachelor Degree
-										</SelectItem>
-										<SelectItem value="Post-Graduate Diploma">
-											Post-Graduate Diploma
-										</SelectItem>
-										<SelectItem value="Masters Degree">
-											Masters Degree
-										</SelectItem>
+										<SelectItem value="Diploma">Poly Diploma</SelectItem>
+										<SelectItem value="A levels">A Levels</SelectItem>
+										<SelectItem value="Undergraduate">Undergraduate</SelectItem>
+										<SelectItem value="Bachelor Degree">Bachelor Degree</SelectItem>
+										<SelectItem value="Post-Graduate Diploma">Post-Graduate Diploma</SelectItem>
+										<SelectItem value="Masters Degree">Masters Degree</SelectItem>
 										<SelectItem value="PHD">PHD</SelectItem>
-										<SelectItem value="Others">
-											Others
-										</SelectItem>
+										<SelectItem value="Others">Others</SelectItem>
 									</SelectContent>
 								</Select>
 							</div>
@@ -756,10 +567,12 @@ export const RegisterForm = () => {
 							)}
 						</CardContent>
 						<CardFooter className="flex justify-between space-x-2">
-							<Button onClick={onBack} className="flex-1">
+							<Button onClick={onBack} className="flex-1" style={whiteButton}>
 								Back
 							</Button>
-							<Button className="flex-1">Register</Button>
+							<Button className="flex-1" style={blueButton}>
+								Register
+							</Button>
 						</CardFooter>
 					</Card>
 				</TabsContent>

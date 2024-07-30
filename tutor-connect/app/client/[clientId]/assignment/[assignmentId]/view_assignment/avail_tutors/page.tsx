@@ -2,9 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { Alert } from "@/components/ui/alert";
-import NavBar from "@/components/nav-bar/navBar";
 import Footer from "@/components/footer/footer";
+import * as React from "react";
+import { OfferForm } from "./offer";
+import Image from "next/image";
+import Nothing from "@/components/ui/Nothing";
+import { Review } from "@prisma/client";
+import SmallStarRating from "@/components/ui/SmallStarRating";
+import { Button } from "@/components/ui/button";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { Input } from "@/components/ui/input";
+import Loading from "@/app/loading";
 
 interface Tutor {
 	id: number;
@@ -20,7 +28,10 @@ interface Tutor {
 	typeOfTutor: string;
 	yearsOfExperience: number;
 	highestEducationLevel: string;
-	location: string; // Added location field
+	location: string;
+	image: string;
+	reviews: Review[];
+	introduction: string;
 }
 
 export default function AvailTutors() {
@@ -29,149 +40,296 @@ export default function AvailTutors() {
 	const assignmentId = params.assignmentId;
 	const clientId = params.clientId;
 	const [tutors, setTutors] = useState<Tutor[]>([]);
+	const [sortedTutors, setSortedTutors] = useState<Tutor[]>([]);
 	const [error, setError] = useState<string | null>(null);
-	const [error2, setError2] = useState<string | null>(null);
-
-	//TODO: Clean code
-	// const params = useParams();
-	// const [username, setUsername] = useState(params.user);
-	// const receiverName = params.anon;
-	async function acceptTutor(tutor: Tutor) {
-		try {
-			if (!clientId) {
-				setError2("Client ID is required");
-				return;
-			}
-
-			const res = await fetch("/api/client/accept_tutor", {
-				method: "PUT",
-				body: JSON.stringify({
-					clientId,
-					AssignmentId: assignmentId,
-					tutor,
-				}),
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
-
-			if (res.ok) {
-				alert("Successfully accepted the tutor!");
-				router.push(`/client/${clientId}/assignment/client_assignment`);
-			} else {
-				const resData = await res.json();
-				setError(resData.error);
-			}
-		} catch (error: any) {
-			setError(error?.message);
-		}
-	}
+	const limit = 8;
+	const [startIndex, setStartIndex] = useState(0);
+	const [endIndex, setEndIndex] = useState(limit);
+	const [page, setPage] = useState(1);
+	const [totalPages, setTotalPages] = useState(1);
+	const [search, setSearch] = useState("");
+	const [sortBy, setSortBy] = useState<"highest" | "lowest">("highest");
+	const [loading, setLoading] = useState<boolean>(true);
 
 	useEffect(() => {
-		async function getTutors() {
+		async function fetchData() {
 			try {
-				const res = await fetch(`/api/client/avail_tutors/${assignmentId}`);  // Ensure this matches your route
-				const contentType = res.headers.get("content-type");
-
-				if (!res.ok) {
-					const errorData = await res.json();
-					setError(errorData.error || "Failed to fetch tutors");
-					return;
+				const tutorsResponse = await fetch(`/api/client/avail_tutors/${assignmentId}`);
+				if (!tutorsResponse.ok) {
+					throw new Error("Failed to fetch tutors");
 				}
-
-				if (contentType && contentType.includes("application/json")) {
-					const data = await res.json();
-					setTutors(data.avail_tutors);
-				} else {
-					setError("Unexpected content type: " + contentType);
-				}
+				const tutorsData = await tutorsResponse.json();
+				setTutors(tutorsData.avail_tutors);
+				setSortedTutors(tutorsData.avail_tutors);
+				setTotalPages(Math.ceil(tutorsData.avail_tutors.length / limit));
 			} catch (err: any) {
 				setError(err.message);
+			} finally {
+				setLoading(false);
 			}
 		}
-
-		getTutors();
+		fetchData();
 	}, [assignmentId]);
 
-	if (error) {
-		return <div className="text-red-500">Error: {error}</div>;
+	useEffect(() => {
+		let sorted;
+		if (sortBy === "highest") {
+			sorted = [...tutors].sort((a, b) => averageRating(b.reviews) - averageRating(a.reviews));
+		} else if (sortBy === "lowest") {
+			sorted = [...tutors].sort((a, b) => averageRating(a.reviews) - averageRating(b.reviews));
+		}
+		if (sorted) {
+			setSortedTutors(sorted);
+		}
+	}, [sortBy, tutors]);
+
+	function averageRating(reviews: Review[]) {
+		if (reviews.length === 0) {
+			return 0;
+		}
+		return reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length;
 	}
+
+	const handlePreviousPage = () => {
+		if (page > 1) {
+			setPage(page - 1);
+			setStartIndex(startIndex - limit);
+			setEndIndex(endIndex - limit);
+		}
+	};
+
+	const handleNextPage = () => {
+		if (page < totalPages) {
+			setPage(page + 1);
+			setStartIndex(startIndex + limit);
+			setEndIndex(endIndex + limit);
+		}
+	};
+
+	const viewProfile = (id: number) => {
+		router.push(`/client/${clientId}/view_tutors/${id}/tutor_profile`);
+	};
+
+	const filteredTutors = sortedTutors.filter((tut) => tut.name.toLowerCase().includes(search.toLowerCase()));
+
+	const styles = {
+		tutorInfo: {
+			display: "flex",
+			flexDirection: "row" as "row",
+		},
+		tutorImage: {
+			width: "200px",
+			height: "200px",
+			borderRadius: "50%",
+			border: "1px solid #ddd",
+		},
+		detailItem: {
+			display: "block",
+			marginBottom: "8px",
+			font: "Poppins",
+			fontSize: "16px",
+			fontWeight: "bold",
+			textAlign: "justify" as "justify",
+		},
+		blueButton: {
+			backgroundColor: "#5790AB",
+			color: "#fff",
+			font: "Poppins",
+			fontWeight: "bold",
+			fontSize: "16px",
+		},
+		searchbar: {
+			width: "20%",
+			marginLeft: "auto",
+		},
+		sortSection: {
+			display: "flex",
+			justifyContent: "flex-start",
+			alignItems: "center",
+			padding: "10px 20px 20px 20px",
+			width: "100%",
+			borderBottom: "1px solid #5790AB",
+		},
+		sortText: {
+			fontSize: "20px",
+			fontWeight: "bold" as "bold",
+			font: "Poppins",
+			marginRight: "20px",
+			alignItems: "center",
+			display: "flex",
+		},
+		activeButton: {
+			backgroundColor: "#5790AB",
+			color: "#fff",
+			padding: "10px 20px",
+			borderRadius: "5px",
+			marginRight: "10px",
+			cursor: "pointer",
+			fontSize: "16px",
+			fontWeight: "bold",
+		},
+		inactiveButton: {
+			backgroundColor: "#fff",
+			color: "#5790AB",
+			padding: "10px 20px",
+			borderRadius: "5px",
+			marginRight: "10px",
+			border: "1px solid #5790AB",
+			fontSize: "16px",
+			fontWeight: "bold",
+		},
+		container: {
+			display: "flex",
+			flexDirection: "column" as "column",
+			justifyContent: "center",
+			alignItems: "center",
+			padding: "20px",
+			width: "75%",
+		},
+		main: {
+			display: "flex",
+			justifyContent: "center",
+			alignItems: "flex-start",
+			flex: "1",
+			border: "1px solid #5790AB",
+		},
+		imageSection: {
+			display: "flex",
+			borderColor: "#5790AB",
+			borderWidth: "0 1px 1px 0",
+			borderStyle: "solid",
+			padding: "20px 15px 20px 15px",
+			alignItems: "center",
+			justifyContent: "center",
+		},
+		detailSection: {
+			padding: "20px 15px 20px 25px",
+			display: "flex",
+			flexDirection: "column" as "column",
+			borderColor: "#5790AB",
+			borderWidth: "0 0 1px 0",
+			borderStyle: "solid",
+		},
+		detailHeader: {
+			display: "flex",
+			justifyContent: "space-between",
+			alignItems: "center",
+		},
+		buttons: {
+			marginLeft: "auto",
+			gap: "10px",
+		},
+		profileName: {
+			fontSize: "24px",
+			fontWeight: "bold" as "bold",
+			font: "Poppins",
+			marginTop: "2px",
+		},
+		tutorText: {
+			fontSize: "16px",
+			fontWeight: "normal" as "normal",
+			font: "Poppins",
+			color: "#909090",
+			marginBottom: "10px",
+		},
+		detailContainer: {
+			display: "grid",
+			gridTemplateColumns: "2fr 6fr",
+			width: "100%",
+		},
+		title: {
+			fontSize: "32px",
+			textAlign: "center" as "center",
+			fontWeight: "bold",
+			padding: "20px",
+		},
+	};
 
 	return (
 		<div className="flex flex-col min-h-screen">
-			<NavBar />
-			<div className="container mx-auto p-6 flex flex-col items-center flex-grow">
-				<h1 className="text-4xl font-bold mb-8 text-center">
-					Available Tutors
-				</h1>
-				{tutors.length === 0 ? (
-					<p className="text-gray-500 text-center">
-						No tutors available.
-					</p>
-				) : (
-					<div className="grid grid-cols-1 gap-8">
-						{tutors.map((tutor) => (
-							<div
-								key={tutor.id}
-								className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow w-full max-w-6xl"
-							>
-								<div className="mt-4">
-									<h3 className="text-xl font-semibold mb-2">
-										Tutor Information
-									</h3>
-									<p className="text-gray-700 mb-1">
-										<strong>Name:</strong> {tutor.name}
-									</p>
-									<p className="text-gray-700 mb-1">
-										<strong>Contact Number:</strong>{" "}
-										{tutor.contactNumber}
-									</p>
-									<p className="text-gray-700 mb-1">
-										<strong>Date of Birth:</strong>{" "}
-										{new Date(
-											tutor.dateOfBirth
-										).toLocaleDateString()}
-									</p>
-									<p className="text-gray-700 mb-1">
-										<strong>Gender:</strong> {tutor.gender}
-									</p>
-									<p className="text-gray-700 mb-1">
-										<strong>Age:</strong> {tutor.age}
-									</p>
-									<p className="text-gray-700 mb-1">
-										<strong>Nationality:</strong>{" "}
-										{tutor.nationality}
-									</p>
-									<p className="text-gray-700 mb-1">
-										<strong>Race:</strong> {tutor.race}
-									</p>
-									<p className="text-gray-700 mb-1">
-										<strong>Type of Tutor:</strong>{" "}
-										{tutor.typeOfTutor}
-									</p>
-									<p className="text-gray-700 mb-1">
-										<strong>Years of Experience:</strong>{" "}
-										{tutor.yearsOfExperience}
-									</p>
-									<p className="text-gray-700 mb-1">
-										<strong>
-											Highest Education Level:
-										</strong>{" "}
-										{tutor.highestEducationLevel}
-									</p>
-									{/* <p className="text-gray-700 mb-1"><strong>Location:</strong> {tutor.location}</p> Display location */}
-								</div>
-								<button
-									className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors w-full"
-									onClick={() => acceptTutor(tutor)}
-								>
-									Accept Tutor
-								</button>
-								{error2 && <Alert>{error2}</Alert>}
-							</div>
-						))}
+			<div style={styles.main}>
+				<div style={styles.container}>
+					<h1 style={styles.title}>Available Tutors</h1>
+					<div style={styles.sortSection}>
+						<div style={styles.sortText}>Sort by:</div>
+						<Button style={sortBy == "highest" ? styles.activeButton : styles.inactiveButton} onClick={() => setSortBy("highest")}>
+							Highest
+						</Button>
+						<Button style={sortBy == "lowest" ? styles.activeButton : styles.inactiveButton} onClick={() => setSortBy("lowest")}>
+							Lowest
+						</Button>
+						<Input
+							placeholder="Search by name"
+							value={search}
+							onChange={(e) => setSearch(e.target.value)}
+							type="search"
+							style={styles.searchbar}
+						/>
 					</div>
-				)}
+					{loading && <Loading />}
+					{!loading && filteredTutors.length === 0 ? (
+						<Nothing message={"No available tutors"} imageSrc={"/images/teacher.png"} imageAlt={"tutor"} />
+					) : (
+						<>
+							{filteredTutors.slice(startIndex, endIndex).map((tutor: Tutor) => (
+								<div style={styles.detailContainer} key={tutor.id}>
+									<div style={styles.imageSection}>
+										<Image
+											src={tutor.image ? tutor.image : "/images/Blank Profile Photo.jpg"}
+											alt={tutor.name}
+											width={180}
+											height={180}
+											style={styles.tutorImage}
+										/>
+									</div>
+									<div style={styles.detailSection}>
+										<div style={styles.detailHeader}>
+											<div>
+												<h2 style={styles.profileName}>{tutor.name}</h2>
+											</div>
+											<div style={styles.buttons}>
+												<Button style={styles.blueButton} onClick={() => viewProfile(tutor.id)}>
+													View Profile
+												</Button>
+												<OfferForm tutor={tutor} assignmentId={assignmentId} clientId={clientId} />
+											</div>
+										</div>
+										<p style={styles.tutorText}>
+											{tutor.typeOfTutor}, {tutor.gender}, {tutor.race}
+										</p>
+										<div style={{ marginBottom: "10px" }}>
+											<SmallStarRating rating={averageRating(tutor.reviews)} starSize="24px" />
+										</div>
+										<p style={styles.detailItem}>
+											Years of Experience: <span className="font-normal">{tutor.yearsOfExperience} years</span>
+										</p>
+										<p style={styles.detailItem}>
+											Highest Qualification: <span className="font-normal">{tutor.highestEducationLevel}</span>
+										</p>
+										{tutor.introduction && (
+											<p style={styles.detailItem}>
+												About Me: <span className="font-normal">{tutor.introduction}</span>
+											</p>
+										)}
+									</div>
+								</div>
+							))}
+							<Pagination style={{ padding: "10px", fontSize: "16px" }}>
+								<PaginationContent>
+									<PaginationItem>
+										<PaginationPrevious onClick={handlePreviousPage} />
+									</PaginationItem>
+									<PaginationItem>
+										<PaginationLink>{page}</PaginationLink>
+									</PaginationItem>
+									<PaginationItem>
+										<PaginationNext onClick={handleNextPage} />
+									</PaginationItem>
+								</PaginationContent>
+							</Pagination>
+						</>
+					)}
+				</div>
 			</div>
 			<Footer />
 		</div>

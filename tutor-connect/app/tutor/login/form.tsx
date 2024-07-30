@@ -44,14 +44,12 @@ export const Form = () => {
 						email,
 					}),
 					headers: {
-						"Content-Type": "application/json",
+						"Content-Type": "application/data.idson",
 					},
 				});
 				const data = await response.json();
 				if (data?.id) {
-					router.push(
-						`/tutor/${data.id}/view_assignments`
-					);
+					window.location.href = `/tutor/${data.id}/view_assignments`;
 				} else {
 					setError("Failed to retrieve user information");
 				}
@@ -61,6 +59,16 @@ export const Form = () => {
 			}
 		} catch (err: any) {}
 	};
+
+	const blueButton = {
+		backgroundColor: "#5790AB",
+		color: "#fff",
+		font: "Poppins",
+		fontWeight: "bold",
+		fontSize: "16px",
+		width: "100%",
+	};
+
 	return (
 		<form onSubmit={onSubmit} className="space-y-4 w-full sm:w-[400px]">
 			<div className="grid w-full items-center gap-1.5">
@@ -85,7 +93,7 @@ export const Form = () => {
 			</div>
 			{error && <Alert>{error}</Alert>}
 			<div className="w-full py-1">
-				<Button className="w-full" size="lg">
+				<Button style={blueButton}>
 					Log in
 				</Button>
 			</div>
