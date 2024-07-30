@@ -72,7 +72,7 @@ export const Filter: React.FC<FilterProps> = ({ assignments, setFilteredAssignme
 			return "North East";
 		} else if (latitude > 1.38 && longitude < 103.85) {
 			return "North West";
-		} else if (latitude > 1.35) {
+		} else if (latitude > 1.38) {
 			return "North";
 		} else if (latitude < 1.25) {
 			return "South";
