@@ -149,7 +149,6 @@ export const AllAssignments: React.FC<AllAssignmentsProps> = ({ assignments, fil
 		setCenter({ lat: latitude, lng: longitude });
 		setZoom(15);
 	};
-
 	const filteredMarkers = markers.filter((marker) => filteredAssignments.some((assignment) => assignment.id === marker.assignment.id));
 
 	if (error) {
