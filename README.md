@@ -1,42 +1,19 @@
 # TutorConnect
-Please don't flame my Orbital
+Welcome to TutorConnect, the No. 1 platform for matching tutors and clients.
+Please refer to the [TutorConnect README](https://docs.google.com/document/d/1rj6MWFLKFyx1OSHklbfvJHT1SNxgvtb6uzkBuf5D2Jo/edit?usp=sharing) for more details. 
 
-Description:
+## About
+TutorConnect is a centralized platform designed to connect students and parents with qualified tutors based on individual needs and preferences. It streamlines the tutor-student matching process through a range of features including user account authentication, a comprehensive onboarding process for tutors, assignment posting and application functionalities, integrated messaging for seamless communication, and a feedback and review system to maintain quality and transparency. The platform also incorporates features like Google Maps integration to display assignment locations and a secure payment system to facilitate transactions, ultimately enhancing the overall learning experience and fostering a supportive educational community.
 
-Documentation:
-
-To set up locally:
-
-Install:
-1. postgresSQL https://www.postgresql.org/download/
-2. pgadmin4 https://www.pgadmin.org/download/pgadmin-4-windows/
-3. Follow the following video to set up pgadmin: https://www.youtube.com/watch?v=_ER9jHiylAo
-
-Type in command prompt
-1. cd tutor-connect
-   
-2. create .env file
-   
-3. Write in .env file:
--> DATABASE_URL = "postgresql://postgres:{database_password}@localhost:5432/{database_name}?schema=public" (Follow the following instructions to set up prisma: https://www.youtube.com/watch?v=_ER9jHiylAo)
-   
--> NEXTAUTH_SECRET = secret
-
--> NEXTAUTH_URL = http://localhost:3000
-
--> MAIL_HOST = "gmail"
-
--> MAIL_USERNAME = "{your own gmail}"
-
--> MAIL_PASSWORD="{Auto generated password}" (Refer to https://support.google.com/mail/answer/185833?hl=en for more details)
-   
-4. npm install
-
-To run:
-1. npm run dev
-
-
-Use Cases: TODO
-
-
- For any queries, please join the TutorConnect Help group via https://t.me/+pWSjbAhuNIphNmE1 .
+## Features implemented:
+1. Registration with NextAuth 2FA
+2. Posting Assignments
+3. Assignment Application
+4. Google Maps API + Filter Assignments
+5. Chat System
+6. Searching for tutors/clients
+7. Feedback and Review System
+8. Payment System
+9. Notifications System
+10. FAQ + Rates Page
+11. Contact Us Page
