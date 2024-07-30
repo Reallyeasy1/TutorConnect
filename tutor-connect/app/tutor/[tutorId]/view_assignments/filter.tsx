@@ -86,7 +86,7 @@ export const Filter: React.FC<FilterProps> = ({ assignments, setFilteredAssignme
 	}
 
 	const search = () => {
-		console.log(assignments)
+		console.log(assignments);
 		let filtered = assignments.filter(
 			(assignment: Assignment) =>
 				(!gender || assignment.gender === gender || assignment.gender === "No Preference") &&

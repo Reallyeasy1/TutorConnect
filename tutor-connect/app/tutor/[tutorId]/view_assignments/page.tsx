@@ -63,9 +63,10 @@ export default async function ViewAssignments() {
 		price: `$${assignment.minRate}`,
 		assignment: assignment,
 	}));
-	
+
 	const markerResults = await Promise.all(markerPromises);
 	const validMarkers = markerResults.filter((result) => result !== null);
+	console.log(assignmentsData)
 
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
