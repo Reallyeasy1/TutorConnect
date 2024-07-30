@@ -50,17 +50,20 @@ export default async function ViewAssignments() {
 	}
 
 	const assignmentsData = await assignmentsRes.json();
+
 	const availableAssignments = assignmentsData.filter((assignment: Assignment) => {
 		const isAvailable = assignment.taken === false && !assignment.tutorId;
 		const tutorApplied = assignment.avail_tutors && assignment.avail_tutors.some(tutor => tutor.id === session.user.id);
 		return isAvailable && !tutorApplied;
 	});
+
 	const markerPromises = availableAssignments.map((assignment: Assignment) => ({
 		lat: assignment.coordinates[0],
 		lng: assignment.coordinates[1],
 		price: `$${assignment.minRate}`,
 		assignment: assignment,
 	}));
+	
 	const markerResults = await Promise.all(markerPromises);
 	const validMarkers = markerResults.filter((result) => result !== null);
 
