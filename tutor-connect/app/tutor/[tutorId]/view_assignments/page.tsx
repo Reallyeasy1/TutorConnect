@@ -43,6 +43,7 @@ export default async function ViewAssignments() {
 		headers: {
 			"Content-Type": "application/json",
 		},
+		cache: "no-cache",
 	});
 
 	if (!assignmentsRes.ok) {
