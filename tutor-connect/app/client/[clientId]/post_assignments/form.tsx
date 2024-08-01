@@ -122,6 +122,16 @@ export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) =
 			newLevel = level;
 		}
 
+		if (maxRate > minRate) {
+			setError("Max rate must be greater than min rate");
+			return;
+		}
+
+		if (postalCode.length !== 6) {
+			setError("Please enter a valid postal code");
+			return;
+		}
+
 		let locationString = null;
 		if (address) {
 			locationString = await geocodeAddress(address);
@@ -138,6 +148,11 @@ export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) =
 
 		if (typeOfTutor.length === 0) {
 			setError("Please select at least one type of tutor");
+			return;
+		}
+
+		if (race.length === 0) {
+			setError("Please select a race")
 			return;
 		}
 
