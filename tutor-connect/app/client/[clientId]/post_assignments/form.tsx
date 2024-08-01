@@ -132,6 +132,15 @@ export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) =
 			return;
 		}
 
+		if (frequency === "") {
+			setError("Please enter frequency");
+			return;
+		}
+
+		if (duration === "") {
+			setError("Please enter duration");
+		}
+
 		let locationString = null;
 		if (address) {
 			locationString = await geocodeAddress(address);
@@ -152,7 +161,7 @@ export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) =
 		}
 
 		if (race.length === 0) {
-			setError("Please select a race")
+			setError("Please select a race");
 			return;
 		}
 
