@@ -38,8 +38,11 @@ export default async function ViewAssignments() {
 		redirect("/tutor/invalid_session");
 	}
 
-	const assignmentsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/assignments`, {
-		method: "GET",
+	const assignmentsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tutor/viewAssignments`, {
+		method: "POST",
+		body: JSON.stringify({
+			tutorId: session.user.id,
+		}),
 		headers: {
 			"Content-Type": "application/json",
 		},
@@ -51,13 +54,9 @@ export default async function ViewAssignments() {
 
 	const assignmentsData = await assignmentsRes.json();
 
-	const availableAssignments = assignmentsData.filter((assignment: Assignment) => {
-		const isAvailable = assignment.taken === false && !assignment.tutorId;
-		const tutorApplied = assignment.avail_tutors && assignment.avail_tutors.some(tutor => tutor.id === session.user.id);
-		return isAvailable && !tutorApplied;
-	});
+	const availableAssignments = assignmentsData.assignments.filter((assignment: Assignment) => assignment.taken === false && !assignment.tutorId);
 
-	const markerPromises = availableAssignments.map((assignment: Assignment) => ({
+	const markerPromises = assignmentsData.assignments.map((assignment: Assignment) => ({
 		lat: assignment.coordinates[0],
 		lng: assignment.coordinates[1],
 		price: `$${assignment.minRate}`,
@@ -70,7 +69,7 @@ export default async function ViewAssignments() {
 
 	return (
 		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
-			<AllAssignments assignments={assignmentsData} marker={validMarkers} filtered={availableAssignments} tutorId={session.user.id} />
+			<AllAssignments assignments={availableAssignments} marker={validMarkers} filtered={availableAssignments} tutorId={session.user.id} />
 			<Footer />
 		</div>
 	);

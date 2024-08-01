@@ -8,12 +8,14 @@ export async function POST(req: Request) {
 		const assignments = await prisma.assignment.findMany({
 			where: {
 				avail_tutors: {
-					some: {
+					none: {
 						id: parseInt(tutorId),
 					},
 				},
 			},
 			include: {
+				client: true,
+				tutor: true,
 				avail_tutors: true,
 			},
 		});
