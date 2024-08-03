@@ -4,14 +4,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
 import { redirect } from "next/navigation";
 
+export const dynamic = 'force-dynamic'
+
 export default async function ViewTutorsPage() {
 	const session = await getServerSession(authOptions);
 
 	if (!session || !session.user.id || !session.user.name) {
 		redirect("/client/invalid_session");
 	}
-
-	const dynamic = 'force-dynamic'
 
 	const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tutor/allTutors`);
 
