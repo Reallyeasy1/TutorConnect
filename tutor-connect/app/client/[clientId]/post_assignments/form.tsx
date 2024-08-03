@@ -19,6 +19,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { levels, subjectsByLevel } from "@/utils/levelsAndSubjects";
+import Spinner from "@/components/ui/Spinner";
 
 interface ClientData {
 	address: string;
@@ -206,7 +207,6 @@ export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) =
 			});
 
 			if (res.ok) {
-				//TODO: Change to main page
 				alert("Assignment posted successfully!");
 				router.push(`/client/${clientId}/assignment/client_assignment`); // Use relative path
 			} else {
@@ -572,7 +572,7 @@ export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) =
 								Back
 							</Button>
 							<Button className="flex-1" style={blueButton} disabled={submit}>
-								{submit ? "Posting Assignment..." : "Post Assignment"}
+								{submit ? <><Spinner /> Posting Assignment...</> : "Post Assignment"}
 							</Button>
 						</CardFooter>
 					</Card>

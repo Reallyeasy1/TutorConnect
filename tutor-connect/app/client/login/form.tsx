@@ -3,6 +3,7 @@
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Spinner from "@/components/ui/Spinner";
 import { Label } from "@radix-ui/react-label";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
@@ -115,7 +116,7 @@ export const Form = () => {
 			</div>
 			{error && <Alert>{error}</Alert>}
 			<div className="w-full">
-				<Button style={blueButton} disabled={submit}>{submit ? "Logging in..." : "Log in"}</Button>
+				<Button style={blueButton} disabled={submit}>{submit ? <><Spinner /> Logging in...</> : "Log in"}</Button>
 			</div>
 		</form>
 	);

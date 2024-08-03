@@ -21,6 +21,7 @@ import { levels, subjectsByLevel } from "@/utils/levelsAndSubjects";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import { Client } from "@prisma/client";
+import Spinner from "@/components/ui/Spinner";
 
 type Tutor = {
 	id: number;
@@ -437,7 +438,7 @@ export const RequestForm: FC<RequestFormProps> = ({ client, tutor }) => {
 										Back
 									</Button>
 									<Button className="flex-1" disabled={submit}>
-										{submit ? "Sending Request..." : "Send Request"}
+										{submit ? <><Spinner /> Sending Request...</> : "Send Request"}
 									</Button>
 								</CardFooter>
 							</Card>

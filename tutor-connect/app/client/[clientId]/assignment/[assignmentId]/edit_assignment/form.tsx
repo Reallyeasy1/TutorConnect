@@ -20,6 +20,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { levels, subjectsByLevel } from "@/utils/levelsAndSubjects";
+import Spinner from "@/components/ui/Spinner";
 
 type Assignment = {
 	id: number;
@@ -568,12 +569,12 @@ export const UpdateAssignmentForm = () => {
 									Back
 								</Button>
 								<Button className="flex-1" style={whiteButton} disabled={submit || submit1}>
-									{submit ? "Updating..." : "Update Assignment"}
+									{submit ? <><Spinner /> Updating...</> : "Update Assignment"}
 								</Button>
 							</div>
 							<div className="w-full">
 								<Button variant="destructive" style={deleteButton} onClick={onDelete} disabled={submit || submit1}>
-									{submit1 ? "Deleting" : "Delete"}
+									{submit1 ? <><Spinner /> Deleting...</> : "Delete"}
 								</Button>
 							</div>
 						</CardFooter>

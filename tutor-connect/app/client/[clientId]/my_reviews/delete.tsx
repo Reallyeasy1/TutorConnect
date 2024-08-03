@@ -4,6 +4,7 @@ import { Dialog, DialogClose, DialogContent, DialogTrigger } from "@/components/
 import { Button } from "@/components/ui/button";
 import { FC, useState } from "react";
 import { useRouter } from "next/navigation";
+import Spinner from "@/components/ui/Spinner";
 
 interface ReviewFormProps {
 	reviewId: number;
@@ -72,7 +73,7 @@ export const DeletePopup: FC<ReviewFormProps> = ({ reviewId }) => {
 				</div>
 				<div className="flex justify-between space-x-2">
 					<Button onClick={deleteReview} variant="destructive" className="w-full" disabled={submit}>
-						{submit ? "Deleting..." : "Delete"}
+						{submit ? <><Spinner /> Deleting...</> : "Delete"}
 					</Button>
 					<DialogClose asChild>
 						<Button variant="outline" className="w-full" disabled={submit}>

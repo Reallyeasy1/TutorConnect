@@ -3,6 +3,7 @@
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Spinner from "@/components/ui/Spinner";
 import { Label } from "@radix-ui/react-label";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -98,7 +99,7 @@ export const Form = () => {
 			{error && <Alert>{error}</Alert>}
 			<div className="w-full py-1">
 				<Button style={blueButton} disabled={submit}>
-					{submit ? "Logging in..." : "Log in"}
+					{submit ? <><Spinner /> Logging in...</> : "Log in"}
 				</Button>
 			</div>
 		</form>

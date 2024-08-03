@@ -5,6 +5,7 @@ import { useStripe, useElements, PaymentElement } from "@stripe/react-stripe-js"
 import convertToSubcurrency from "@/lib/convertToSubcurrency";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import Spinner from "@/components/ui/Spinner";
 
 const CheckoutPage = ({
 	amount,
@@ -218,7 +219,7 @@ const CheckoutPage = ({
 			{clientSecret && <PaymentElement />}
 			{errorMessage && <div>{errorMessage}</div>}
 			<Button disabled={!stripe || loading} style={blueButton}>
-				{!loading ? "Pay" : "Processing..."}
+				{!loading ? "Pay" : <><Spinner /> Processing...</>}
 			</Button>
 			<Button style={whiteButton} onClick={testPay} type="button">
 				Test Pay

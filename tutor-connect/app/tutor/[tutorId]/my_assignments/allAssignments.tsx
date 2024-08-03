@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/customTabs";
 import { useState } from "react";
+import Spinner from "@/components/ui/Spinner";
 
 interface Assignment {
 	id: number;
@@ -371,10 +372,10 @@ export const AllAssignments: React.FC<AllAssignmentsProps> = ({ tutorId, offered
 												</div>
 												<div style={styles.buttons}>
 													<Button style={styles.whiteButton} onClick={() => acceptButton(assignment)} disabled={submit || submit1}>
-														{submit ? "Accepting" : "Accept"}
+														{submit ? <><Spinner /> Accepting...</> : "Accept"}
 													</Button>
 													<Button style={styles.rejectButton} onClick={() => rejectButton(assignment)} disabled={submit || submit1}>
-														{submit1 ? "Rejecting" : "Reject"}
+														{submit1 ? <><Spinner /> Rejecting...</> : "Reject"}
 													</Button>
 												</div>
 											</div>

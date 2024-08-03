@@ -4,6 +4,7 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Spinner from "@/components/ui/Spinner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -189,7 +190,7 @@ export const RegisterForm = () => {
 			</div>
 			{error && <Alert>{error}</Alert>}
 			<div className="w-full">
-				<Button style={blueButton} disabled={submit}>{submit ? "Registering..." : "Register"}</Button>
+				<Button style={blueButton} disabled={submit}>{submit ? <><Spinner /> Registering...</> : "Register"}</Button>
 			</div>
 		</form>
 	);

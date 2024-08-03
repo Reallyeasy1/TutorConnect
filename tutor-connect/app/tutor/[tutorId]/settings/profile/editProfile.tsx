@@ -15,6 +15,7 @@ import { PutBlobResult } from "@vercel/blob";
 import { subjectsByCategory } from "@/utils/levelsAndSubjects";
 import { locations } from "@/utils/locations";
 import { Tutor } from "@prisma/client";
+import Spinner from "@/components/ui/Spinner";
 
 type CheckedSubjects = {
 	"Pre-School": string[];
@@ -659,7 +660,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }
 										Reset Password
 									</Button>
 									<Button type="submit" style={profileCard.saveButton} disabled={submit}>
-										{submit ? "Saving Changes..." : "Save Changes"}
+										{submit ? <><Spinner /> Saving Changes...</> : "Save Changes"}
 									</Button>
 								</div>
 								{error1 && <p style={{ color: "red" }}>{error1}</p>}
@@ -804,7 +805,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }
 								</div>
 								<div style={profileCard.buttonContainer}>
 									<Button type="submit" style={profileCard.buttonFull} disabled={submit}>
-										{submit ? "Saving Changes..." : "Save Changes"}
+										{submit ? <><Spinner /> Saving Changes...</> : "Save Changes"}
 									</Button>
 								</div>
 								{error2 && <p style={{ color: "red" }}>{error2}</p>}
@@ -870,7 +871,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }
 								</div>
 								<div style={profileCard.buttonContainer}>
 									<Button type="submit" style={profileCard.buttonFull} disabled={submit}>
-										{submit ? "Saving Changes..." : "Save Changes"}
+										{submit ? <><Spinner /> Saving Changes...</> : "Save Changes"}
 									</Button>
 								</div>
 								{error3 && <p style={{ color: "red" }}>{error3}</p>}

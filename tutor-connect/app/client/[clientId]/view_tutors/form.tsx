@@ -8,6 +8,7 @@ import { FC, useState } from "react";
 import Image from "next/image";
 import { Alert } from "@/components/ui/alert";
 import { useParams, useRouter } from "next/navigation";
+import Spinner from "@/components/ui/Spinner";
 
 type Tutor = {
 	id: number;
@@ -270,7 +271,7 @@ export const ReviewForm: FC<ReviewFormProps> = ({ tutor, clientName, clientImage
 						</div>
 						{error && <Alert>{error}</Alert>}
 						<Button onClick={postReview} style={styles.blueButton} disabled={submit}>
-							{submit ? "Posting Review..." : "Post Review"}
+							{submit ? <><Spinner /> Posting Review...</> : "Post Review"}
 						</Button>
 					</div>
 					<div className="col-span-1" style={styles.guideSection}>

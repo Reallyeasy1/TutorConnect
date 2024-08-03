@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Alert } from "@/components/ui/alert";
+import Spinner from "@/components/ui/Spinner";
 
 export const ForgotPasswordForm = () => {
 	const [email, setEmail] = useState("");
@@ -71,7 +72,7 @@ export const ForgotPasswordForm = () => {
 				<CardFooter className="flex flex-col items-center space-y-2">
 					{error && <Alert>{error}</Alert>}
 					<Button style={blueButton} disabled={submit}>
-						{submit ? "Sending the email..." : "Reset Password"}
+						{submit ? <><Spinner /> Sending the email...</> : "Reset Password"}
 					</Button>
 					<Link className="text-sm text-indigo-500 hover:underline center" href="/tutor/login">
 						Back to Login

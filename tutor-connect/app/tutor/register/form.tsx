@@ -17,6 +17,7 @@ import jwt from "jsonwebtoken";
 import { subjectsByCategory } from "@/utils/levelsAndSubjects";
 import { locations } from "@/utils/locations";
 import { Alert } from "@/components/ui/alert";
+import Spinner from "@/components/ui/Spinner";
 
 type CheckedSubjects = {
 	"Pre-School": string[];
@@ -580,7 +581,7 @@ export const RegisterForm = () => {
 								Back
 							</Button>
 							<Button className="flex-1" style={blueButton} disabled={submit}>
-								{submit ? "Registering..." : "Register"}
+								{submit ? <><Spinner /> Registering...</> : "Register"}
 							</Button>
 						</CardFooter>
 					</Card>

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { Alert } from "@/components/ui/alert";
 import Footer from "@/components/footer/footer";
 import { Button } from "@/components/ui/button";
+import Spinner from "@/components/ui/Spinner";
 
 interface Assignment {
 	id: number;
@@ -184,7 +185,7 @@ export default function ViewAssignment() {
 										<strong>Status:</strong> {assignment.taken ? "Taken" : "Available"}
 									</p>
 									<Button style={blueButton} onClick={() => apply_assignment(assignment)} disabled={submit}>
-										{submit ? "Applying..." : "Apply Assignment?"}
+										{submit ? <><Spinner /> Applying...</> : "Apply Assignment?"}
 									</Button>
 									{error2 && <Alert>{error2}</Alert>}
 								</div>

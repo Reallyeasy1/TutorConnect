@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import type { PutBlobResult } from "@vercel/blob";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Spinner from "@/components/ui/Spinner";
 
 interface ClientData {
 	email: string;
@@ -331,7 +332,7 @@ export default function ProfilePage({ clientData }: { clientData: ClientData }) 
 								Reset Password
 							</Button>
 							<Button type="submit" style={profileCard.saveButton} disabled={submit}>
-								{submit ? "Saving Changes..." : "Save Changes"}
+								{submit ? <><Spinner /> Saving Changes...</> : "Save Changes"}
 							</Button>
 						</div>
 						{error && <p style={{ color: "red" }}>{error}</p>}

@@ -9,6 +9,7 @@ import Image from "next/image";
 import { Alert } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
 import { Client, Tutor } from "@prisma/client";
+import Spinner from "@/components/ui/Spinner";
 
 type Review = {
 	id: number;
@@ -271,7 +272,7 @@ export const EditReview: FC<ReviewFormProps> = ({ review }) => {
 						{error && <Alert>{error}</Alert>}
 						<div className="flex justify-between space-x-2">
 							<Button onClick={updateReview} style={styles.blueButton} disabled={submit}>
-								{submit ? "Saving Changes..." : "Save Changes"}
+								{submit ? <><Spinner /> Saving Changes...</> : "Save Changes"}
 							</Button>
 							<DialogClose asChild>
 								<Button variant="outline" className="w-full" style={styles.whiteButton} disabled={submit}>

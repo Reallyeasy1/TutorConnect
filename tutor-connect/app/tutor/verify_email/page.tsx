@@ -4,8 +4,11 @@ import Footer from "@/components/footer/footer";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
+import Spinner from "@/components/ui/Spinner";
+import { useState } from "react";
 
 export default function VerifyEmail() {
+	const [submit, setSubmit] = useState(false);
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const tutorId = searchParams.get("tutorId");
@@ -14,6 +17,7 @@ export default function VerifyEmail() {
 	};
 
 	const onClickResend = async () => {
+		setSubmit(true);
 		const response = await fetch("/api/tutor/getTutorDetails", {
 			method: "POST",
 			body: JSON.stringify({
@@ -37,12 +41,15 @@ export default function VerifyEmail() {
 			});
 
 			if (resendEmail.ok) {
-				console.log("Email sent successfully.");
+				alert("Email resent successfully. Please check your email.");
+				setSubmit(false);
 			} else {
 				console.log("Failed to send email.");
+				setSubmit(false);
 			}
 		} else {
 			console.log("Cannot find user email.");
+			setSubmit(false);
 		}
 	};
 
@@ -76,8 +83,8 @@ export default function VerifyEmail() {
 						<p>We have sent a verification link to your email. Please click on the link to verify your email.</p>
 					</CardContent>
 					<CardFooter className="flex justify-between space-x-2">
-						<Button style={whiteButton} className="flex-1" onClick={onClickResend}>
-							Resend Verification Email
+						<Button style={whiteButton} className="flex-1" onClick={onClickResend} disabled={submit}>
+							{submit ? <><Spinner /> Resending Email...</> : "Resend Verification Email"}
 						</Button>
 						<Button className="flex-1" style={blueButton} onClick={onClickLogin}>
 							Login
