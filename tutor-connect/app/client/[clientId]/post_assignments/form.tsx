@@ -139,6 +139,7 @@ export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) =
 
 		if (duration === "") {
 			setError("Please enter duration");
+			return;
 		}
 
 		let locationString = null;
