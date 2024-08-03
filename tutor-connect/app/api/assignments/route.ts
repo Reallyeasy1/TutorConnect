@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function POST() {
 	try {
 		const assignments = await prisma.assignment.findMany({
 			// where: { taken: false }, // Fetch only available assignments
