@@ -11,6 +11,8 @@ export default async function ViewTutorsPage() {
 		redirect("/client/invalid_session");
 	}
 
+	const dynamic = 'force-dynamic'
+
 	const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tutor/allTutors`);
 
 	if (!res.ok) {
