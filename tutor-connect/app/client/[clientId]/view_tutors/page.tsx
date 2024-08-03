@@ -4,8 +4,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
 import { redirect } from "next/navigation";
 
-export const dynamic = 'force-dynamic'
-
 export default async function ViewTutorsPage() {
 	const session = await getServerSession(authOptions);
 
