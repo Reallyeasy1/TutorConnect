@@ -186,6 +186,7 @@ export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) =
 					level: newLevel,
 					subject,
 					address,
+					unitNumber,
 					postalCode,
 					minRate,
 					maxRate,
