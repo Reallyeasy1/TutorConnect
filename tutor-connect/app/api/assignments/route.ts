@@ -1,20 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function GET() {
 	try {
-		const data = await req.json(); // Get the data from the request body
-
-		// You can use the data to create a new assignment, for example
-		const newAssignment = await prisma.assignment.create({
-			data: {
-				// Use the data from the request body
-				title: data.title,
-				description: data.description,
-				clientId: data.clientId,
-				tutorId: data.tutorId,
-				// Add other fields as necessary
-			},
+		const assignments = await prisma.assignment.findMany({
+			// where: { taken: false }, // Fetch only available assignments
 			include: {
 				client: true, // Include client details if needed
 				tutor: true, // Include tutor details if needed
@@ -22,8 +12,8 @@ export async function POST(req: Request) {
 			},
 		});
 
-		return new NextResponse(JSON.stringify(newAssignment), {
-			status: 201, // Created
+		return new NextResponse(JSON.stringify(assignments), {
+			status: 200,
 			headers: { "Content-Type": "application/json" },
 		});
 	} catch (err: any) {
