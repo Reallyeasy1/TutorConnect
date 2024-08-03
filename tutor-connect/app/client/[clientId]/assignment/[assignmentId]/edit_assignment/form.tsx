@@ -114,6 +114,7 @@ export const UpdateAssignmentForm = () => {
 						setGender(assignment.gender);
 						setRace(assignment.race);
 						setAvailability(assignment.availability);
+						setUnitNumber(assignment.unitNumber);
 					}
 				} else {
 					setError("Unexpected content type: " + contentType);
