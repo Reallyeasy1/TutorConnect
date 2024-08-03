@@ -122,7 +122,7 @@ export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) =
 			newLevel = level;
 		}
 
-		if (maxRate > minRate) {
+		if (maxRate < minRate) {
 			setError("Max rate must be greater than min rate");
 			return;
 		}
