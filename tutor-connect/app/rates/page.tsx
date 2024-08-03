@@ -51,7 +51,7 @@ export default function Rates() {
 			border: "1px solid #ddd",
 			display: "block",
 			margin: "auto",
-            backgroundColor: "#ffffff",
+			backgroundColor: "#ffffff",
 		},
 		table: {
 			width: "100%",
@@ -73,7 +73,7 @@ export default function Rates() {
 			textAlign: "center" as "center",
 			font: "Poppins",
 			fontSize: "16px",
-            backgroundColor: "#ffffff",
+			backgroundColor: "#ffffff",
 		},
 		level: {
 			backgroundColor: "#EFF8FA",
@@ -87,13 +87,12 @@ export default function Rates() {
 	};
 
 	return (
-		<div>
+		<div style={{ backgroundColor: "#fff" }}>
 			<div style={styles.ratesContainer}>
 				<div style={styles.title}>Home Tuition Rates</div>
 				<div style={styles.subtitle}>
-					To provide you with an understanding of how our pricing
-					structure aligns with your rates, please review our tuition
-					rates, which are based on current market standards.
+					To provide you with an understanding of how our pricing structure aligns with your rates, please review our tuition rates, which
+					are based on current market standards.
 				</div>
 				<table style={styles.table}>
 					<thead>
@@ -199,10 +198,8 @@ export default function Rates() {
 				<div style={styles.tutorContainer}>
 					<div style={styles.title}>Types of Home Tutors</div>
 					<div style={styles.subtitle}>
-						In this section, we break down the three main types of
-						home tutors you can find in Singapore, highlighting the
-						unique qualities of part-time tutors, full-time tutors,
-						and ex/current MOE teachers.
+						In this section, we break down the three main types of home tutors you can find in Singapore, highlighting the unique
+						qualities of part-time tutors, full-time tutors, and ex/current MOE teachers.
 					</div>
 					<table style={styles.table}>
 						<thead>
@@ -241,40 +238,27 @@ export default function Rates() {
 							<tr>
 								<th style={styles.tableHeader}>Part-Time Tutors</th>
 								<th style={styles.tableHeader}>Full-Time Tutors</th>
-								<th style={styles.tableHeader}>
-									Ex/Current MOE Teachers
-								</th>
+								<th style={styles.tableHeader}>Ex/Current MOE Teachers</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td style={styles.cell}>
-									0-3 Years of Experience
-								</td>
-								<td style={styles.cell}>
-									More than 3 Years of Experience
-								</td>
+								<td style={styles.cell}>0-3 Years of Experience</td>
+								<td style={styles.cell}>More than 3 Years of Experience</td>
 								<td style={styles.cell}>MOE & NIE Trained</td>
 							</tr>
 							<tr>
 								<td style={styles.cell}>Mostly Undergraduates</td>
 								<td style={styles.cell}>Mostly Graduates</td>
-								<td style={styles.cell}>
-									Familiar with the Latest MOE Syllabus &
-									Pedagogy
-								</td>
+								<td style={styles.cell}>Familiar with the Latest MOE Syllabus & Pedagogy</td>
 							</tr>
 							<tr>
 								<td style={styles.cell}>Good Academic Grades</td>
 								<td style={styles.cell}>Highly Experienced</td>
-								<td style={styles.cell}>
-									Vast Classroom Teaching Experience
-								</td>
+								<td style={styles.cell}>Vast Classroom Teaching Experience</td>
 							</tr>
 							<tr>
-								<td style={styles.cell}>
-									Most Budget Friendly Option
-								</td>
+								<td style={styles.cell}>Most Budget Friendly Option</td>
 								<td style={styles.cell}>Highest Commitment</td>
 								<td style={styles.cell}>Most Qualified</td>
 							</tr>

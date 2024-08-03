@@ -5,7 +5,7 @@ import Footer from "@/components/footer/footer";
 
 export default function UpdateAssignmentPage() {
 	return (
-		<div>
+		<div style={{ backgroundColor: "#fff" }}>
 			<div className="h-full w-screen flex flex-col justify-center items-center bg-navy-100 py-6">
 				<div style={{ padding: "20px", fontWeight: "bold", fontSize: "32px" }}>
 					<h1>Update Assignment here</h1>

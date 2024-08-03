@@ -146,7 +146,7 @@ export default function ViewAssignment() {
 	};
 
 	return (
-		<div className="flex flex-col min-h-screen">
+		<div className="flex flex-col min-h-screen" style={{ backgroundColor: "#fff" }}>
 			<div className="container mx-auto p-6 flex flex-col items-center flex-grow">
 				<h1 className="text-4xl font-bold mb-8 text-center">Tutee Assignment</h1>
 				{assignments.length === 0 ? (

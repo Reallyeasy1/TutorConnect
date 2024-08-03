@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -26,13 +26,13 @@ type CheckedSubjects = {
 };
 
 interface ShowSubjects {
-    [key: string]: boolean;
-  }
+	[key: string]: boolean;
+}
 
 type EditProfileProps = {
-    tutor: Tutor;
-    checked: CheckedSubjects;
-    show: ShowSubjects;
+	tutor: Tutor;
+	checked: CheckedSubjects;
+	show: ShowSubjects;
 };
 
 export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }) => {
@@ -63,7 +63,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }
 	const [summary, setSummary] = useState(tutor.summary ?? "");
 	const [studentsResults, setStudentsResults] = useState(tutor.studentsResults ?? "");
 
-    const handleMouseEnter = (index: number) => {
+	const handleMouseEnter = (index: number) => {
 		setHoverIndex(index);
 	};
 
@@ -472,6 +472,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }
 			border: "1px solid #ccc",
 			marginTop: "10px",
 			resize: "vertical" as "vertical",
+			backgroundColor: "#fff",
 		},
 		count: {
 			fontSize: "12px",

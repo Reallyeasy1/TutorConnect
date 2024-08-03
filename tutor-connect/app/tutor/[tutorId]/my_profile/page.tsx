@@ -39,7 +39,7 @@ export default async function TutorProfile() {
 	const reviewsData = await reviewsRes.json();
 
 	return (
-		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
+		<div className="relative min-h-screen flex flex-col bg-cover bg-center" style={{ backgroundColor: "#fff" }}>
 			<Profile tutor={tutorData} reviews={reviewsData.reviews} averageRating={reviewsData.averageRating} />
 			<Footer />
 		</div>

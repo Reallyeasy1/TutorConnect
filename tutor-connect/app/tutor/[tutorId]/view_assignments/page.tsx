@@ -69,7 +69,7 @@ export default async function ViewAssignments() {
 	console.log(assignmentsData)
 
 	return (
-		<div className="relative min-h-full flex flex-col bg-cover bg-center">
+		<div className="relative min-h-full flex flex-col bg-cover bg-center" style={{ backgroundColor: "#fff" }}>
 			<AllAssignments assignments={availableAssignments} marker={validMarkers} filtered={availableAssignments} tutorId={session.user.id} />
 			<Footer />
 		</div>

@@ -246,7 +246,7 @@ export default function AvailTutors() {
 	};
 
 	return (
-		<div className="flex flex-col min-h-screen">
+		<div className="flex flex-col min-h-screen" style={{ backgroundColor: "#fff" }}>
 			<div style={styles.main}>
 				<div style={styles.container}>
 					<h1 style={styles.title}>Available Tutors</h1>

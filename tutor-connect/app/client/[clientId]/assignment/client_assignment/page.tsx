@@ -29,7 +29,7 @@ export default async function MyAssignments() {
 	const assignmentsData = await res.json();
 
 	return (
-		<div className="flex flex-col min-h-screen">
+		<div className="flex flex-col min-h-screen" style={{ backgroundColor: "#fff" }}>
 			<AllAssignments assignments={assignmentsData.assignments} clientId={session.user.id} />
 			<Footer />
 		</div>

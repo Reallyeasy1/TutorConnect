@@ -38,7 +38,7 @@ export default function Chat() {
   }, [clientId, router]);
 
   return (
-    <div>
+    <div style={{ backgroundColor: "#fff" }}>
       {done !== "done" ? ( // Waiting for access to be granted
         <h1>Verifying token..... Please wait</h1>
       ) : (<div>

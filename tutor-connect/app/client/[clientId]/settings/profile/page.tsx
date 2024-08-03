@@ -41,7 +41,7 @@ export default async function ProfilePage() {
 	};
 
 	return (
-		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
+		<div className="relative min-h-screen flex flex-col bg-cover bg-center" style={{ backgroundColor: "#fff" }}>
 			<div style={container} className="py-6">
 				<SideBar />
 				<Profile clientData={clientData} />

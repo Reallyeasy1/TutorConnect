@@ -93,7 +93,7 @@ export default function FAQPage() {
 			justifyContent: "center",
 			alignItems: "flex-start",
 			flex: "1",
-			border: "1px solid #5790AB",
+			backgroundColor: "#fff",
 		},
 		blueButton: {
 			backgroundColor: "#5790AB",

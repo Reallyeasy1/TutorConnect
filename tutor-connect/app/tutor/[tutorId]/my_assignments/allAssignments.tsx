@@ -156,7 +156,6 @@ export const AllAssignments: React.FC<AllAssignmentsProps> = ({ tutorId, offered
 			justifyContent: "center",
 			alignItems: "flex-start",
 			flex: "1",
-			border: "1px solid #5790AB",
 		},
 		noOffer: {
 			fontSize: "24px",

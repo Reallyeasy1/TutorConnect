@@ -29,7 +29,7 @@ export default async function NotificationsPage() {
 	const clientData = await res.json();
 
 	return (
-		<div className="flex flex-col min-h-screen">
+		<div className="flex flex-col min-h-screen" style={{ backgroundColor: "#fff" }}>
 			<Notifications notifs={clientData.notifications} clientId={session.user.id} />
 			<Footer />
 		</div>

@@ -15,7 +15,7 @@ export default function InvalidSession() {
 	}, []);
 
 	return (
-		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
+		<div className="relative min-h-screen flex flex-col bg-cover bg-center" style={{ backgroundColor: "#fff" }}>
 			<div className="flex-grow flex justify-center items-center py-6">
 				<Card className="w-[500px]">
 					<CardHeader>

@@ -28,7 +28,7 @@ export default async function TutorNotifications() {
 	const tutorData = await res.json();
 
 	return (
-		<div className="flex flex-col min-h-screen">
+		<div className="flex flex-col min-h-screen" style={{ backgroundColor: "#fff" }}>
 			<Notifications tutorId={session.user.id} notifs={tutorData.notifications}/>
 			<Footer />
 		</div>

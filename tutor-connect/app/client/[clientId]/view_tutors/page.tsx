@@ -27,7 +27,7 @@ export default async function ViewTutorsPage() {
 	const clientData = await clientRes.json();
 
 	return (
-		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
+		<div className="relative min-h-screen flex flex-col bg-cover bg-center" style={{ backgroundColor: "#fff" }}>
 			<AllTutors allTutors={tutorsData.tutors} client={clientData}/>
 			<Footer />
 		</div>

@@ -29,7 +29,7 @@ export default async function PostAssignmentPage() {
 
 	return (
 		<div>
-			<div className="h-full w-screen flex justify-center items-center bg-navy-100 py-6">
+			<div className="h-full w-screen flex justify-center items-center bg-navy-100 py-6" style={{ backgroundColor: "#fff" }}>
 				<div className="sm:shadow-xl px-8 pb-8 pt-8 sm:bg-white rounded-xl space-y-5">
 					<div className="flex items-center justify-center">
 						<Logo />

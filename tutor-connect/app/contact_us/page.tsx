@@ -6,10 +6,10 @@ import BlueBackground from "./BlueBackground";
 import { ContactUsForm } from "./form";
 import Footer from "@/components/footer/footer";
 
-export default function RegisterPage() {
+export default function ContactUsPage() {
 	return (
 		<div>
-			<div className="relative min-h-screen flex flex-col bg-cover bg-center mt-1">
+			<div className="relative min-h-screen flex flex-col bg-cover bg-center" style={{ backgroundColor: "#fff" }}>
 				<ContactUsHeader />
 				<div className="flex-grow flex flex-col items-center w-full py-6 mt-[-3.5%]">
 					{/* Make the below component  */}

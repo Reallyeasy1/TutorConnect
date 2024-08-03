@@ -11,6 +11,8 @@ export default function HomePage() {
 			margin: 0,
 			padding: 0,
 			boxSizing: "border-box" as "border-box",
+			backgroundColor: "#fff",
+			marginTop: "1em",
 		},
 		sectionContainer: {
 			width: "85%",

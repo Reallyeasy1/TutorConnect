@@ -14,7 +14,7 @@ export default function RegisterPage() {
 	};
 
 	return (
-		<div className="relative min-h-screen flex flex-col bg-cover bg-center">
+		<div className="relative min-h-screen flex flex-col bg-cover bg-center" style={{ backgroundColor: "#fff" }}>
 			<div className="flex-grow flex justify-center items-center py-6">
 				<div className="bg-white shadow-xl rounded-xl p-8 space-y-6 max-w-md w-full">
 					<div className="flex flex-col items-center space-y-2">

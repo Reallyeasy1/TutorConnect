@@ -89,6 +89,7 @@ const NavBar = ({ userImage, userName, userRole, userId, userNotifications }: Na
 		alignItems: "center",
 		width: "100%",
 		top: 0,
+		marginBottom: "6px"
 	};
 
 	const registerButton = {

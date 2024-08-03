@@ -39,7 +39,7 @@ export default async function MyReviews() {
 	const appliedData = await apply.json();
 	
 	return (
-		<div className="flex flex-col min-h-screen">
+		<div className="flex flex-col min-h-screen" style={{ backgroundColor: "#fff" }}>
 			<AllAssignments tutorId={session.user.id} offered={offeredData.assignments} applied={appliedData.assignments} />
 			<Footer />
 		</div>

@@ -28,7 +28,7 @@ export default async function MyReviews() {
 	const clientData = await res.json();
 
 	return (
-		<div className="flex flex-col min-h-screen">
+		<div className="flex flex-col min-h-screen" style={{ backgroundColor: "#fff" }}>
 			<Reviews reviewData={clientData.reviews} />
 			<Footer />
 		</div>
