@@ -30,16 +30,16 @@ export async function DELETE(req: Request) {
             );
         }
 
-        const assignment = await prisma.assignment.delete({
-            where: { id: assignmentIdNumber },
-        });
-
         const clientNotif = await prisma.clientNotification.deleteMany({
-            where: { assignmentId: null },
+            where: { assignmentId: assignmentIdNumber },
         });
 
         const tutorNotif = await prisma.tutorNotification.deleteMany({
-            where: { assignmentId: null },
+            where: { assignmentId: assignmentIdNumber },
+        });
+
+        const assignment = await prisma.assignment.delete({
+            where: { id: assignmentIdNumber },
         });
 
         return new NextResponse(
