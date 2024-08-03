@@ -53,12 +53,15 @@ export const AllAssignments: React.FC<AllAssignmentsProps> = ({ tutorId, offered
 	const [appliedAssignments, setAppliedAssignments] = useState<Assignment[]>(applied.filter((assignment: Assignment) => !assignment.taken));
 	const [acceptedAssignments, setAcceptedAssignments] = useState<Assignment[]>(offered.filter((assignment: Assignment) => assignment.taken));
 	const router = useRouter();
+	const [submit, setSubmit] = useState(false);
+	const [submit1, setSubmit1] = useState(false);
 
 	const findAssignments = () => {
 		router.push(`/tutor/${tutorId}/view_assignments`);
 	};
 
 	const acceptButton = async (assignment: Assignment) => {
+		setSubmit(true);
 		try {
 			const response = await fetch("/api/tutor/acceptOffer", {
 				method: "POST",
@@ -71,6 +74,7 @@ export const AllAssignments: React.FC<AllAssignmentsProps> = ({ tutorId, offered
 				},
 			});
 			if (!response.ok) {
+				setSubmit(false);
 				throw new Error("Failed to accept assignment");
 			}
 
@@ -92,10 +96,12 @@ export const AllAssignments: React.FC<AllAssignmentsProps> = ({ tutorId, offered
 			setAcceptedAssignments((prevAcceptedAssignments) => [...prevAcceptedAssignments, assignment]);
 		} catch (error) {
 			console.error("Error accepting assignment:", error);
+			setSubmit(false);
 		}
 	};
 
 	const rejectButton = async (assignment: Assignment) => {
+		setSubmit1(true);
 		try {
 			const response = await fetch("/api/tutor/rejectAssignment", {
 				method: "POST",
@@ -108,6 +114,7 @@ export const AllAssignments: React.FC<AllAssignmentsProps> = ({ tutorId, offered
 				},
 			});
 			if (!response.ok) {
+				setSubmit1(false);
 				throw new Error("Failed to reject assignment");
 			}
 
@@ -124,14 +131,12 @@ export const AllAssignments: React.FC<AllAssignmentsProps> = ({ tutorId, offered
 				},
 			});
 
-			if (!notif.ok) {
-				throw new Error("Failed to send notification");
-			}
 			alert("Assignment rejected successfully");
 			const updatedAssignments = offeredAssignments.filter((a) => a.id !== assignment.id);
 			setOfferedAssignments(updatedAssignments);
 		} catch (error) {
 			console.error("Error rejecting assignment:", error);
+			setSubmit1(false);
 		}
 	};
 
@@ -365,11 +370,11 @@ export const AllAssignments: React.FC<AllAssignmentsProps> = ({ tutorId, offered
 													</h2>
 												</div>
 												<div style={styles.buttons}>
-													<Button style={styles.whiteButton} onClick={() => acceptButton(assignment)}>
-														Accept
+													<Button style={styles.whiteButton} onClick={() => acceptButton(assignment)} disabled={submit || submit1}>
+														{submit ? "Accepting" : "Accept"}
 													</Button>
-													<Button style={styles.rejectButton} onClick={() => rejectButton(assignment)}>
-														Reject
+													<Button style={styles.rejectButton} onClick={() => rejectButton(assignment)} disabled={submit || submit1}>
+														{submit1 ? "Rejecting" : "Reject"}
 													</Button>
 												</div>
 											</div>

@@ -13,11 +13,13 @@ export const ResetPasswordForm = () => {
 	const [password, setPassword] = useState("");
 	const [password2, setPassword2] = useState("");
 	const [error, setError] = useState("");
+	const [submit, setSubmit] = useState(false);
 	const router = useRouter();
 	const { token } = useParams();
 
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setSubmit(true);
 
 		if (
 			password.length < 8 ||
@@ -29,11 +31,13 @@ export const ResetPasswordForm = () => {
 			setError(
 				"Your password must be at least 8 characters long, contain at least one number and one special character, and have a mixture of uppercase and lowercase letters."
 			);
+			setSubmit(false);
 			return;
 		}
 
 		if (password !== password2) {
 			setError("Passwords do not match");
+			setSubmit(false);
 			return;
 		}
 
@@ -53,12 +57,12 @@ export const ResetPasswordForm = () => {
 				router.push("/tutor/login");
 			} else {
 				setError((await res.json()).error);
+				setSubmit(false);
 			}
 		} catch (error: any) {
 			setError(error?.message);
+			setSubmit(false);
 		}
-
-		console.log("Reset Password!");
 	};
 
 	const blueButton = {
@@ -90,7 +94,7 @@ export const ResetPasswordForm = () => {
 				</CardContent>
 				<CardFooter className="flex flex-col items-center space-y-2">
 					{error && <Alert>{error}</Alert>}
-					<Button style={blueButton}>Reset Password</Button>
+					<Button style={blueButton} disabled={submit}>{submit ? "Resetting Password..." : "Reset Password"}</Button>
 					<Link className="text-sm text-indigo-500 hover:underline center" href="/tutor/login">
 						Back to Login
 					</Link>

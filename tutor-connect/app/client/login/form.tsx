@@ -14,9 +14,11 @@ export const Form = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
+	const [submit, setSubmit] = useState(false);
 
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setSubmit(true);
 		try {
 			const res = await signIn("credentials", {
 				redirect: false,
@@ -78,12 +80,15 @@ export const Form = () => {
 					window.location.href = `/client/${data.id}/assignment/client_assignment`;
 				} else {
 					setError("Failed to retrieve user information");
+					setSubmit(false);
 				}
 			} else {
 				setError("Invalid email or password");
+				setSubmit(false);
 			}
 		} catch (err) {
 			setError("An error occurred during login");
+			setSubmit(false);
 			console.error(err);
 		}
 	};
@@ -110,7 +115,7 @@ export const Form = () => {
 			</div>
 			{error && <Alert>{error}</Alert>}
 			<div className="w-full">
-				<Button style={blueButton}>Log in</Button>
+				<Button style={blueButton} disabled={submit}>{submit ? "Logging in..." : "Log in"}</Button>
 			</div>
 		</form>
 	);

@@ -22,10 +22,12 @@ export const RegisterForm = () => {
 	const [unitNumber, setUnitNumber] = useState("");
 	const [postalCode, setPostalCode] = useState("");
 	const [error, setError] = useState<string | null>(null);
+	const [submit, setSubmit] = useState(false);
 	const router = useRouter();
 
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setSubmit(true);
 
 		if (
 			password.length < 8 ||
@@ -37,16 +39,19 @@ export const RegisterForm = () => {
 			setError(
 				"Your password must be at least 8 characters long, contain at least one number and one special character, and have a mixture of uppercase and lowercase letters."
 			);
+			setSubmit(false);
 			return;
 		}
 
 		if (contactNumber.length !== 8) {
 			setError("Contact number must be 8 digits");
+			setSubmit(false);
 			return;
 		}
 
 		if (postalCode.length !== 6) {
 			setError("Postal code must be 6 digits");
+			setSubmit(false);
 			return;
 		}
 
@@ -77,9 +82,9 @@ export const RegisterForm = () => {
 						"Content-Type": "application/json",
 					},
 				});
-				// const data = await response.json();
+				const data = await response.json();
 
-				// TODO: Mr Yong Zhe
+				/*
 				const data: StrapiResponseData = await response.json();
 
 				if (data?.id) {
@@ -125,14 +130,17 @@ export const RegisterForm = () => {
 				} else {
 					setError("Failed to retrieve user information");
 				}
+					*/
 
 				router.push("/client/verify_email?clientId=" + data.id);
 			} else {
 				const errorResponse = await res.json();
 				setError(errorResponse.error);
+				setSubmit(false);
 			}
 		} catch (error: any) {
 			setError(error.message);
+			setSubmit(false);
 		}
 
 		console.log("Register!");
@@ -181,7 +189,7 @@ export const RegisterForm = () => {
 			</div>
 			{error && <Alert>{error}</Alert>}
 			<div className="w-full">
-				<Button style={blueButton}>Register</Button>
+				<Button style={blueButton} disabled={submit}>{submit ? "Registering..." : "Register"}</Button>
 			</div>
 		</form>
 	);

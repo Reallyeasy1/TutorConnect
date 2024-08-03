@@ -11,10 +11,12 @@ interface ReviewFormProps {
 
 export const DeletePopup: FC<ReviewFormProps> = ({ reviewId }) => {
 	const [error, setError] = useState<string | null>(null);
+	const [submit, setSubmit] = useState(false);
 	const router = useRouter();
 
 	const deleteReview = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setSubmit(true);
 
 		try {
 			const res = await fetch("/api/client/delete_review", {
@@ -32,12 +34,16 @@ export const DeletePopup: FC<ReviewFormProps> = ({ reviewId }) => {
 				router.refresh();
 			} else {
 				setError((await res.json()).error);
+				alert(error);
+				setSubmit(false);
 			}
 		} catch (error: any) {
 			setError(error?.message);
+			alert(error?.message);
+			setSubmit(false);
 		}
 
-		console.log("Review Posted!");
+		console.log("Review Deleted!");
 	};
 
 	const styles = {
@@ -65,11 +71,11 @@ export const DeletePopup: FC<ReviewFormProps> = ({ reviewId }) => {
 					<p style={styles.text}>This action cannot be undone.</p>
 				</div>
 				<div className="flex justify-between space-x-2">
-					<Button onClick={deleteReview} variant="destructive" className="w-full">
-						Delete
+					<Button onClick={deleteReview} variant="destructive" className="w-full" disabled={submit}>
+						{submit ? "Deleting..." : "Delete"}
 					</Button>
 					<DialogClose asChild>
-						<Button variant="outline" className="w-full">
+						<Button variant="outline" className="w-full" disabled={submit}>
 							Cancel
 						</Button>
 					</DialogClose>

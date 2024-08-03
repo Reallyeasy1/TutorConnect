@@ -29,6 +29,7 @@ export const EditReview: FC<ReviewFormProps> = ({ review }) => {
 	const [rating, setRating] = useState(review.rating);
 	const [reviewText, setReviewText] = useState(review.review);
 	const [error, setError] = useState<string | null>(null);
+	const [submit, setSubmit] = useState(false);
 	const router = useRouter();
 
 	const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>, setState: React.Dispatch<React.SetStateAction<string>>) => {
@@ -47,14 +48,17 @@ export const EditReview: FC<ReviewFormProps> = ({ review }) => {
 
 	const updateReview = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setSubmit(true);
 
 		if (rating === 0) {
 			setError("Rating cannot be empty");
+			setSubmit(false);
 			return;
 		}
 
 		if (!reviewText || reviewText.trim() === "") {
 			setError("Review cannot be empty");
+			setSubmit(false);
 			return;
 		}
 
@@ -76,9 +80,11 @@ export const EditReview: FC<ReviewFormProps> = ({ review }) => {
 				router.refresh();
 			} else {
 				setError((await res.json()).error);
+				setSubmit(false);
 			}
 		} catch (error: any) {
 			setError(error?.message);
+			setSubmit(false);
 		}
 
 		console.log("Review Updated!");
@@ -264,11 +270,11 @@ export const EditReview: FC<ReviewFormProps> = ({ review }) => {
 						</div>
 						{error && <Alert>{error}</Alert>}
 						<div className="flex justify-between space-x-2">
-							<Button onClick={updateReview} style={styles.blueButton}>
-								Save Changes
+							<Button onClick={updateReview} style={styles.blueButton} disabled={submit}>
+								{submit ? "Saving Changes..." : "Save Changes"}
 							</Button>
 							<DialogClose asChild>
-								<Button variant="outline" className="w-full" style={styles.whiteButton}>
+								<Button variant="outline" className="w-full" style={styles.whiteButton} disabled={submit}>
 									Cancel
 								</Button>
 							</DialogClose>

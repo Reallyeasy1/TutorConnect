@@ -31,9 +31,10 @@ export const ReviewForm: FC<ReviewFormProps> = ({ tutor, clientName, clientImage
 	const [rating, setRating] = useState(0);
 	const [review, setReview] = useState("");
 	const [error, setError] = useState<string | null>(null);
-    const params = useParams();
-    const router = useRouter();
-    const clientId = params.clientId;
+	const [submit, setSubmit] = useState(false);
+	const params = useParams();
+	const router = useRouter();
+	const clientId = params.clientId;
 
 	const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>, setState: React.Dispatch<React.SetStateAction<string>>) => {
 		const text = event.target.value;
@@ -49,32 +50,36 @@ export const ReviewForm: FC<ReviewFormProps> = ({ tutor, clientName, clientImage
 		setRating(rate);
 	};
 
-    const postReview = async (e: React.FormEvent) => {
-        e.preventDefault();
+	const postReview = async (e: React.FormEvent) => {
+		e.preventDefault();
+		setSubmit(true);
 
 		if (clientName === "") {
 			setError("You must be logged in to post a review");
+			setSubmit(false);
 			return;
 		}
 
-        if (rating === 0) {
-            setError("Rating cannot be empty");
-            return;
-        }
+		if (rating === 0) {
+			setError("Rating cannot be empty");
+			setSubmit(false);
+			return;
+		}
 
-        if (!review || review.trim() === "") {
-            setError("Review cannot be empty");
-            return;
-        }
+		if (!review || review.trim() === "") {
+			setError("Review cannot be empty");
+			setSubmit(false);
+			return;
+		}
 
-        try {
-            const res = await fetch("/api/client/post_review", {
+		try {
+			const res = await fetch("/api/client/post_review", {
 				method: "POST",
 				body: JSON.stringify({
 					tutorId: tutor.id,
-                    clientId: clientId,
-                    review: review,
-                    rating: rating,
+					clientId: clientId,
+					review: review,
+					rating: rating,
 				}),
 				headers: {
 					"Content-Type": "application/json",
@@ -86,9 +91,11 @@ export const ReviewForm: FC<ReviewFormProps> = ({ tutor, clientName, clientImage
 				router.refresh();
 			} else {
 				setError((await res.json()).error);
+				setSubmit(false);
 			}
-        } catch (error: any) {
+		} catch (error: any) {
 			setError(error?.message);
+			setSubmit(false);
 		}
 
 		console.log("Review Posted!");
@@ -261,8 +268,10 @@ export const ReviewForm: FC<ReviewFormProps> = ({ tutor, clientName, clientImage
 							{!review || review.trim() === "" ? 0 : review.trim().split(/\s+/).length}
 							/100 words
 						</div>
-                        {error && <Alert>{error}</Alert>}
-						<Button  onClick={postReview} style={styles.blueButton}>Post Review</Button>
+						{error && <Alert>{error}</Alert>}
+						<Button onClick={postReview} style={styles.blueButton} disabled={submit}>
+							{submit ? "Posting Review..." : "Post Review"}
+						</Button>
 					</div>
 					<div className="col-span-1" style={styles.guideSection}>
 						<div style={styles.guideContainer}>

@@ -62,8 +62,11 @@ export const UpdateAssignmentForm = () => {
 	const [level, setLevel] = useState<Level | "">("");
 	const [otherLevel, setOtherLevel] = useState("");
 	const [subject, setSubject] = useState("");
+	const [submit, setSubmit] = useState(false);
+	const [submit1, setSubmit1] = useState(false);
 
 	const onDelete = async () => {
+		setSubmit1(true);
 		try {
 			const res = await fetch(`/api/client/deleteAssignment?id=${assignmentId}`, {
 				method: "DELETE",
@@ -73,9 +76,11 @@ export const UpdateAssignmentForm = () => {
 				router.push(`/client/${clientId}/assignment/client_assignment`); // Use relative path
 			} else {
 				setError((await res.json()).error);
+				setSubmit1(false);
 			}
 		} catch (error: any) {
 			setError(error?.message);
+			setSubmit1(false);
 		}
 	};
 
@@ -155,6 +160,7 @@ export const UpdateAssignmentForm = () => {
 
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setSubmit(true);
 		const postDate = Date.now();
 		let newLevel;
 		if (level === "Others") {
@@ -195,9 +201,11 @@ export const UpdateAssignmentForm = () => {
 				router.push(`/client/${clientId}/assignment/client_assignment`); // Use relative path
 			} else {
 				setError((await res.json()).error);
+				setSubmit(false);
 			}
 		} catch (error: any) {
 			setError(error?.message);
+			setSubmit(false);
 		}
 
 		console.log("Assignment posted!");
@@ -558,13 +566,13 @@ export const UpdateAssignmentForm = () => {
 								<Button onClick={onBack} className="flex-1" style={blueButton}>
 									Back
 								</Button>
-								<Button className="flex-1" style={whiteButton}>
-									Update Assignment
+								<Button className="flex-1" style={whiteButton} disabled={submit || submit1}>
+									{submit ? "Updating..." : "Update Assignment"}
 								</Button>
 							</div>
 							<div className="w-full">
-								<Button variant="destructive" style={deleteButton} onClick={onDelete}>
-									Delete
+								<Button variant="destructive" style={deleteButton} onClick={onDelete} disabled={submit || submit1}>
+									{submit1 ? "Deleting" : "Delete"}
 								</Button>
 							</div>
 						</CardFooter>

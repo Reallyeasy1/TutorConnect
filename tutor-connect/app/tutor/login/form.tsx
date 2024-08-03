@@ -17,15 +17,15 @@ import { useState } from "react";
 export const Form = () => {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-    //TODO: Add clientId to the query string
 	const callbackUrl = searchParams.get("callbackUrl") || "/tutor/view_assignments"; //change
-	//const error = searchParams.get('error') ? 'Invalid credentials' : ''
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
+	const [submit, setSubmit] = useState(false);
 
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setSubmit(true);
 
 		// Attempt to sign in using the signIn function from next-auth/react
 		try {
@@ -52,12 +52,16 @@ export const Form = () => {
 					window.location.href = `/tutor/${data.id}/view_assignments`;
 				} else {
 					setError("Failed to retrieve user information");
+					setSubmit(false);
 				}
 			} else {
 				// If there is an error, set the error state to the error message
 				setError("Invalid email or password");
+				setSubmit(false);
 			}
-		} catch (err: any) {}
+		} catch (err: any) {
+			setSubmit(false);
+		}
 	};
 
 	const blueButton = {
@@ -93,8 +97,8 @@ export const Form = () => {
 			</div>
 			{error && <Alert>{error}</Alert>}
 			<div className="w-full py-1">
-				<Button style={blueButton}>
-					Log in
+				<Button style={blueButton} disabled={submit}>
+					{submit ? "Logging in..." : "Log in"}
 				</Button>
 			</div>
 		</form>

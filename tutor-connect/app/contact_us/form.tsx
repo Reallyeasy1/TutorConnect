@@ -14,22 +14,27 @@ export const ContactUsForm = () => {
 	const [subject, setSubject] = useState("");
 	const [message, setMessage] = useState("");
 	const [error, setError] = useState<string | null>(null);
+	const [submit, setSubmit] = useState(false);
 
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setSubmit(true);
 
 		if (name.length === 0) {
 			setError("Name cannot be empty");
+			setSubmit(false);
 			return;
 		}
 
 		if (email.length === 0) {
 			setError("Email cannot be empty");
+			setSubmit(false);
 			return;
 		}
 
 		if (subject.length === 0) {
 			setError("Subject cannot be empty");
+			setSubmit(false);
 			return;
 		}
 
@@ -54,14 +59,17 @@ export const ContactUsForm = () => {
 				setEmail("");
 				setSubject("");
 				setMessage("");
+				setSubmit(false);
 			} else {
 				const errorResult = await res.json();
 				setError(errorResult.error);
 				alert(`Error: ${errorResult.error}`);
+				setSubmit(false);
 			}
 		} catch (error: any) {
 			setError(error.message);
 			alert(`Error: ${error.message}`);
+			setSubmit(false);
 		}
 	};
 

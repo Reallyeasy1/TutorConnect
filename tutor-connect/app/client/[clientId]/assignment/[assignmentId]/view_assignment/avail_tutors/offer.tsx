@@ -54,6 +54,7 @@ export const OfferForm: FC<OfferFormProps> = ({
   const [availability, setAvailability] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [assignment, setAssignment] = useState<Assignment | null>(null);
+  const [submit, setSubmit] = useState(false);
 
   useEffect(() => {
     async function fetchAssignment() {
@@ -80,14 +81,17 @@ export const OfferForm: FC<OfferFormProps> = ({
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmit(true);
 
     if (availability === "") {
       setError("Please enter availability");
+      setSubmit(false);
       return;
     }
 
     if (amount === 0 || amount > 500) {
       setError("Please enter a valid amount");
+      setSubmit(false);
       return;
     }
     
@@ -127,9 +131,11 @@ export const OfferForm: FC<OfferFormProps> = ({
       } else {
         const resData = await res.json();
         setError(resData.error);
+        setSubmit(false);
       }
     } catch (error: any) {
       setError(error?.message);
+      setSubmit(false);
     }
     console.log("Request sent!");
   };
@@ -236,7 +242,7 @@ export const OfferForm: FC<OfferFormProps> = ({
           )}
           {error && <div className="text-red-500">{error}</div>}
           <DialogFooter>
-            <Button style={styles.blueButton}>Send Offer</Button>
+            <Button style={styles.blueButton} disabled={submit}>{submit ? "Sending Offer..." : "Send Offer"}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

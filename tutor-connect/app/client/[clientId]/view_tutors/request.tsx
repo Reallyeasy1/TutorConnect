@@ -51,6 +51,7 @@ export const RequestForm: FC<RequestFormProps> = ({ client, tutor }) => {
 	const [currentTab, setCurrentTab] = useState("lessonDetails");
 	const [availability, setAvailability] = useState("");
 	const [error, setError] = useState<string | null>(null);
+	const [submit, setSubmit] = useState(false);
 	const [location, setLocation] = useState<string>("");
 	type Category = keyof typeof levels;
 	type Level = (typeof levels)[Category][number];
@@ -92,11 +93,13 @@ export const RequestForm: FC<RequestFormProps> = ({ client, tutor }) => {
 
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setSubmit(true);
 		const postDate = Date.now();
 
 		let newLevel;
 		if (subject === "") {
 			setError("Please enter a subject");
+			setSubmit(false);
 			return;
 		}
 
@@ -105,6 +108,7 @@ export const RequestForm: FC<RequestFormProps> = ({ client, tutor }) => {
 		} else if (level === "Poly" || level === "University") {
 			if (otherLevel === "") {
 				setError("Please state the year and school (e.g. Y2 NUS)");
+				setSubmit(false);
 				return;
 			}
 			newLevel = level + " " + otherLevel;
@@ -114,6 +118,7 @@ export const RequestForm: FC<RequestFormProps> = ({ client, tutor }) => {
 
 		if (amount > 500) {
 			setError("Please enter a rate less than $500");
+			setSubmit(false);
 			return;
 		}
 
@@ -123,12 +128,14 @@ export const RequestForm: FC<RequestFormProps> = ({ client, tutor }) => {
 			if (!locationString) {
 				// If geocoding fails, exit early
 				setError("Invalid address, please enter a valid address");
+				setSubmit(false);
 				return;
 			}
 		}
 
 		if (availability === "") {
 			setError("Please enter availability");
+			setSubmit(false);
 			return;
 		}
 
@@ -183,9 +190,11 @@ export const RequestForm: FC<RequestFormProps> = ({ client, tutor }) => {
 				}
 			} else {
 				setError((await res.json()).error);
+				setSubmit(false);
 			}
 		} catch (error: any) {
 			setError(error?.message);
+			setSubmit(false);
 		}
 
 		console.log("Request sent!");
@@ -427,7 +436,9 @@ export const RequestForm: FC<RequestFormProps> = ({ client, tutor }) => {
 									<Button onClick={onBack} className="flex-1">
 										Back
 									</Button>
-									<Button className="flex-1">Send Request</Button>
+									<Button className="flex-1" disabled={submit}>
+										{submit ? "Sending Request..." : "Send Request"}
+									</Button>
 								</CardFooter>
 							</Card>
 						</TabsContent>

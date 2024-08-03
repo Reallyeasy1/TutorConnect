@@ -62,6 +62,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }
 	const [introduction, setIntroduction] = useState(tutor.introduction ?? "");
 	const [summary, setSummary] = useState(tutor.summary ?? "");
 	const [studentsResults, setStudentsResults] = useState(tutor.studentsResults ?? "");
+	const [submit, setSubmit] = useState(false);
 
 	const handleMouseEnter = (index: number) => {
 		setHoverIndex(index);
@@ -110,7 +111,6 @@ export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }
 	const handleLevelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { id, checked } = event.target;
 		setShowSubjects({ ...showSubjects, [id]: checked });
-		console.log(showSubjects);
 	};
 
 	const handleSubjectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -140,15 +140,15 @@ export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }
 		} else {
 			setLocation(location.filter((loc) => loc !== value));
 		}
-		console.log(showSubjects);
-		console.log(checkedSubjects);
 	};
 
 	const savePersonalInformation = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setSubmit(true);
 
 		if (contactNumber.length !== 8) {
 			setError1("Contact number must be 8 digits");
+			setSubmit(false);
 			return;
 		}
 
@@ -174,6 +174,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }
 
 					if (!deleteRes.ok) {
 						alert("Failed to delete old image");
+						setSubmit(false);
 						return;
 					}
 				}
@@ -188,6 +189,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }
 					formData.append("image", imageBlob.url);
 				} else {
 					alert("Failed to upload new image");
+					setSubmit(false);
 					return;
 				}
 			}
@@ -198,31 +200,38 @@ export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }
 			});
 			if (res.ok) {
 				alert("Changes saved successfully");
+				setSubmit(false);
 				router.refresh();
 			} else {
 				alert("Failed to save changes");
+				setSubmit(false);
 			}
 		} catch (error) {
 			console.error("Error updating tutor details:", error);
+			setSubmit(false);
 		}
 	};
 
 	const saveTutorPreferences = async (e: React.FormEvent) => {
 		e.preventDefault();
 		const levelAndSubjects = checkedSubjects;
+		setSubmit(true);
 
 		if (introduction.trim().split(/\s+/).length > 100) {
 			setError2("Max word limit exceeded for Short Introduction of yourself.");
+			setSubmit(false);
 			return;
 		}
 
 		if (summary.trim().split(/\s+/).length > 100) {
 			setError2("Max word limit exceeded for Summary of Teaching Experiences and Academic Achievements.");
+			setSubmit(false);
 			return;
 		}
 
 		if (studentsResults.trim().split(/\s+/).length > 100) {
 			setError2("Max word limit exceeded for Past Students' Results.");
+			setSubmit(false);
 			return;
 		}
 
@@ -243,9 +252,11 @@ export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }
 			});
 			if (res.ok) {
 				alert("Changes saved successfully");
+				setSubmit(false);
 				router.refresh();
 			} else {
 				alert("Failed to save changes");
+				setSubmit(false);
 			}
 		} catch {
 			console.error("Error updating tutor preferences:", error2);
@@ -254,6 +265,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }
 
 	const savecademicQualificationsChanges = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setSubmit(true);
 
 		try {
 			const res = await fetch("/api/tutor/profile/academic_qualifications", {
@@ -270,12 +282,15 @@ export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }
 			});
 			if (res.ok) {
 				alert("Changes saved successfully");
+				setSubmit(false);
 				router.refresh();
 			} else {
 				alert("Failed to save changes");
+				setSubmit(false);
 			}
 		} catch (error) {
 			console.error("Error updating tutor academic qualifications:", error);
+			setSubmit(false);
 		}
 	};
 
@@ -640,12 +655,12 @@ export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }
 									</div>
 								</div>
 								<div style={profileCard.buttonContainer}>
-									<button type="button" style={profileCard.resetPasswordButton} onClick={handleResetPassword}>
+									<Button type="button" style={profileCard.resetPasswordButton} onClick={handleResetPassword}>
 										Reset Password
-									</button>
-									<button type="submit" style={profileCard.saveButton}>
-										Save Changes
-									</button>
+									</Button>
+									<Button type="submit" style={profileCard.saveButton} disabled={submit}>
+										{submit ? "Saving Changes..." : "Save Changes"}
+									</Button>
 								</div>
 								{error1 && <p style={{ color: "red" }}>{error1}</p>}
 							</form>
@@ -788,9 +803,9 @@ export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }
 									</div>
 								</div>
 								<div style={profileCard.buttonContainer}>
-									<button type="submit" style={profileCard.buttonFull}>
-										Save Changes
-									</button>
+									<Button type="submit" style={profileCard.buttonFull} disabled={submit}>
+										{submit ? "Saving Changes..." : "Save Changes"}
+									</Button>
 								</div>
 								{error2 && <p style={{ color: "red" }}>{error2}</p>}
 							</div>
@@ -854,9 +869,9 @@ export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }
 									</div>
 								</div>
 								<div style={profileCard.buttonContainer}>
-									<button type="submit" style={profileCard.buttonFull}>
-										Save Changes
-									</button>
+									<Button type="submit" style={profileCard.buttonFull} disabled={submit}>
+										{submit ? "Saving Changes..." : "Save Changes"}
+									</Button>
 								</div>
 								{error3 && <p style={{ color: "red" }}>{error3}</p>}
 							</div>

@@ -43,6 +43,7 @@ export const RegisterForm = () => {
 	const [highestEducationLevel, setHighestEducationLevel] = useState("");
 	const [error, setError] = useState<string | null>(null);
 	const [currentTab, setCurrentTab] = useState("personalInformation");
+	const [submit, setSubmit] = useState(false);
 	const [showSubjects, setShowSubjects] = useState({
 		"Pre-School": false,
 		"Primary School": false,
@@ -113,10 +114,12 @@ export const RegisterForm = () => {
 
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setSubmit(true);
 		const levelAndSubjects = checkedSubjects;
 
 		if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
 			setError("Invalid email address");
+			setSubmit(false);
 			return;
 		}
 
@@ -130,21 +133,25 @@ export const RegisterForm = () => {
 			setError(
 				"Your password must be at least 8 characters long, contain at least one number and one special character, and have a mixture of uppercase and lowercase letters."
 			);
+			setSubmit(false);
 			return;
 		}
 
 		if (contactNumber.length !== 8) {
 			setError("Contact number must be 8 digits");
+			setSubmit(false);
 			return;
 		}
 
 		if (!/^\d{2}$/.test(age)) {
 			setError("Age must be a 2-digit number");
+			setSubmit(false);
 			return;
 		}
 
 		if (location.length === 0) {
 			setError("Please select a location");
+			setSubmit(false);
 			return;
 		}
 
@@ -194,7 +201,7 @@ export const RegisterForm = () => {
 							"Content-Type": "application/json",
 						},
 					});
-
+					/*
 					const account = { token: data.id };
 					const SECRET = "this is a secret";
 					const token = jwt.sign(account, SECRET);
@@ -224,19 +231,21 @@ export const RegisterForm = () => {
 					const strapiResponseData = await strapiResponse.json();
 					console.log(strapiResponseData); // Outputs the result
 					console.log("Upload to Strapi success");
+					*/
 
 					router.push("/tutor/verify_email?tutortId=" + data.id);
 				} else {
 					setError("Failed to retrieve user information");
+					setSubmit(false);
 				}
 			} else {
 				setError((await res.json()).error);
+				setSubmit(false);
 			}
 		} catch (error: any) {
 			setError(error?.message);
+			setSubmit(false);
 		}
-
-		console.log("Register!");
 	};
 
 	const locationStyle = {
@@ -570,8 +579,8 @@ export const RegisterForm = () => {
 							<Button onClick={onBack} className="flex-1" style={whiteButton}>
 								Back
 							</Button>
-							<Button className="flex-1" style={blueButton}>
-								Register
+							<Button className="flex-1" style={blueButton} disabled={submit}>
+								{submit ? "Registering..." : "Register"}
 							</Button>
 						</CardFooter>
 					</Card>

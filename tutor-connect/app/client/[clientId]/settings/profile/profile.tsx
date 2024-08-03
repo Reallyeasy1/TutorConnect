@@ -25,6 +25,7 @@ export default function ProfilePage({ clientData }: { clientData: ClientData }) 
 	const [preview, setPreview] = useState<string | null>(null);
 	const [profile, setProfile] = useState<ClientData>(clientData);
 	const [modifiedFields, setModifiedFields] = useState<Set<string>>(new Set());
+	const [submit, setSubmit] = useState(false);
 
 	const handleResetPassword = () => {
 		router.push("/client/forgot_password");
@@ -66,14 +67,17 @@ export default function ProfilePage({ clientData }: { clientData: ClientData }) 
 
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setSubmit(true);
 
 		if (modifiedFields.has("contactNumber") && profile.contactNumber.length !== 8) {
 			setError("Contact number must be 8 digits");
+			setSubmit(false);
 			return;
 		}
 
 		if (modifiedFields.has("postalCode") && profile.postalCode.length !== 6) {
 			setError("Postal code must be 6 digits");
+			setSubmit(false);
 			return;
 		}
 
@@ -97,6 +101,7 @@ export default function ProfilePage({ clientData }: { clientData: ClientData }) 
 
 					if (!deleteRes.ok) {
 						alert("Failed to delete old image");
+						setSubmit(false);
 						return;
 					}
 				}
@@ -110,6 +115,7 @@ export default function ProfilePage({ clientData }: { clientData: ClientData }) 
 					formData.append("image", imageBlob.url);
 				} else {
 					alert("Failed to upload new image");
+					setSubmit(false);
 					return;
 				}
 			}
@@ -124,9 +130,11 @@ export default function ProfilePage({ clientData }: { clientData: ClientData }) 
 				router.refresh();
 			} else {
 				alert("Failed to save changes");
+				setSubmit(false);
 			}
 		} catch (error) {
 			console.error("Error updating client details:", error);
+			setSubmit(false);
 		}
 	};
 
@@ -322,8 +330,8 @@ export default function ProfilePage({ clientData }: { clientData: ClientData }) 
 							<Button type="button" style={profileCard.resetPasswordButton} onClick={handleResetPassword}>
 								Reset Password
 							</Button>
-							<Button type="submit" style={profileCard.saveButton}>
-								Save Changes
+							<Button type="submit" style={profileCard.saveButton} disabled={submit}>
+								{submit ? "Saving Changes..." : "Save Changes"}
 							</Button>
 						</div>
 						{error && <p style={{ color: "red" }}>{error}</p>}

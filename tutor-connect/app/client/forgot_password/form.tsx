@@ -7,14 +7,17 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Alert } from "@/components/ui/alert";
 
 export const ForgotPasswordForm = () => {
 	const [email, setEmail] = useState("");
 	const [error, setError] = useState("");
+	const [submit, setSubmit] = useState(false);
 	const router = useRouter();
 
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setSubmit(true);
 
 		try {
 			const res = await fetch("/api/client/forgot-password", {
@@ -31,9 +34,11 @@ export const ForgotPasswordForm = () => {
 				router.push("/client/forgot_password/success");
 			} else {
 				setError((await res.json()).error);
+				setSubmit(false);
 			}
 		} catch (error: any) {
 			setError(error?.message);
+			setSubmit(false);
 		}
 
 		console.log("Forgot Password!");
@@ -64,7 +69,10 @@ export const ForgotPasswordForm = () => {
 					</div>
 				</CardContent>
 				<CardFooter className="flex flex-col items-center space-y-2">
-					<Button style={blueButton}>Reset Password</Button>
+					{error && <Alert>{error}</Alert>}
+					<Button style={blueButton} disabled={submit}>
+						{submit ? "Sending the email..." : "Reset Password"}
+					</Button>
 					<Link className="text-sm text-indigo-500 hover:underline center" href="/client/login">
 						Back to Login
 					</Link>

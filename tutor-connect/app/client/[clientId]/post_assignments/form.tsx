@@ -50,6 +50,7 @@ export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) =
 	const [level, setLevel] = useState<Level | "">("");
 	const [otherLevel, setOtherLevel] = useState("");
 	const [subject, setSubject] = useState("");
+	const [submit, setSubmit] = useState(false);
 
 	const onBack = () => {
 		const tabs = ["lessonDetails", "tutorDetails"];
@@ -102,11 +103,13 @@ export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) =
 
 	const onSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setSubmit(true);
 		const postDate = Date.now();
 
 		let newLevel;
 		if (subject === "") {
 			setError("Please enter a subject");
+			setSubmit(false);
 			return;
 		}
 
@@ -115,6 +118,7 @@ export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) =
 		} else if (level === "Poly" || level === "University") {
 			if (otherLevel === "") {
 				setError("Please state the year and school (e.g. Y2 NUS)");
+				setSubmit(false);
 				return;
 			}
 			newLevel = level + " " + otherLevel;
@@ -124,21 +128,25 @@ export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) =
 
 		if (maxRate < minRate) {
 			setError("Max rate must be greater than min rate");
+			setSubmit(false);
 			return;
 		}
 
 		if (postalCode.length !== 6) {
 			setError("Please enter a valid postal code");
+			setSubmit(false);
 			return;
 		}
 
 		if (frequency === "") {
 			setError("Please enter frequency");
+			setSubmit(false);
 			return;
 		}
 
 		if (duration === "") {
 			setError("Please enter duration");
+			setSubmit(false);
 			return;
 		}
 
@@ -147,22 +155,26 @@ export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) =
 			locationString = await geocodeAddress(address);
 			if (!locationString) {
 				setError("Invalid address, please enter a valid address");
+				setSubmit(false);
 				return;
 			}
 		}
 
 		if (availability === "") {
 			setError("Please enter availability");
+			setSubmit(false);
 			return;
 		}
 
 		if (typeOfTutor.length === 0) {
 			setError("Please select at least one type of tutor");
+			setSubmit(false);
 			return;
 		}
 
 		if (race.length === 0) {
 			setError("Please select a race");
+			setSubmit(false);
 			return;
 		}
 
@@ -198,9 +210,11 @@ export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) =
 				router.push(`/client/${clientId}/assignment/client_assignment`); // Use relative path
 			} else {
 				setError((await res.json()).error);
+				setSubmit(false);
 			}
 		} catch (error: any) {
 			setError(error?.message);
+			setSubmit(false);
 		}
 
 		console.log("Assignment posted!");
@@ -556,8 +570,8 @@ export const PostAssignmentForm = ({ clientData }: { clientData: ClientData }) =
 							<Button onClick={onBack} className="flex-1" style={whiteButton}>
 								Back
 							</Button>
-							<Button className="flex-1" style={blueButton}>
-								Post Assignment
+							<Button className="flex-1" style={blueButton} disabled={submit}>
+								{submit ? "Posting Assignment..." : "Post Assignment"}
 							</Button>
 						</CardFooter>
 					</Card>

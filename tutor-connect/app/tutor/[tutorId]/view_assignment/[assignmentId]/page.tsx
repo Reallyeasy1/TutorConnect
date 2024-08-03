@@ -37,12 +37,15 @@ export default function ViewAssignment() {
 	const [assignments, setAssignments] = useState<Assignment[]>([]);
 	const [error, setError] = useState<string | null>(null);
 	const [error2, setError2] = useState<string | null>(null);
+	const [submit, setSubmit] = useState(false);
 
 	async function apply_assignment(assignment: Assignment) {
+		setSubmit(true);
 		try {
 			console.log(tutorId);
 			if (tutorId == null) {
 				setError2("Tutor ID is required");
+				setSubmit(false);
 			} else {
 				const res = await fetch("/api/tutor/applyAssignment", {
 					method: "PUT",
@@ -88,10 +91,12 @@ export default function ViewAssignment() {
 					router.push(`/tutor/${tutorId}/view_assignments`);
 				} else {
 					setError((await res.json()).error);
+					setSubmit(false);
 				}
 			}
 		} catch (error: any) {
 			setError(error?.message);
+			setSubmit(false);
 		}
 	}
 
@@ -178,8 +183,8 @@ export default function ViewAssignment() {
 									<p className={`text-gray-700 mb-1 ${assignment.taken ? "text-red-500" : "text-green-500"}`}>
 										<strong>Status:</strong> {assignment.taken ? "Taken" : "Available"}
 									</p>
-									<Button style={blueButton} onClick={() => apply_assignment(assignment)}>
-										Apply Assignment?
+									<Button style={blueButton} onClick={() => apply_assignment(assignment)} disabled={submit}>
+										{submit ? "Applying..." : "Apply Assignment?"}
 									</Button>
 									{error2 && <Alert>{error2}</Alert>}
 								</div>
