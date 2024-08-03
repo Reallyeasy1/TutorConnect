@@ -5,6 +5,7 @@ import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { Alert } from "@/components/ui/alert";
 import Footer from "@/components/footer/footer";
 import { Button } from "@/components/ui/button";
+import Loading from "@/app/loading";
 
 interface Assignment {
 	id: number;
@@ -42,6 +43,7 @@ export default function ViewAssignment() {
 	const [assignments, setAssignments] = useState<Assignment[]>([]);
 	const [error, setError] = useState<string | null>(null);
 	const [error2, setError2] = useState<string | null>(null);
+	const [loading, setLoading] = useState(true);
 
 	async function accept_assignment(assignment: Assignment) {
 		try {
@@ -85,6 +87,7 @@ export default function ViewAssignment() {
 				if (contentType && contentType.includes("application/json")) {
 					const data = await res.json();
 					setAssignments(data);
+					setLoading(false);
 				} else {
 					setError("Unexpected content type: " + contentType);
 				}
@@ -149,7 +152,8 @@ export default function ViewAssignment() {
 		<div className="flex flex-col min-h-screen" style={{ backgroundColor: "#fff" }}>
 			<div className="container mx-auto p-6 flex flex-col items-center flex-grow">
 				<h1 className="text-4xl font-bold mb-8 text-center">Tutee Assignment</h1>
-				{assignments.length === 0 ? (
+				{loading && <Loading />}
+				{!loading && assignments.length === 0 ? (
 					<p className="text-gray-500 text-center">No assignments available.</p>
 				) : (
 					<div className="grid grid-cols-1 gap-8">
