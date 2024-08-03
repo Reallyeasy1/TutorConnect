@@ -35,11 +35,11 @@ export async function DELETE(req: Request) {
         });
 
         const clientNotif = await prisma.clientNotification.deleteMany({
-            where: { assignmentId: assignmentIdNumber },
+            where: { assignmentId: null },
         });
 
         const tutorNotif = await prisma.tutorNotification.deleteMany({
-            where: { assignmentId: assignmentIdNumber },
+            where: { assignmentId: null },
         });
 
         return new NextResponse(
