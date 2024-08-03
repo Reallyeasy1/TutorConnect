@@ -1,6 +1,5 @@
 import Footer from "@/components/footer/footer";
 import { redirect } from "next/navigation";
-import Loading from "@/app/loading";
 import { Notifications } from "./notifications";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";

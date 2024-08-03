@@ -90,7 +90,6 @@ export const Reviews: FC<ReviewsProps> = ({ reviewData }) => {
 			justifyContent: "center",
 			alignItems: "flex-start",
 			flex: "1",
-			border: "1px solid #5790AB",
 		},
 		sortSection: {
 			display: "flex",

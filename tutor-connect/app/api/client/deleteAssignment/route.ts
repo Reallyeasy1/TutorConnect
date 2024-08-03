@@ -34,6 +34,14 @@ export async function DELETE(req: Request) {
             where: { id: assignmentIdNumber },
         });
 
+        const clientNotif = await prisma.clientNotification.deleteMany({
+            where: { assignmentId: assignmentIdNumber },
+        });
+
+        const tutorNotif = await prisma.tutorNotification.deleteMany({
+            where: { assignmentId: assignmentIdNumber },
+        });
+
         return new NextResponse(
             JSON.stringify({
                 assignment,
