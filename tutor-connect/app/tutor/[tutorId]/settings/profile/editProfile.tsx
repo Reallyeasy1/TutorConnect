@@ -208,7 +208,7 @@ export const EditProfile: React.FC<EditProfileProps> = ({ tutor, checked, show }
 				setSubmit(false);
 			}
 		} catch (error) {
-			console.error("Error updating tutor details:", error);
+			console.error("Error updating tutor details: ", error);
 			setSubmit(false);
 		}
 	};
